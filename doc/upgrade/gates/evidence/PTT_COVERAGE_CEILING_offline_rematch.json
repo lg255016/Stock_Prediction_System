@@ -1,0 +1,182 @@
+{
+  "generated_at": "2026-09-21T07:45:27.975467+00:00",
+  "script": "scripts/verify/measure_ptt_keyword_coverage_offline.py",
+  "gate_a_proposal": "doc/upgrade/gates/PTT_COVERAGE_CEILING_MEASUREMENT_GATE_A_PROPOSAL.md",
+  "read_only": true,
+  "network_requests_to_ptt": 0,
+  "panel_path": "/workspaces/Database_Backups/Stock_Prediction_System2/ml_panels/panel_target_up_down_20260912.parquet",
+  "panel_sha256": "39dc6b8e6160add20f39a7265bad04de50c76199fa7ab81b979a7aabeabbd014",
+  "panel_freeze_date": "2026-09-12",
+  "n_keyword_union": 479,
+  "n_articles": 1349,
+  "date_level_pairs": {
+    "current": {
+      "pairs": 1502,
+      "stocks": 30
+    },
+    "full_keyword_rematch": {
+      "pairs": 1714,
+      "stocks": 86
+    },
+    "note": "配對單位為 (stock_id, post_time 日曆日期)，未經交易日 roll-forward；用於與提案 §2.1 已用原生 SQL 獨立驗算過的 1,502/30、1,714/86 做一致性核對，不是套進面板視窗後的覆蓋率（那是 panel_window_coverage／drift_vs_expansion 的職責）。"
+  },
+  "panel_window_coverage": {
+    "panel_subset_rows": 24450,
+    "coverage_raw_hit": {
+      "n_hit": 1005,
+      "pct": 4.11,
+      "baseline_article_count_gt0_frozen_panel": 683,
+      "baseline_pct": 2.79,
+      "note": "主要比較對象；與 article_count>0 同語意（提案 §3.1 第 4 點）。baseline 是 09-12 凍結面板的值，與本欄用今日映射表重算的值之間混有映射表漂移與關鍵字擴展兩種成因，正確拆解見 drift_vs_expansion。"
+    },
+    "coverage_5d_ma_proxy": {
+      "n_hit": 2383,
+      "pct": 9.75,
+      "baseline_sentiment_5d_ma_notna_frozen_panel": 1409,
+      "baseline_pct": 5.76,
+      "note": "次要／選配指標，僅套用與 sentiment_5d_ma 相同的滾動視窗機制（rolling(window=5, min_periods=1) on binary hit indicator），不是重跑情緒分析；不得與主要指標混用同一數字比較；baseline 同樣是凍結值，漂移／擴展拆解見 drift_vs_expansion。"
+    },
+    "n_full_hit_rows_dropped": {
+      "total": 756,
+      "not_in_panel_458_universe": 564,
+      "stocks_not_in_panel_458_universe": [
+        "6143",
+        "AAPL",
+        "MU",
+        "NVDA"
+      ],
+      "in_universe_after_global_last_trade_date": 136,
+      "in_universe_after_global_last_trade_date_cutoff_boundary": 1,
+      "in_universe_after_own_calendar_last_not_global": 56,
+      "in_universe_before_own_calendar_first": 0,
+      "note": "三種互斥原因（段 A 複核第一輪訂正，不再合併為「多半」）：(1) not_in_panel_458_universe——命中股票代碼本身不在 458 檔面板宇宙內（例：美股代碼、非本專案追蹤範圍個股），定義上不可能貢獻面板覆蓋率，不是量測缺陷；(2) in_universe_after_global_last_trade_date——該篇文章 roll-forward 後的有效日期晚於面板全域最後交易日（2026-09-04），其中in_universe_after_global_last_trade_date_cutoff_boundary 是恰好卡在最後一天、但發文時間晚於 15:30 cutoff 而滾到次日的邊界案例（此為前者的子集，非另加）；(3) in_universe_after_own_calendar_last_not_global——不晚於全域最後交易日，但晚於該股自身交易日曆的最後一天，是 RISK-027 方案 B「逐股票日曆」機制本身的正常行為（該股在面板結束前已離開 PIT 宇宙），不是缺陷。"
+    },
+    "per_stock_raw_hit_day_counts": {
+      "2330": 136,
+      "2408": 110,
+      "8299": 108,
+      "5289": 107,
+      "2344": 107,
+      "2454": 57,
+      "2382": 38,
+      "8069": 24,
+      "1303": 23,
+      "3008": 23,
+      "2317": 21,
+      "3081": 20,
+      "3363": 17,
+      "6669": 16,
+      "6442": 16,
+      "3163": 15,
+      "2308": 14,
+      "2059": 14,
+      "2303": 13,
+      "6488": 12,
+      "3131": 10,
+      "2327": 7,
+      "2337": 7,
+      "5347": 6,
+      "3260": 5,
+      "6187": 5,
+      "3583": 4,
+      "6770": 4,
+      "3231": 4,
+      "2313": 3,
+      "3653": 3,
+      "4979": 3,
+      "3481": 3,
+      "3105": 3,
+      "2368": 2,
+      "3017": 2,
+      "2357": 2,
+      "2377": 2,
+      "5274": 2,
+      "3406": 2,
+      "7769": 2,
+      "2455": 2,
+      "2449": 2,
+      "2345": 2,
+      "3324": 2,
+      "2409": 2,
+      "2395": 1,
+      "6239": 1,
+      "3533": 1,
+      "3529": 1,
+      "8210": 1,
+      "2356": 1,
+      "2383": 1,
+      "2353": 1,
+      "8046": 1,
+      "8150": 1,
+      "8039": 1,
+      "1815": 1,
+      "4967": 1,
+      "3042": 1,
+      "3167": 1,
+      "2881": 1,
+      "4931": 1,
+      "3037": 1,
+      "8096": 1,
+      "6830": 1,
+      "5483": 1,
+      "2002": 1,
+      "6451": 1
+    },
+    "per_stock_hit_days_via_drift_theme_mapping": {
+      "8299": 107,
+      "2344": 107,
+      "2408": 107,
+      "2317": 16,
+      "2382": 16
+    },
+    "trading_day_mapping": {
+      "function": "src.transform.feature_aggregator.assign_trading_days_per_stock",
+      "cutoff_time": "15:30:00",
+      "trading_days_source": "panel 全期逐股票 trade_date（非全市場聯集日曆，RISK-027 方案 B）"
+    }
+  },
+  "drift_vs_expansion": {
+    "purpose": "凍結面板基準與今日映射表重算之間，混有「映射表漂移」（凍結後每日 ETL 的 AI 探索新增了 theme 映射）與「關鍵字擴展」（本案要量測的效果）兩種成因。拿新管線比一個凍結產物之前，先把「沒改的輸入」（現行口徑）推過新管線，看它是否重現凍結值——重現了，差異才全歸新輸入；沒重現，差多少就是漂移。",
+    "coverage_raw_hit_frozen_baseline": {
+      "n": 683,
+      "pct": 2.79
+    },
+    "coverage_raw_hit_current_kw_recomputed_today": {
+      "n": 846,
+      "pct": 3.46
+    },
+    "coverage_raw_hit_full_kw_recomputed_today": {
+      "n": 1005,
+      "pct": 4.11
+    },
+    "frozen_baseline_reproduced_by_current_kw_pipeline": {
+      "intersection": 683,
+      "only_in_frozen_baseline": 0,
+      "only_in_current_kw_recompute": 163,
+      "note": "intersection 應等於 frozen_baseline 的 n（零遺漏），only_in_frozen_baseline 應為 0——若非 0，代表重用的映射管線漏掉了凍結面板實際存在的格子，需要另外排查。"
+    },
+    "drift_cells": 163,
+    "expansion_cells": 159,
+    "coverage_5d_ma_proxy_frozen_baseline": {
+      "n": 1409,
+      "pct": 5.76
+    },
+    "coverage_5d_ma_proxy_current_kw_recomputed_today": {
+      "n": 1784,
+      "pct": 7.3
+    },
+    "coverage_5d_ma_proxy_full_kw_recomputed_today": {
+      "n": 2383,
+      "pct": 9.75
+    },
+    "evidence": {
+      "theme_stock_mapping_rows_total": 66,
+      "theme_stock_mapping_rows_updated_after_panel_freeze": 28,
+      "theme_stock_mapping_rows_updated_exactly_on_panel_freeze_date": 0,
+      "panel_freeze_date": "2026-09-12",
+      "panel_freeze_date_source": "從 PANEL_PATH 檔名反查（panel_target_up_down_20260912.parquet → 2026-09-12），非手打常數。",
+      "boundary_caveat": "漂移判定用的是 updated_at 的日期（等同凍結日 00:00 起算），不是面板實際生成的時刻。本次資料集 theme_stock_mapping_rows_updated_exactly_on_panel_freeze_date 為 0，凍結後最早一次更新是 2026-09-16 16:45，故本次結果不受此邊界影響；但換一份資料集，若凍結當天真的有映射更新，以日期為粒度的比較就可能誤判，屆時需改用面板實際生成的時刻而非只取日期。"
+    }
+  },
+  "known_limitation": "本結果是既有語料內的重新比對，是嚴格下界，不是真正上限（提案 §2.2）。真正上限需段 B（頁面速率探測 + 全量看板掃頁）向 PTT 重新取數才能量到。「關鍵字擴展的真實效果」請看 drift_vs_expansion.expansion_cells，不要直接拿 coverage_raw_hit.pct 減 baseline_pct。"
+}

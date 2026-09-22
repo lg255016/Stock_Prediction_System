@@ -1,0 +1,48 @@
+{
+  "purpose": "UG-G2-SB9 階段一取數報告",
+  "target_database": {
+    "name": "sb9_tpex_tmpdb",
+    "host": "sb9_tpex_tmpdb",
+    "port": 5432,
+    "is_temporary": true
+  },
+  "environment": {
+    "timestamp_utc": "2026-09-01T15:44:38.746937+00:00"
+  },
+  "market": "tpex",
+  "segment": {
+    "prior_common_supplied": 887,
+    "first_day_continuity_checked": true,
+    "note": "本段首日已與前一段最後一天做 2% 連續性比對（前值 887）。"
+  },
+  "expectations": {
+    "max_daily_change_ratio": 0.02,
+    "first_day_min_common": 200,
+    "first_day_floor_note": "**只擋分頁碎片，不是對市場規模的宣稱。** TPEx 用 200（同判準 C3a），**刻意不用 C7 的量測值 887** —— 先寫一個數字再拿它當判準就是在猜。",
+    "median_turnover": [
+      1000000.0,
+      100000000.0
+    ],
+    "note": "提案 §6.2a，取數前寫死。2026-09-01 由絕對區間改為相對變動率——絕對區間是兩天觀測推出來的，在跨年度資料上必然誤報。"
+  },
+  "trading_days_collected": 0,
+  "trading_days_requested": 693,
+  "logical_requests_made": 1,
+  "http_attempts_made": 3,
+  "logical_request_budget": 850,
+  "pk_collisions": 0,
+  "db_summary": {
+    "rows": 808263,
+    "distinct_stocks": 1988,
+    "distinct_dates": 740,
+    "min_date": "2023-08-07",
+    "max_date": "2026-08-21"
+  },
+  "per_day_log": [
+    {
+      "date": "20260615",
+      "outcome": "ERROR",
+      "detail": "傳輸層失敗，重試 2 次後仍未取得回應：HTTPSConnectionPool(host='www.tpex.org.tw', port=443): Max retries exceeded with url: /www/zh-tw/afterTrading/otc?date=2026/06/15&type=EW&response=json (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Missing Subject Key Identifier (_ssl.c:1082)')))"
+    }
+  ]
+}

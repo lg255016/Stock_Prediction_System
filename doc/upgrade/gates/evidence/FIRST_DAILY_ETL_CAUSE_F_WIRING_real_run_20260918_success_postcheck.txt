@@ -1,0 +1,50 @@
+REAL(5432,AFTER)= ('postgres', 5432)
+PRE-BASELINE(55443,BEFORE)= ('pre_baseline', 55443)
+===== Criterion 1: price-derived 10 columns, F(09-16) before, 458 TWSE stocks =====
+price column diffs (must all be 0): {'close_price': 0, 'volume': 0, 'return_1d': 0, 'rsi_14': 0, 'volatility_5d': 0, 'volatility_20d': 0, 'amplitude_ratio': 0, 'ma5_bias_ratio': 0, 'ma20_bias_ratio': 0, 'volume_ratio_5d': 0}
+CRITERION 1: PASS
+===== Full diff (all dates, all stocks) for criteria 2/3/5 =====
+new rows (in after, not in before): 8
+total differing existing rows: 68
+rows changing only social_8/source_status: 52
+rows changing only target/label cols (tail-recompute pattern): 7
+rows with OTHER/mixed column changes (needs manual review): 9
+  MIXED: ('8069', datetime.date(2026, 9, 10)) {'label_reason', 'bullishness_index', 'article_count', 'agreement_index', 'target_triple_barrier', 'source_status'}
+  MIXED: ('3008', datetime.date(2026, 9, 10)) {'label_reason', 'bullishness_index', 'article_count', 'sentiment_5d_ma', 'agreement_index', 'source_status'}
+  MIXED: ('2454', datetime.date(2026, 9, 10)) {'label_reason', 'bullishness_index', 'article_count', 'sentiment_5d_ma', 'agreement_index', 'target_triple_barrier', 'source_status'}
+  MIXED: ('NVDA', datetime.date(2026, 9, 16)) {'label_reason', 'volume_ratio_5d', 'volume', 'target_up_down', 'target_next_close', 'target_return_1d'}
+  MIXED: ('NVDA', datetime.date(2026, 9, 10)) {'label_reason', 'bullishness_index', 'article_count', 'sentiment_5d_ma', 'agreement_index', 'target_triple_barrier', 'source_status'}
+  MIXED: ('2330', datetime.date(2026, 9, 10)) {'label_reason', 'bullishness_index', 'article_count', 'sentiment_5d_ma', 'agreement_index', 'target_triple_barrier', 'source_status'}
+  MIXED: ('6488', datetime.date(2026, 9, 10)) {'label_reason', 'bullishness_index', 'article_count', 'agreement_index', 'target_triple_barrier', 'source_status'}
+  MIXED: ('2059', datetime.date(2026, 9, 10)) {'label_reason', 'bullishness_index', 'article_count', 'agreement_index', 'target_triple_barrier', 'source_status'}
+  MIXED: ('2382', datetime.date(2026, 9, 10)) {'label_reason', 'bullishness_index', 'article_count', 'sentiment_5d_ma', 'agreement_index', 'target_triple_barrier', 'source_status'}
+===== Criterion 5: flipped-to-SOURCE_FAILED rows =====
+flipped_to_failed count: 47
+article_count NOT NULL violations (must be 0): 0
+flipped_to_failed == expected_keys (47) ? True
+===== Criterion 4: new feature row count via per-stock SQL (post-hoc, using actual stock_prices) =====
+  2454 new trading days since F(09-16): 1
+  2059 new trading days since F(09-16): 1
+  2330 new trading days since F(09-16): 1
+  3008 new trading days since F(09-16): 1
+  6488 new trading days since F(09-16): 1
+  2382 new trading days since F(09-16): 1
+  NVDA new trading days since F(09-16): 1
+  8069 new trading days since F(09-16): 1
+SUM (criterion-4 expected new rows): 8
+actual new rows (daily_ml_features): 8
+CRITERION 4: PASS
+===== Criterion 3: label/target changes within tail_window =====
+tail-recompute-pattern rows (target/label only): 7
+(cross-check against Triple-Barrier log: 2754 rows updated, 459 stocks x tail_window)
+===== Row counts summary =====
+  stock_prices after: 449334
+  candidate_prices after: 1859341
+  market_articles after: 1347
+  article_comments after: 137278
+  daily_ml_features after: 449334
+  etl_run_log after: 231
+  sentiment_cache after: 42
+  theme_stock_mapping after: 66
+  unscored articles after: 0
+  active keywords after: 31

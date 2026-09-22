@@ -1,0 +1,78 @@
+{
+  "outcome": "COMMIT",
+  "checks": {
+    "M1_delete_rowcount": 251,
+    "M2_inserted_articles": 1249,
+    "comments_inserted": 136147,
+    "M3_market_articles_after": 1330,
+    "M4_article_comments_after": 136185,
+    "M5_survivor_fp": "41b5ca64a25b0fddb90852ce307fd724",
+    "M5_survivor_n": 80,
+    "M6_article_1495_fp": "f447f80647824b9117f640374d072631",
+    "M6_comments_1495_fp": "9cfef4e815a64c1b2c18b2855a362a2e",
+    "M6_comments_1495_n": 38,
+    "M7_dmf_fp": "4fc208b95dbc6ea9d7c4b381d6ba97b5",
+    "M8_samples": [
+      {
+        "url": "https://www.ptt.cc/bbs/Stock/M.1780642616.A.B4A.html",
+        "expected": 48,
+        "actual": 48,
+        "verdict": "PASS"
+      },
+      {
+        "url": "https://www.ptt.cc/bbs/Stock/M.1786686697.A.EF2.html",
+        "expected": 154,
+        "actual": 154,
+        "verdict": "PASS"
+      },
+      {
+        "url": "https://www.ptt.cc/bbs/Stock/M.1787197384.A.C83.html",
+        "expected": 148,
+        "actual": 148,
+        "verdict": "PASS"
+      },
+      {
+        "url": "https://www.ptt.cc/bbs/Stock/M.1778679157.A.37C.html",
+        "expected": 44,
+        "actual": 44,
+        "verdict": "PASS"
+      },
+      {
+        "url": "https://www.ptt.cc/bbs/Stock/M.1785999168.A.FCA.html",
+        "expected": 146,
+        "actual": 146,
+        "verdict": "PASS"
+      },
+      {
+        "url": "https://www.ptt.cc/bbs/Stock/M.1782283035.A.FDB.html",
+        "expected": 59,
+        "actual": 59,
+        "verdict": "PASS"
+      },
+      {
+        "url": "https://www.ptt.cc/bbs/Stock/M.1782535336.A.CDF.html",
+        "expected": 131,
+        "actual": 131,
+        "verdict": "PASS"
+      },
+      {
+        "url": "https://www.ptt.cc/bbs/Stock/M.1784211406.A.B4D.html",
+        "expected": 89,
+        "actual": 89,
+        "verdict": "PASS"
+      },
+      {
+        "url": "https://www.ptt.cc/bbs/Stock/M.1772581393.A.1AC.html",
+        "expected": 121,
+        "actual": 121,
+        "verdict": "PASS"
+      },
+      {
+        "url": "https://www.ptt.cc/bbs/Stock/M.1784639274.A.684.html",
+        "expected": 69,
+        "actual": 69,
+        "verdict": "PASS"
+      }
+    ]
+  }
+}

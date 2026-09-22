@@ -1,0 +1,38 @@
+psycopg2-binary
+
+# 本機環境設定與秘密資訊
+.env
+*.env
+.env.*
+!.env.example
+.secrets/
+secrets/
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+service-account*.json
+
+# Python 快取檔案
+__pycache__/
+*.pyc
+
+# PostgreSQL 本機實體資料與邏輯備份
+.devcontainer/postgres-data/
+*.dump
+*.backup
+
+# Claude Code 本機權限設定（host 上被使用者全域 ignore 擋掉，容器內無該
+# 全域設定，導致同一檔案在容器內顯示為 untracked——見 UG-G3-SB6 乾跑）
+.claude/settings.local.json
+
+# 給 PO 的一頁式進程摘要（GOV 案，PO 裁決 2026-09-21）——本機限定證據檔，
+# 不進 repo、不上 GitHub。格式與生命週期見 `gate-submit` skill 產出 10、
+# `DECISIONS.md` DEC-046。
+doc/progress/
+
+# 原始網頁擷取內容（體積大、非治理文件）——見
+# `PTT_COVERAGE_CEILING_MEASUREMENT_GATE_A_PROPOSAL.md` §3.2／§3.3。
+# 摘要與統計數字進 doc/upgrade/gates/evidence/，原始內容留在本機。
+scripts/verify/evidence_local/

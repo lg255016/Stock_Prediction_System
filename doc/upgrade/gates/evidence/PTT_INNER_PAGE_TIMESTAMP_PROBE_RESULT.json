@@ -1,0 +1,108 @@
+{
+ "criteria_file": "PTT_INNER_PAGE_TIMESTAMP_PROBE_CRITERIA.json（commit 232c6dd，觸網前寫死）",
+ "probed_at_taipei": "2026-09-06 02:45:40.091089",
+ "article_id": 169,
+ "url": "https://www.ptt.cc/bbs/Stock/M.1565858907.A.FC0.html",
+ "http_attempts": 1,
+ "outcome": "OK",
+ "P1": {
+  "criterion": "HTTP 200 且頁面可被 BeautifulSoup 解析、能找到 div.push 區塊",
+  "div_push_count": 281,
+  "verdict": "PASS"
+ },
+ "P2": {
+  "criterion": "每一則留言是否帶有它自己的時間戳（不論那個元素叫什麼）",
+  "first_push_spans": [
+   {
+    "class": "hl push-tag",
+    "text": "推 "
+   },
+   {
+    "class": "f3 hl push-userid",
+    "text": "smbtomas    "
+   },
+   {
+    "class": "f3 push-content",
+    "text": ": 狗哥別走"
+   },
+   {
+    "class": "push-ipdatetime",
+    "text": " 08/15 16:49\n"
+   }
+  ],
+  "all_span_classes": [
+   "f1 hl push-tag",
+   "f3 hl push-userid",
+   "f3 push-content",
+   "hl push-tag",
+   "push-ipdatetime"
+  ],
+  "timestamp_bearing_classes": {
+   "push-ipdatetime": {
+    "count": 281,
+    "sample": [
+     "08/15 16:49",
+     "08/15 16:50",
+     "08/15 16:51"
+    ]
+   }
+  },
+  "pushes_with_timestamp": 281,
+  "verdict": "PASS",
+  "INFERENCE_CHECK": "`push-ipdatetime` 是否為實際 class 名：是"
+ },
+ "P3": {
+  "criterion": "時間戳格式逐字",
+  "samples_verbatim": [
+   "08/15 16:49"
+  ],
+  "has_year": false
+ },
+ "P4": {
+  "criterion": "最早與最晚留言的時間戳，是否跨年",
+  "parsed_count": 281,
+  "first_three": [
+   "08/15 16:49",
+   "08/15 16:50",
+   "08/15 16:51"
+  ],
+  "last_three": [
+   "08/20 18:08",
+   "08/20 19:35",
+   "08/20 20:22"
+  ],
+  "distinct_month_day": 6,
+  "month_range": [
+   8,
+   8
+  ]
+ },
+ "P5": {
+  "criterion": "頁面自身宣告的發文時間是否等於網址時間戳還原值",
+  "article_metaline": {
+   "作者": "stockdog (跟著狗哥吃香喝辣)",
+   "標題": "[標的] 凌巨 8105 多",
+   "時間": "Thu Aug 15 16:48:24 2019"
+  },
+  "url_timestamp_taipei": "2019-08-15 16:48:27",
+  "note": "§3.6A 的權威來源是網址時間戳；本項為獨立對照"
+ },
+ "RAW_CAPTURE": {
+  "note": "**判準的答案是解讀，原始片段是事實。**",
+  "first_3_push_html": [
+   "<div class=\"push\"><span class=\"hl push-tag\">推 </span><span class=\"f3 hl push-userid\">smbtomas    </span><span class=\"f3 push-content\">: 狗哥別走</span><span class=\"push-ipdatetime\"> 08/15 16:49\n</span></div>",
+   "<div class=\"push\"><span class=\"hl push-tag\">推 </span><span class=\"f3 hl push-userid\">asdqwe32    </span><span class=\"f3 push-content\">: 謝謝狗哥，你的基本面分析都有在看，支持你 ！</span><span class=\"push-ipdatetime\"> 08/15 16:50\n</span></div>",
+   "<div class=\"push\"><span class=\"f1 hl push-tag\">→ </span><span class=\"f3 hl push-userid\">ruln        </span><span class=\"f3 push-content\">: 狗哥不要～～～～～</span><span class=\"push-ipdatetime\"> 08/15 16:51\n</span></div>"
+  ],
+  "last_3_push_html": [
+   "<div class=\"push\"><span class=\"hl push-tag\">推 </span><span class=\"f3 hl push-userid\">usoppp      </span><span class=\"f3 push-content\">: 80張續抱！</span><span class=\"push-ipdatetime\"> 08/20 18:08\n</span></div>",
+   "<div class=\"push\"><span class=\"hl push-tag\">推 </span><span class=\"f3 hl push-userid\">haozaira    </span><span class=\"f3 push-content\">: 散戶多踩多</span><span class=\"push-ipdatetime\"> 08/20 19:35\n</span></div>",
+   "<div class=\"push\"><span class=\"hl push-tag\">推 </span><span class=\"f3 hl push-userid\">psqq        </span><span class=\"f3 push-content\">: 瑞士人買回來了，我兒有奶喝了</span><span class=\"push-ipdatetime\"> 08/20 20:22\n</span></div>"
+  ],
+  "article_metaline_html": [
+   "<div class=\"article-metaline\"><span class=\"article-meta-tag\">作者</span><span class=\"article-meta-value\">stockdog (跟著狗哥吃香喝辣)</span></div>",
+   "<div class=\"article-metaline\"><span class=\"article-meta-tag\">標題</span><span class=\"article-meta-value\">[標的] 凌巨 8105 多</span></div>",
+   "<div class=\"article-metaline\"><span class=\"article-meta-tag\">時間</span><span class=\"article-meta-value\">Thu Aug 15 16:48:24 2019</span></div>"
+  ]
+ }
+}

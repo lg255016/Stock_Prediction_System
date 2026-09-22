@@ -1,0 +1,87 @@
+======================================================================
+段 B 演練：§0.5 #31+#33 GEMINI_QUOTA_DISCIPLINE
+還原自 stock_prediction_system2_POST_second_daily_etl_20260918_1450.dump
+======================================================================
+[BINDING][開始前] current_database=gemquota_rehearsal inet_server_port=55501 (expect gemquota_rehearsal/55501)
+/workspaces/Stock_Prediction_System2/src/transform/nlp_processor.py:8: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+
+======================================================================
+場景 1：NLP 撞每日配額，整日執行
+======================================================================
+[BINDING][場景1] current_database=gemquota_rehearsal inet_server_port=55501 (expect gemquota_rehearsal/55501)
+[SETUP] 合成操作：把以下 article_id 的 sentiment_score 設回 NULL： [1504, 1505, 1510, 1512, 1518]
+
+========== 開始執行 NLP 情緒運算管線 (Batch Checkpointing 模式) ==========
+⏳ 撈取 5 筆待處理資料，啟動 Hybrid 管線...
+Building prefix dict from the default dictionary ...
+Loading model from cache /tmp/jieba.cache
+Loading model cost 1.154 seconds.
+Prefix dict has been built successfully.
+[Gemini API] 正在批次處理 1 筆複雜標題 (具備 429 指數退避防護)...
+[WARNING] NLP 每日配額耗盡，本次停止，剩餘 5 篇留待下次：429 You exceeded your current quota, please check your plan and billing details. quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier", model: gemini-3.8-flash
+[RESULT] nlp_gemini etl_run_log 列： [('2026-09-18', 'daily_quota', 'REFUSED', '剩餘 5 篇未評分，每日配額耗盡：429 You exceeded your current quota, please check your plan and billing details. quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier", model: gemini-3.8-flash')]
+[RESULT] generate_content 呼叫次數： 1
+[FeatureAggregator] 已初始化 ML 特徵聚合器 (支援雙模式時間對齊、研究指標與題材情緒溢出)
+
+========== 啟動 ML 特徵工程管線 ==========
+[INFO] [Feature] 開始聚合特徵：股價 449334 筆, 文章 1262 筆 (Cutoff: 15:30:00)
+[INFO] [Feature] 特徵表聚合完成！
+
+[Load] 準備寫入 449334 筆特徵數據至 daily_ml_features...
+[Load] 成功執行資料庫作業。已處理 449334 筆資料。
+[RESULT] 特徵階段已完成（未拋例外）
+[RESULT] fetch_failed_source_keys() 對到 2330 的鍵數： 10
+[SCENARIO 1] exit 0（未拋例外）
+
+======================================================================
+場景 2a：距上次 OK 不足 7 天 → 跳過，不呼叫、不寫列
+======================================================================
+[BINDING][場景2a] current_database=gemquota_rehearsal inet_server_port=55501 (expect gemquota_rehearsal/55501)
+[RESULT] fetch_last_discovery_probed_date() = 2026-09-18 should_run_discovery = False
+[RESULT] 依判準跳過，A4：不寫任何列（本場景不呼叫 run_discovery()）
+[RESULT] ai_discovery 列（應僅剩合成的那一列 OK）： [('2026-09-18', 'discovery', 'OK', None)]
+[SCENARIO 2a] PASS
+
+======================================================================
+場景 2b：把該 OK 列的 batch_key 改到 8 天前 → 執行，掃頁失敗 → FETCH_FAILED
+======================================================================
+[BINDING][場景2b] current_database=gemquota_rehearsal inet_server_port=55501 (expect gemquota_rehearsal/55501)
+[RESULT] fetch_last_discovery_probed_date() = 2026-09-10 should_run_discovery = True
+[Discover][ERROR] PTT 熱門標題擷取失敗，本次探索未寫入資料庫。
+[RESULT] run_discovery() 回傳： FETCH_FAILED PTT 熱門標題擷取失敗（掃頁時發生錯誤）
+[RESULT] ai_discovery 列（新增一列 FETCH_FAILED）： [('2026-09-10', 'discovery', 'OK', None), ('2026-09-18', 'discovery', 'FETCH_FAILED', 'PTT 熱門標題擷取失敗（掃頁時發生錯誤）')]
+[SCENARIO 2b] PASS
+
+======================================================================
+場景 2c：Gemini 回應有效但無新詞 → NO_DATA
+======================================================================
+[BINDING][場景2c] current_database=gemquota_rehearsal inet_server_port=55501 (expect gemquota_rehearsal/55501)
+[RESULT] fetch_last_discovery_probed_date() = 2026-09-10 should_run_discovery = True （FETCH_FAILED 不算試過，故仍未達門檻／已達門檻請見上）
+[Discover] 收集到 1 篇熱門標題，正在呼叫 Gemini 分析題材趨勢與成分股...
+[Discover] Gemini 未回傳可新增的熱門詞彙，本次未寫入資料庫。
+[RESULT] run_discovery() 回傳： NO_DATA None
+[RESULT] ai_discovery 列（新增一列 NO_DATA）： [('2026-09-10', 'discovery', 'OK', None), ('2026-09-18', 'discovery', 'FETCH_FAILED', 'PTT 熱門標題擷取失敗（掃頁時發生錯誤）'), ('2026-09-18', 'discovery', 'NO_DATA', None)]
+[SCENARIO 2c] PASS
+
+======================================================================
+場景 3：既有映射不被探索結果覆寫
+======================================================================
+[BINDING][場景3] current_database=gemquota_rehearsal inet_server_port=55501 (expect gemquota_rehearsal/55501)
+[SETUP] 改動後（改動前）： [(Decimal('0.50'), datetime.datetime(2026, 9, 18, 6, 46, 49, 46513))]
+
+[Load] 準備寫入 1 筆題材成分股映射至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+[RESULT] upsert 後： [(Decimal('0.50'), datetime.datetime(2026, 9, 18, 6, 46, 49, 46513))]
+[SCENARIO 3] PASS：權重與 updated_at 皆未變動
+
+======================================================================
+全部場景執行完畢，零真實 Gemini 呼叫。
+======================================================================

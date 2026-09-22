@@ -1,0 +1,145 @@
+{
+  "date": "2026-09-08",
+  "R1": {
+    "total": 3713,
+    "per_stock": {
+      "2330": 987,
+      "2382": 987,
+      "6488": 985,
+      "NVDA": 754
+    }
+  },
+  "R2": {
+    "2330": 126,
+    "2382": 33,
+    "6488": 12,
+    "NVDA": 91
+  },
+  "R3": [
+    {
+      "stock_id": "2330",
+      "source_status": "SUCCESS",
+      "n": 126
+    },
+    {
+      "stock_id": "2330",
+      "source_status": "SUCCESS_EMPTY",
+      "n": 861
+    },
+    {
+      "stock_id": "2382",
+      "source_status": "SUCCESS",
+      "n": 33
+    },
+    {
+      "stock_id": "2382",
+      "source_status": "SUCCESS_EMPTY",
+      "n": 954
+    },
+    {
+      "stock_id": "6488",
+      "source_status": "SUCCESS",
+      "n": 12
+    },
+    {
+      "stock_id": "6488",
+      "source_status": "SUCCESS_EMPTY",
+      "n": 973
+    },
+    {
+      "stock_id": "NVDA",
+      "source_status": "SUCCESS",
+      "n": 91
+    },
+    {
+      "stock_id": "NVDA",
+      "source_status": "SUCCESS_EMPTY",
+      "n": 663
+    }
+  ],
+  "R4_sample_before_after": {
+    "2330": {
+      "trade_date": "2026-08-07",
+      "before_sentiment_mean": 0.5,
+      "after_sentiment_mean": 0.1054,
+      "after_source_status": "SUCCESS"
+    },
+    "2382": {
+      "trade_date": "2026-08-03",
+      "before_sentiment_mean": 0.5,
+      "after_sentiment_mean": null,
+      "after_source_status": "SUCCESS_EMPTY"
+    },
+    "6488": {
+      "trade_date": "2026-07-20",
+      "before_sentiment_mean": 0.5,
+      "after_sentiment_mean": null,
+      "after_source_status": "SUCCESS_EMPTY"
+    },
+    "NVDA": {
+      "trade_date": "2026-05-21",
+      "before_sentiment_mean": 0.5,
+      "after_sentiment_mean": 0.7728999999999999,
+      "after_source_status": "SUCCESS"
+    }
+  },
+  "R5_null_ratio": [
+    {
+      "stock_id": "2330",
+      "n_null": 861,
+      "n_total": 987
+    },
+    {
+      "stock_id": "2382",
+      "n_null": 954,
+      "n_total": 987
+    },
+    {
+      "stock_id": "6488",
+      "n_null": 973,
+      "n_total": 985
+    },
+    {
+      "stock_id": "NVDA",
+      "n_null": 663,
+      "n_total": 754
+    }
+  ],
+  "table_counts_before": {
+    "article_comments": 136185,
+    "candidate_prices": 1825814,
+    "daily_ml_features": 137,
+    "entity_mapping": 5,
+    "etl_run_log": 38,
+    "market_articles": 1330,
+    "schema_version": 9,
+    "sentiment_cache": 36,
+    "stock_prices": 3713,
+    "theme_stock_mapping": 43,
+    "tracking_keywords": 27,
+    "universe_snapshots": 85641
+  },
+  "table_counts_after": {
+    "article_comments": 136185,
+    "candidate_prices": 1825814,
+    "daily_ml_features": 3713,
+    "entity_mapping": 5,
+    "etl_run_log": 38,
+    "market_articles": 1330,
+    "schema_version": 9,
+    "sentiment_cache": 36,
+    "stock_prices": 3713,
+    "theme_stock_mapping": 43,
+    "tracking_keywords": 27,
+    "universe_snapshots": 85641
+  },
+  "fingerprint_before": {
+    "value": "4fc208b95dbc6ea9d7c4b381d6ba97b5",
+    "rows": 137
+  },
+  "fingerprint_after": {
+    "value": "ec91c76d44bae74e83c52a3edf07b629",
+    "rows": 3713,
+    "method": "同 fingerprint_before 的 SQL 側 concat_ws/md5 方法（見 PRE_G3_04_recalc_expectations.json PRE_STATE.daily_ml_features.fingerprint_method），為下一次 daily_ml_features 操作的新基準"
+  }
+}

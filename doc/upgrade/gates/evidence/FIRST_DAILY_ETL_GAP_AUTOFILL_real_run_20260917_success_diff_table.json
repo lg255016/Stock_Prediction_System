@@ -1,0 +1,5551 @@
+{
+  "total_differing_rows": 187,
+  "rows": [
+    {
+      "stock_id": "2059",
+      "trade_date": "2026-08-31",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": 1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "2059",
+      "trade_date": "2026-09-01",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": -1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "2059",
+      "trade_date": "2026-09-02",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": -1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "2059",
+      "trade_date": "2026-09-03",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": -1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "2059",
+      "trade_date": "2026-09-04",
+      "changed_columns": {
+        "target_next_close": {
+          "before": null,
+          "after": 13905.0
+        },
+        "target_return_1d": {
+          "before": null,
+          "after": 0.003241493924171023
+        },
+        "target_up_down": {
+          "before": null,
+          "after": 1
+        },
+        "target_triple_barrier": {
+          "before": null,
+          "after": -1
+        },
+        "label_reason": {
+          "before": "no_entry",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-08-31",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": 1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-09-01",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": 1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-09-02",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": 1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-09-03",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": 1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-09-04",
+      "changed_columns": {
+        "target_next_close": {
+          "before": null,
+          "after": 2460.0
+        },
+        "target_return_1d": {
+          "before": null,
+          "after": 0.020534602441707735
+        },
+        "target_up_down": {
+          "before": null,
+          "after": 1
+        },
+        "target_triple_barrier": {
+          "before": null,
+          "after": 1
+        },
+        "label_reason": {
+          "before": "no_entry",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-08-31",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": 1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-09-01",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": -1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-09-02",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": -1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-09-03",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": 1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-09-04",
+      "changed_columns": {
+        "target_next_close": {
+          "before": null,
+          "after": 347.5
+        },
+        "target_return_1d": {
+          "before": null,
+          "after": 0.007220247973487097
+        },
+        "target_up_down": {
+          "before": null,
+          "after": 1
+        },
+        "target_triple_barrier": {
+          "before": null,
+          "after": -1
+        },
+        "label_reason": {
+          "before": "no_entry",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-08-31",
+      "changed_columns": {
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": "ambiguous_dual_barrier"
+        }
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-09-01",
+      "changed_columns": {
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": "ambiguous_dual_barrier"
+        }
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-09-02",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": -1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-09-03",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": -1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-09-04",
+      "changed_columns": {
+        "target_next_close": {
+          "before": null,
+          "after": 4760.0
+        },
+        "target_return_1d": {
+          "before": null,
+          "after": 0.07523983418740526
+        },
+        "target_up_down": {
+          "before": null,
+          "after": 1
+        },
+        "target_triple_barrier": {
+          "before": null,
+          "after": 1
+        },
+        "label_reason": {
+          "before": "no_entry",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "3008",
+      "trade_date": "2026-08-31",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": 1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "3008",
+      "trade_date": "2026-09-01",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": 1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "3008",
+      "trade_date": "2026-09-02",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": -1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "3008",
+      "trade_date": "2026-09-03",
+      "changed_columns": {
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": "ambiguous_dual_barrier"
+        }
+      }
+    },
+    {
+      "stock_id": "3008",
+      "trade_date": "2026-09-04",
+      "changed_columns": {
+        "target_next_close": {
+          "before": null,
+          "after": 6660.0
+        },
+        "target_return_1d": {
+          "before": null,
+          "after": -0.10536051565782628
+        },
+        "target_up_down": {
+          "before": null,
+          "after": 0
+        },
+        "target_triple_barrier": {
+          "before": null,
+          "after": -1
+        },
+        "label_reason": {
+          "before": "no_entry",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "6488",
+      "trade_date": "2026-08-31",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": 1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "6488",
+      "trade_date": "2026-09-01",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": -1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "6488",
+      "trade_date": "2026-09-02",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": -1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "6488",
+      "trade_date": "2026-09-03",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": 1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "6488",
+      "trade_date": "2026-09-04",
+      "changed_columns": {
+        "target_next_close": {
+          "before": null,
+          "after": 971.0
+        },
+        "target_return_1d": {
+          "before": null,
+          "after": -0.01024599127403816
+        },
+        "target_up_down": {
+          "before": null,
+          "after": 0
+        },
+        "label_reason": {
+          "before": "no_entry",
+          "after": "ambiguous_dual_barrier"
+        }
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-08-31",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": 1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-09-01",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": -1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-09-02",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": -1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-09-03",
+      "changed_columns": {
+        "target_triple_barrier": {
+          "before": null,
+          "after": -1
+        },
+        "label_reason": {
+          "before": "insufficient_data",
+          "after": null
+        }
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-09-04",
+      "changed_columns": {
+        "target_next_close": {
+          "before": null,
+          "after": 150.5
+        },
+        "target_return_1d": {
+          "before": null,
+          "after": 0.01337812594617605
+        },
+        "target_up_down": {
+          "before": null,
+          "after": 1
+        },
+        "label_reason": {
+          "before": "no_entry",
+          "after": "ambiguous_dual_barrier"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-01-19",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 5
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.30378
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.30378
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.791759469228055
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.30378
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-01-20",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 4
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.3106
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.30718999999999996
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 0.1339745962155614
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.30718999999999996
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.30378
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-01-21",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 5
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.07324
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.22920666666666667
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.791759469228055
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.22920666666666667
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.3106
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.30378
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-01-22",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.5
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.29461333333333334
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.296905
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.07324
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.3106
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-01-23",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 4
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.020675
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.19797166666666666
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.6094379124341003
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.241659
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.5
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.07324
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-01-26",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 8
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.023125
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.1812666666666667
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -2.1972245773362196
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.185528
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.020675
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.5
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-01-27",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 2
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.16845
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.07075000000000002
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.0986122886681098
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.15709800000000002
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.023125
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.020675
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-01-28",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 8
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0477875
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.07978750000000001
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -2.1972245773362196
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.15200750000000002
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.16845
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.023125
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-01-29",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 2
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0112
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.07581250000000002
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.0986122886681098
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.05424749999999999
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0477875
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.16845
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-01-30",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 2
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.86165
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.3068791666666667
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": 1.0986122886681098
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.22244250000000002
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0112
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0477875
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-02-02",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 5
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.12608000000000003
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.3329766666666667
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.791759469228055
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.24303349999999999
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.86165
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0112
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-02-03",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 7
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.2050857142857143
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.3976052380952382
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.252762968495368
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 0.3001457877762348
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.2503606428571429
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.12608000000000003
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.86165
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-02-04",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 9
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.26755555555555555
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.19957375661375665
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.5596157879354228
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 0.057190958417936644
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.294314253968254
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.2050857142857143
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.12608000000000003
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-02-05",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 2
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.2655
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.24604708994709
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.0986122886681098
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.34517425396825396
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.26755555555555555
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.2050857142857143
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-02-06",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 7
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.18527142857142856
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.23944232804232804
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.252762968495368
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 0.3001457877762348
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.2098985396825397
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.2655
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.26755555555555555
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-02-09",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 5
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.20752
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.2194304761904762
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.916290731874155
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 0.19999999999999996
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.22618653968253968
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.18527142857142856
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.2655
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-02-10",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 2
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.5126
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.3017971428571429
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.2876893968253968
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.20752
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.18527142857142856
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-02-11",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 4
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.48057500000000003
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.4002316666666667
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.3302932857142857
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.5126
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.20752
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-02-23",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 6
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.06933333333333334
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.3541694444444445
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.9459101490553135
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.2910599523809524
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.48057500000000003
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.5126
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-02-24",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.2749541666666667
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.31750708333333333
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.06933333333333334
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.48057500000000003
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-02-25",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.1179
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.09361666666666674
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.2951020833333333
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.06933333333333334
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-02-26",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.1179
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.2226027777777778
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.1179
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-02",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.1179
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.09361666666666665
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.1179
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-03",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 3
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0321
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.0321
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.3862943611198906
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.075
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-04",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.1613
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.09670000000000005
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.10376666666666667
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0321
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-05",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.09670000000000005
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.09670000000000001
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.1613
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0321
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-06",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.1613
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.09670000000000001
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.1613
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-09",
+      "changed_columns": {
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.09670000000000001
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-10",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.975
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.975
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": 0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.56815
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-11",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0257
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.5003500000000001
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.50035
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.975
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-12",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.5003500000000001
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.50035
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0257
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.975
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-13",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.0257
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.50035
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0257
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-16",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0691
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.0691
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.3566
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-17",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 3
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.3329
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.20100000000000004
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.40546510810816444
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 0.057190958417936644
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.14256666666666665
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0691
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-18",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 4
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.16060000000000002
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.18753333333333336
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.6094379124341003
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.18753333333333333
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.3329
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0691
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-19",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 3
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0404
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.17796666666666672
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.3862943611198906
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.15075
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.16060000000000002
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.3329
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-20",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0257
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.07556666666666671
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.12574000000000002
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0404
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.16060000000000002
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-23",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 6
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.18461666666666665
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.08357222222222226
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.0986122886681098
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 0.2546440075000701
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.14884333333333336
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0257
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0404
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-24",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.3407
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.18367222222222224
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.15040333333333333
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.18461666666666665
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0257
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-25",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.027
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.18410555555555555
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.12368333333333334
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.3407
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.18461666666666665
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-26",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 4
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.46215
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.27661666666666673
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.20803333333333335
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.027
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.3407
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-27",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 4
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.15407500000000002
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.2144083333333334
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.6094379124341003
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.23370833333333332
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.46215
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.027
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-30",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 6
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.20253333333333332
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.2729194444444445
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.0986122886681098
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 0.2546440075000701
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.23729166666666668
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.15407500000000002
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.46215
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-03-31",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 6
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.1605
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.1723694444444445
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.0986122886681098
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 0.2546440075000701
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.20125166666666666
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.20253333333333332
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.15407500000000002
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-04-01",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0245
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.1291777777777778
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.20075166666666666
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.1605
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.20253333333333332
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-04-02",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.839
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.3413333333333333
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": 0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.27612166666666665
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0245
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.1605
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-04-07",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 5
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.059820000000000005
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.3077733333333334
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.791759469228055
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.25727066666666665
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.839
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0245
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-04-08",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.44941000000000003
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.270955
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.059820000000000005
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.839
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-04-09",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.059820000000000005
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.3077733333333333
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.059820000000000005
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-04-10",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 2
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.35424999999999995
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.35424999999999995
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.41768999999999995
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-04-13",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 2
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.25579999999999997
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.305025
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.0986122886681098
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.22329
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.35424999999999995
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-04-14",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.305025
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.305025
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.25579999999999997
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.35424999999999995
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-04-15",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0257
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.14075000000000004
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.21191666666666664
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.25579999999999997
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-04-16",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0998
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.06275000000000006
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.18388749999999998
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0257
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-04-17",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.06275000000000006
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.1271
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0998
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0257
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-04-20",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 4
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.3039
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.20185000000000006
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.6094379124341003
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.14313333333333333
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0998
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-04-21",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 3
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.12596666666666667
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.2149333333333334
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.3862943611198906
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.13884166666666667
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.3039
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-04-22",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 5
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0469
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.15892222222222227
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.791759469228055
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.14414166666666667
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.12596666666666667
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.3039
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-04-23",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 2
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.04825
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.0737055555555556
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.0986122886681098
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.13125416666666667
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0469
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.12596666666666667
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-04-24",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.04757500000000006
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.13125416666666667
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.04825
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0469
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-04-27",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.1055
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.07687500000000005
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.08165416666666667
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.04825
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-04-28",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 2
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.022
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.06375000000000006
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.0986122886681098
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.0556625
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.1055
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-04-29",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.06375000000000006
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.05858333333333333
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.022
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.1055
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-04-30",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.022
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.06375
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.022
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-05-04",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 2
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0801
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.0801
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.0986122886681098
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.0692
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-05-05",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.0801
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.05105
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0801
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-05-06",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.8
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.44005000000000005
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": 0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.44005000000000005
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0801
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-05-07",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0377
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.41885
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.30593333333333333
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.8
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-05-08",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.41885
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.30593333333333333
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0377
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.8
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-05-11",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.0377
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.41885000000000006
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0377
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-05-12",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 2
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.01655
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.01655
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.0986122886681098
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.28475000000000006
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-05-13",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.2161
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.116325
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.09011666666666669
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.01655
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-05-14",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.116325
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.11632500000000004
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.2161
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.01655
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-05-15",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 3
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.08800000000000001
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.15205
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.3862943611198906
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.10688333333333337
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.2161
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-05-18",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 5
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0157
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.05185000000000001
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.791759469228055
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.08408750000000002
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.08800000000000001
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-05-19",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.2
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.10123333333333334
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.12995
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0157
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.08800000000000001
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-05-20",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 2
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.31465
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.17678333333333332
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.15458750000000004
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.2
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0157
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-05-21",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.257325
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.15458750000000004
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.31465
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.2
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-05-22",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.31465
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.1767833333333334
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.31465
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-05-25",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 8
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.10968750000000001
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.10968750000000001
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.3862943611198906
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 0.3385621722338523
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.20811250000000003
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-05-26",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.10968750000000001
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.21216875000000004
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.10968750000000001
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-05-27",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.10968750000000001
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.10968750000000001
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.10968750000000001
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-05-28",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0043
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.0043
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.05699375000000006
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-05-29",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.6885
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.3464
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": 0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.2674958333333334
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0043
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-06-01",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 4
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.449225
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.38067499999999993
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.38067500000000004
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.6885
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0043
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-06-02",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.5688624999999999
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.38067500000000004
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.449225
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.6885
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-06-03",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.449225
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.38067500000000004
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.449225
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-06-04",
+      "changed_columns": {
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.5688625
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-06-05",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 4
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.49
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.49
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": 0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 0.1339745962155614
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.46961250000000004
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-06-08",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 4
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.362275
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.4261375
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.42613750000000006
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.49
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-06-09",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 2
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.40085000000000004
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.41770833333333335
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.4177083333333334
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.362275
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.49
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-06-10",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.3815625
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.4177083333333334
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.40085000000000004
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.362275
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-06-11",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.40085000000000004
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.4177083333333334
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.40085000000000004
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-06-12",
+      "changed_columns": {
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.38156250000000014
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-06-15",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.7979
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.7979
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": 0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.5993750000000001
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-06-16",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.7979
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.7979
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.7979
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-06-17",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.7979
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.7979
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.7979
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-06-18",
+      "changed_columns": {
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.7979
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-06-22",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0054
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.0054
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.40165000000000006
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-06-23",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0124
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.0089
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.008900000000000055
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0054
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-06-24",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 3
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.14563333333333336
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.05447777777777779
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.3862943611198906
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.054477777777777826
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0124
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0054
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-06-25",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.3147
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.1575777777777778
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.11953333333333337
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.14563333333333336
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0124
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-06-26",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 10
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.07265
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.17766111111111113
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -2.3978952727983707
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.11015666666666671
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.3147
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.14563333333333336
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-06-29",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 5
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.13201999999999997
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.1731233333333333
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.791759469228055
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.1354806666666667
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.07265
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.3147
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-06-30",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 4
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.01025
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.07163999999999997
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.6094379124341003
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.13505066666666668
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.13201999999999997
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.07265
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-01",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 5
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.055099999999999996
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.06578999999999996
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.791759469228055
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.116944
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.01025
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.13201999999999997
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-02",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 3
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.07383333333333333
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.04639444444444441
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.3862943611198906
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.06877066666666667
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.055099999999999996
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.01025
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-03",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 3
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.026966666666666667
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.05196666666666663
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.3862943611198906
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.059634000000000006
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.07383333333333333
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.055099999999999996
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-06",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 7
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.03755714285714286
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.046119047619047594
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -2.0794415416798357
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.040741428571428595
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.026966666666666667
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.07383333333333333
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-07",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.625
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.22984126984126982
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": 0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.1636914285714286
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.03755714285714286
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.026966666666666667
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-08",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 3
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.2833333333333333
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.31529682539682535
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.3862943611198906
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.20933809523809527
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.625
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.03755714285714286
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-09",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.4541666666666666
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.24321428571428574
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.2833333333333333
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.625
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-13",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 6
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.1795
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.2314166666666666
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.9459101490553135
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.28134761904761907
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.2833333333333333
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-14",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 4
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.04555
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.11252499999999994
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.6094379124341003
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.28334583333333335
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.1795
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-15",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.11252499999999994
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.16946111111111115
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.04555
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.1795
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-16",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.04555
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.11252500000000004
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.04555
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-17",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0413
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.0413
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.08878333333333337
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-20",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 6
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.2889
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.16509999999999994
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.5108256237659907
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 0.057190958417936644
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.12525000000000003
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0413
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-21",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.7081
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.3460999999999999
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": 0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.3461
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.2889
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0413
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-22",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 4
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.520175
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.505725
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": 0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 0.1339745962155614
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.38961875
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.7081
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.2889
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-23",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0001
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.4094583333333333
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.311715
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.520175
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.7081
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-24",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.1611
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.227125
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.335675
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0001
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.520175
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-27",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 4
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.012375
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.05785833333333329
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.6094379124341003
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.28037
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.1611
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0001
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-28",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.08673749999999994
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.17343750000000002
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.012375
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.1611
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-29",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 2
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.5001
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.25623749999999995
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.16841875
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.012375
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-30",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 3
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.005833333333333334
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.2529666666666666
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.3862943611198906
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.16985208333333335
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.5001
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-07-31",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0257
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.17721111111111107
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.13600208333333333
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.005833333333333334
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.5001
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-08-03",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 2
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0081
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.013211111111111075
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.0986122886681098
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.13493333333333332
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0257
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.005833333333333334
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-08-04",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.016899999999999943
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.13493333333333332
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0081
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0257
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-08-05",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 2
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.36215
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.18512499999999996
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.10044583333333335
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0081
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-08-06",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.36215
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.13198333333333334
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.36215
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-08-07",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.2208
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.29147499999999993
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.1970166666666667
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.36215
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-08-10",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 9
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.05233333333333333
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.13656666666666661
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -2.3025850929940455
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.2117611111111111
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.2208
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-08-11",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 3
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0593
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.11081111111111107
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.3862943611198906
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.17364583333333333
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.05233333333333333
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.2208
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-08-12",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.0558166666666666
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.1108111111111111
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0593
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.05233333333333333
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-08-13",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 2
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.20145
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.13037499999999994
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.0986122886681098
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.13347083333333332
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0593
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-08-14",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.20145
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.10436111111111109
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.20145
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-08-17",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.276
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.23872499999999997
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.1789166666666667
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.20145
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-08-18",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.276
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.23872500000000005
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.276
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-08-19",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.276
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.23872500000000005
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.276
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-08-20",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 2
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.03655
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.03655
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.0986122886681098
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.156275
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-08-21",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.03655
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.156275
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.03655
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-08-24",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 2
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0781
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.057324999999999945
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.0986122886681098
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.057325
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.03655
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-08-25",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.2649
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.17149999999999996
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.1265166666666667
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0781
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-08-26",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.17149999999999996
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.1265166666666667
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.2649
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0781
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-08-27",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0233
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.14409999999999995
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.12210000000000003
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.2649
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-08-28",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.2297
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.12649999999999995
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.14900000000000002
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0233
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-08-31",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 5
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0009600000000000001
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.0846533333333333
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.791759469228055
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.129715
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.2297
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0233
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-09-01",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 1
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.0157
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.08211999999999997
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -0.6931471805599453
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.067415
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0009600000000000001
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.2297
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-09-02",
+      "changed_columns": {
+        "article_count": {
+          "before": 0,
+          "after": 3
+        },
+        "sentiment_mean": {
+          "before": null,
+          "after": 0.14143333333333333
+        },
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.05269777777777774
+        },
+        "bullishness_index": {
+          "before": 0.0,
+          "after": -1.3862943611198906
+        },
+        "agreement_index": {
+          "before": 0.0,
+          "after": 1.0
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.08221866666666666
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.0157
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0009600000000000001
+        },
+        "source_status": {
+          "before": "SUCCESS_EMPTY",
+          "after": "SUCCESS"
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-09-03",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.07856666666666662
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.09694833333333333
+        },
+        "sentiment_lag_1": {
+          "before": null,
+          "after": 0.14143333333333333
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.0157
+        }
+      }
+    },
+    {
+      "stock_id": "8299",
+      "trade_date": "2026-09-04",
+      "changed_columns": {
+        "sentiment_3d_ma": {
+          "before": null,
+          "after": 0.14143333333333333
+        },
+        "sentiment_5d_ma": {
+          "before": null,
+          "after": 0.05269777777777777
+        },
+        "sentiment_lag_2": {
+          "before": null,
+          "after": 0.14143333333333333
+        }
+      }
+    }
+  ]
+}

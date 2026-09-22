@@ -1,0 +1,234 @@
+{
+  "target": "target_triple_barrier",
+  "panel_sha256": "4c4657c4e7e36b227fef01d2f6f667b8e613b23587db40f2907d024db9b3f729",
+  "holdout_start_date": "2025-10-23",
+  "is_real_consumption": true,
+  "folds_processed": [
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42
+  ],
+  "folds_excluded_by_both_iterators": [],
+  "holdout_tail_gap_excluded": true,
+  "holdout_row_count": 24162,
+  "holdout_class_distribution": {
+    "-1": 13966,
+    "0": 426,
+    "1": 9770
+  },
+  "sb6_reference": {
+    "theta_star": 0.06907452098250194,
+    "rule": "max_recall_tiebreak_precision",
+    "tercile_low_cutpoint": 0.30421394224025783,
+    "tercile_mid_cutpoint": 0.48111676232087386
+  },
+  "vol_coverage_matched_cutpoint": 0.23116970731839864,
+  "frozen_artifacts": {
+    "panel_sha256": {
+      "target_triple_barrier": "4c4657c4e7e36b227fef01d2f6f667b8e613b23587db40f2907d024db9b3f729",
+      "target_up_down": "39dc6b8e6160add20f39a7265bad04de50c76199fa7ab81b979a7aabeabbd014"
+    },
+    "sb4_oof_parquet_sha256": "b9c1d432f0912a2cf9e2a3b3e544d32a57efb45464fc500646a34a7d6f94466c",
+    "sb4_meta_learner_report_sha256": "7e0216f177ce8c13a3280ed56b26c537ceb0c0c7589b5a84b9472d5d55878e5e",
+    "sb5_reference_sha256": "0689164023e6aec98104744a4d0a56595605a484a2a384da889d77076bd377fc",
+    "sb6_reference_sha256": "aff85bd5efc85fe688719a43de4c170a01726f479a7600defb28e4c8724e9227",
+    "theta_star": 0.06907452098250194,
+    "selection_rule": "max_recall_tiebreak_precision",
+    "tercile_low_cutpoint": 0.30421394224025783,
+    "tercile_mid_cutpoint": 0.48111676232087386,
+    "vol_coverage_matched_cutpoint": 0.23116970731839864,
+    "gating_constants": {
+      "MIN_COVERAGE": 0.8,
+      "MIN_LIFT": 4.0,
+      "MIN_RECALL": 0.6,
+      "MIN_POSITIVE_FOR_AUC": 10
+    },
+    "theta_grid_source": "UG_G3_SB6_gating_report.json 的 theta_grid 欄（LogisticRegression 校準後 P0 分布建構），本 SB 不重新產生網格",
+    "specialist_training_config": {
+      "train_window_size": 60,
+      "test_window_size": 20,
+      "mode": "rolling",
+      "embargo_days": 0,
+      "label_horizon": 5,
+      "label_end_date_col": "label_end_date_tb"
+    }
+  },
+  "specialist_oof_regeneration_check": {
+    "n_rows_compared": 0,
+    "n_cols": 12,
+    "max_abs_diff": null,
+    "tol": 1e-09,
+    "note": "無重疊列——正式消費（折 33-42）與 UG-G3-SB4 OOF parquet（僅折 0-32）通常不重疊，屬預期，非錯誤"
+  },
+  "holdout_gating_metrics": {
+    "n": 24162,
+    "n_timeout": 426,
+    "n_gated": 1808,
+    "coverage": 0.9251717573048589,
+    "precision": 0.18915929203539822,
+    "recall": 0.8028169014084507,
+    "lift": 10.728795338402094
+  },
+  "baseline_comparison": {
+    "random_baseline_precision": 0.01763099081201887,
+    "volatility_tercile": {
+      "n": 24162,
+      "n_timeout": 426,
+      "n_gated": 3597,
+      "coverage": 0.8511298733548547,
+      "precision": 0.11064776202390882,
+      "recall": 0.9342723004694836,
+      "lift": 6.275754051694096
+    },
+    "volatility_coverage_matched": {
+      "n": 24162,
+      "n_timeout": 426,
+      "n_gated": 1928,
+      "coverage": 0.9202052810197832,
+      "precision": 0.18153526970954356,
+      "recall": 0.8215962441314554,
+      "lift": 10.296373677751154
+    },
+    "timeout_gating": {
+      "n": 24162,
+      "n_timeout": 426,
+      "n_gated": 1808,
+      "coverage": 0.9251717573048589,
+      "precision": 0.18915929203539822,
+      "recall": 0.8028169014084507,
+      "lift": 10.728795338402094
+    }
+  },
+  "retained_direction_shift": {
+    "retained_minus1_rate": 0.586561689183144,
+    "retained_plus1_rate": 0.40968059407712265,
+    "shift_minus1": 0.008546624205079234,
+    "shift_plus1": 0.005326649867206268
+  },
+  "per_fold_stability": [
+    {
+      "fold_id": 33,
+      "n": 2639,
+      "n_timeout": 64,
+      "n_gated": 371,
+      "coverage": 0.8594164456233422,
+      "precision": 0.15363881401617252,
+      "recall": 0.890625,
+      "lift": 6.335200471698114
+    },
+    {
+      "fold_id": 34,
+      "n": 2748,
+      "n_timeout": 93,
+      "n_gated": 279,
+      "coverage": 0.898471615720524,
+      "precision": 0.24014336917562723,
+      "recall": 0.7204301075268817,
+      "lift": 7.095849231124984
+    },
+    {
+      "fold_id": 35,
+      "n": 2631,
+      "n_timeout": 95,
+      "n_gated": 384,
+      "coverage": 0.8540478905359179,
+      "precision": 0.2109375,
+      "recall": 0.8526315789473684,
+      "lift": 5.841858552631579
+    },
+    {
+      "fold_id": 36,
+      "n": 2444,
+      "n_timeout": 44,
+      "n_gated": 327,
+      "coverage": 0.86620294599018,
+      "precision": 0.1162079510703364,
+      "recall": 0.8636363636363636,
+      "lift": 6.4548234639977755
+    },
+    {
+      "fold_id": 37,
+      "n": 2403,
+      "n_timeout": 27,
+      "n_gated": 121,
+      "coverage": 0.9496462754889721,
+      "precision": 0.2066115702479339,
+      "recall": 0.9259259259259259,
+      "lift": 18.388429752066116
+    },
+    {
+      "fold_id": 38,
+      "n": 2350,
+      "n_timeout": 50,
+      "n_gated": 92,
+      "coverage": 0.9608510638297872,
+      "precision": 0.31521739130434784,
+      "recall": 0.58,
+      "lift": 14.81521739130435
+    },
+    {
+      "fold_id": 39,
+      "n": 2203,
+      "n_timeout": 19,
+      "n_gated": 140,
+      "coverage": 0.9364502950522016,
+      "precision": 0.1357142857142857,
+      "recall": 1.0,
+      "lift": 15.735714285714284
+    },
+    {
+      "fold_id": 40,
+      "n": 2218,
+      "n_timeout": 4,
+      "n_gated": 32,
+      "coverage": 0.9855725879170424,
+      "precision": 0.09375,
+      "recall": 0.75,
+      "lift": 51.984375
+    },
+    {
+      "fold_id": 41,
+      "n": 2258,
+      "n_timeout": 6,
+      "n_gated": 21,
+      "coverage": 0.9906997342781222,
+      "precision": 0.2857142857142857,
+      "recall": 1.0,
+      "lift": 107.52380952380952
+    },
+    {
+      "fold_id": 42,
+      "n": 2268,
+      "n_timeout": 24,
+      "n_gated": 41,
+      "coverage": 0.9819223985890653,
+      "precision": 0.4146341463414634,
+      "recall": 0.7083333333333334,
+      "lift": 39.18292682926829
+    }
+  ],
+  "up_down_observational_auc": {
+    "observational": true,
+    "lr": 0.5051235259640365,
+    "rf": 0.520201872278875,
+    "lgbm": 0.5231326080760977,
+    "xgb": 0.5220319762855092,
+    "panel_sha256": "39dc6b8e6160add20f39a7265bad04de50c76199fa7ab81b979a7aabeabbd014",
+    "row_count": 29990
+  },
+  "max_rows_used": null,
+  "run_timestamp": "2026-09-16T05:10:40.252102+00:00",
+  "total_elapsed_seconds": 30.668733511993196,
+  "script_commit": "0156d59213f3da1e986575da6c034f4cbea8a4b5",
+  "script_dirty": false,
+  "script_dirty_paths": [],
+  "script_untracked_paths": [],
+  "holdout_consumed_at": "2026-09-16T05:10:40.253598+00:00"
+}

@@ -1,0 +1,206 @@
+{
+  "target": "target_triple_barrier",
+  "panel_path": "/workspaces/Database_Backups/Stock_Prediction_System2/ml_panels/panel_target_triple_barrier_20260912.parquet",
+  "panel_sha256": "4c4657c4e7e36b227fef01d2f6f667b8e613b23587db40f2907d024db9b3f729",
+  "holdout_start_date": "2025-10-23T00:00:00",
+  "meta_eval_start_date": "2025-05-02T00:00:00",
+  "splitter_config": {
+    "train_window_size": 60,
+    "test_window_size": 20,
+    "embargo_days": 0,
+    "label_horizon": 5,
+    "label_end_date_col": "label_end_date_tb",
+    "require_label_end_date": true
+  },
+  "n_folds_processed": 33,
+  "max_folds": null,
+  "fold_timings": [
+    {
+      "fold": 0,
+      "elapsed_seconds": 0.943011071998626,
+      "n_test": 2854
+    },
+    {
+      "fold": 1,
+      "elapsed_seconds": 0.6878492390096653,
+      "n_test": 2888
+    },
+    {
+      "fold": 2,
+      "elapsed_seconds": 0.7556807379878592,
+      "n_test": 2827
+    },
+    {
+      "fold": 3,
+      "elapsed_seconds": 1.039834337978391,
+      "n_test": 2830
+    },
+    {
+      "fold": 4,
+      "elapsed_seconds": 0.8308328819985036,
+      "n_test": 2778
+    },
+    {
+      "fold": 5,
+      "elapsed_seconds": 0.8582739759876858,
+      "n_test": 2638
+    },
+    {
+      "fold": 6,
+      "elapsed_seconds": 0.6810257170000114,
+      "n_test": 2697
+    },
+    {
+      "fold": 7,
+      "elapsed_seconds": 0.6609806720225606,
+      "n_test": 2835
+    },
+    {
+      "fold": 8,
+      "elapsed_seconds": 0.6995590910082683,
+      "n_test": 2799
+    },
+    {
+      "fold": 9,
+      "elapsed_seconds": 1.0346159210021142,
+      "n_test": 2839
+    },
+    {
+      "fold": 10,
+      "elapsed_seconds": 0.8484930649865419,
+      "n_test": 2855
+    },
+    {
+      "fold": 11,
+      "elapsed_seconds": 0.7783661370049231,
+      "n_test": 2852
+    },
+    {
+      "fold": 12,
+      "elapsed_seconds": 0.691739426983986,
+      "n_test": 2715
+    },
+    {
+      "fold": 13,
+      "elapsed_seconds": 0.6420363680226728,
+      "n_test": 2658
+    },
+    {
+      "fold": 14,
+      "elapsed_seconds": 0.8458545389876235,
+      "n_test": 2677
+    },
+    {
+      "fold": 15,
+      "elapsed_seconds": 0.8593592809920665,
+      "n_test": 2729
+    },
+    {
+      "fold": 16,
+      "elapsed_seconds": 1.200089649995789,
+      "n_test": 2775
+    },
+    {
+      "fold": 17,
+      "elapsed_seconds": 0.8013733289844822,
+      "n_test": 2703
+    },
+    {
+      "fold": 18,
+      "elapsed_seconds": 0.8850090309861116,
+      "n_test": 2644
+    },
+    {
+      "fold": 19,
+      "elapsed_seconds": 0.8544515249959659,
+      "n_test": 2716
+    },
+    {
+      "fold": 20,
+      "elapsed_seconds": 0.8816811099823099,
+      "n_test": 2761
+    },
+    {
+      "fold": 21,
+      "elapsed_seconds": 0.6839608789887279,
+      "n_test": 2786
+    },
+    {
+      "fold": 22,
+      "elapsed_seconds": 0.6901523710112087,
+      "n_test": 2803
+    },
+    {
+      "fold": 23,
+      "elapsed_seconds": 0.7431380710040685,
+      "n_test": 2731
+    },
+    {
+      "fold": 24,
+      "elapsed_seconds": 0.748590928997146,
+      "n_test": 2749
+    },
+    {
+      "fold": 25,
+      "elapsed_seconds": 0.7847508349805139,
+      "n_test": 2751
+    },
+    {
+      "fold": 26,
+      "elapsed_seconds": 0.6849635260005016,
+      "n_test": 2504
+    },
+    {
+      "fold": 27,
+      "elapsed_seconds": 0.7044946480018552,
+      "n_test": 2809
+    },
+    {
+      "fold": 28,
+      "elapsed_seconds": 0.671624388982309,
+      "n_test": 2818
+    },
+    {
+      "fold": 29,
+      "elapsed_seconds": 0.9921929069969337,
+      "n_test": 2848
+    },
+    {
+      "fold": 30,
+      "elapsed_seconds": 0.7724069389805663,
+      "n_test": 2781
+    },
+    {
+      "fold": 31,
+      "elapsed_seconds": 0.8752979919954669,
+      "n_test": 2747
+    },
+    {
+      "fold": 32,
+      "elapsed_seconds": 0.7390356640098616,
+      "n_test": 2727
+    }
+  ],
+  "row_counts": {
+    "total": 91124,
+    "meta_train": 73714,
+    "meta_eval": 16730,
+    "purged": 680
+  },
+  "test_window_exclusions": {
+    "rule_a_target_null": 7811,
+    "rule_b_feature_null": 7
+  },
+  "oof_parquet_path": "/workspaces/Database_Backups/Stock_Prediction_System2/ml_panels/oof_target_triple_barrier_20260915_025542.parquet",
+  "oof_parquet_sha256": "b9c1d432f0912a2cf9e2a3b3e544d32a57efb45464fc500646a34a7d6f94466c",
+  "oof_row_count": 91124,
+  "total_elapsed_seconds": 31.82741315700696,
+  "script_commit": "c328805f59c5055c9a0268d245c4aef3870e16e9",
+  "script_dirty": false,
+  "script_dirty_paths": [],
+  "script_untracked_paths": [
+    ".claude/settings.local.json",
+    "doc/upgrade/gates/evidence/UG_G3_SB4_oof_generation_target_up_down.json"
+  ],
+  "run_timestamp": "2026-09-15T02:55:44.921865+00:00"
+}

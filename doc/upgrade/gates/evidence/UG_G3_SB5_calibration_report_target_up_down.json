@@ -1,0 +1,618 @@
+{
+  "target": "target_up_down",
+  "oof_path": "/workspaces/Database_Backups/Stock_Prediction_System2/ml_panels/oof_target_up_down_20260915_024419.parquet",
+  "oof_sha256": "de1998519aca799eba5df179f2909070d43162c1add1a33599b79669f0a8c1ba",
+  "sb4_report_evidence_path": "doc/upgrade/gates/evidence/UG_G3_SB4_meta_learner_report_target_up_down.json",
+  "sb4_model_match": {
+    "actual_macro_f1_meta_eval": {
+      "LogisticRegression": 0.38122646391917847,
+      "RidgeClassifier": 0.3807127260056736
+    },
+    "matched_within_tolerance": 1e-09
+  },
+  "calib_fit_folds": [
+    27,
+    28,
+    29
+  ],
+  "calib_eval_folds": [
+    30,
+    31,
+    32
+  ],
+  "calib_fit_row_count": 8968,
+  "calib_eval_row_count": 8981,
+  "calib_fit_class_distribution": {
+    "0": 4604,
+    "1": 4364
+  },
+  "calib_eval_class_distribution": {
+    "0": 4742,
+    "1": 4239
+  },
+  "lr_native_proba_brier_calib_eval": 0.49895841581462996,
+  "calibration_results": {
+    "LogisticRegression__isotonic": {
+      "model_name": "LogisticRegression",
+      "method": "isotonic",
+      "auc_calib_fit_raw": 0.49594377940992607,
+      "per_class_quality": {
+        "1": {
+          "auc_before": 0.5057555372682156,
+          "auc_after": 0.4975826484784246,
+          "n_unique_calibrated_values": 19,
+          "platt_slope": null,
+          "platt_intercept": null
+        }
+      },
+      "n_unique_calibrated_values": 19,
+      "brier_before": 0.49895841581462996,
+      "brier_after": 0.4996691387560589,
+      "log_loss_before": 0.6922364816979043,
+      "log_loss_after": 0.7040773497433612,
+      "fixed_threshold_rule": "0.5 門檻（二分類）",
+      "fixed_threshold_macro_f1_before": 0.4115449312752576,
+      "fixed_threshold_macro_f1_after": 0.34555126430080885,
+      "fixed_threshold_per_class_before": {
+        "0": {
+          "precision": 0.5322483423749247,
+          "recall": 0.9310417545339519,
+          "f1": 0.6773030605200583,
+          "support": 4742
+        },
+        "1": {
+          "precision": 0.5233236151603499,
+          "recall": 0.084689785326728,
+          "f1": 0.14578680203045685,
+          "support": 4239
+        },
+        "macro_f1": 0.4115449312752576
+      },
+      "fixed_threshold_per_class_after": {
+        "0": {
+          "precision": 0.5280035630776083,
+          "recall": 1.0,
+          "f1": 0.6911025286016177,
+          "support": 4742
+        },
+        "1": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 4239
+        },
+        "macro_f1": 0.34555126430080885
+      },
+      "reliability_before": {
+        "bin_counts": [
+          0,
+          0,
+          0,
+          31,
+          8264,
+          651,
+          10,
+          17,
+          8,
+          0
+        ],
+        "mean_predicted": [
+          NaN,
+          NaN,
+          NaN,
+          0.3823104155761788,
+          0.4622386667143591,
+          0.5171215086871264,
+          0.6705565659683919,
+          0.7369415829384198,
+          0.8444060143379645,
+          NaN
+        ],
+        "observed_frequency": [
+          NaN,
+          NaN,
+          NaN,
+          0.45161290322580644,
+          0.4678121974830591,
+          0.5192012288786483,
+          0.7,
+          0.6470588235294118,
+          0.375,
+          NaN
+        ]
+      },
+      "reliability_after": {
+        "bin_counts": [
+          8,
+          5,
+          3,
+          30,
+          8935,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mean_predicted": [
+          0.024791172926847287,
+          0.14398603337297552,
+          0.22190127506610344,
+          0.374808873156592,
+          0.48875706630051236,
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN
+        ],
+        "observed_frequency": [
+          0.375,
+          0.4,
+          0.3333333333333333,
+          0.5666666666666667,
+          0.47185226636821487,
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN
+        ]
+      },
+      "calibration_not_meaningful": true,
+      "calibration_not_meaningful_reason": "Calib-fit 原始分數 AUC < 0.5（至少一個 OvR 類別，見本條目 auc_calib_fit_raw=0.49594377940992607）——底層訊號趨近零，校準器沒有真實排序訊號可學"
+    },
+    "LogisticRegression__sigmoid": {
+      "model_name": "LogisticRegression",
+      "method": "sigmoid",
+      "auc_calib_fit_raw": 0.49594377940992607,
+      "per_class_quality": {
+        "1": {
+          "auc_before": 0.5057555372682156,
+          "auc_after": 0.49424446273178435,
+          "n_unique_calibrated_values": 8981,
+          "platt_slope": -0.15389297711823016,
+          "platt_intercept": -0.07831539527317337
+        }
+      },
+      "n_unique_calibrated_values": 8981,
+      "brier_before": 0.49895841581462996,
+      "brier_after": 0.4990195024438435,
+      "log_loss_before": 0.6922364816979043,
+      "log_loss_after": 0.6921669148401735,
+      "fixed_threshold_rule": "0.5 門檻（二分類）",
+      "fixed_threshold_macro_f1_before": 0.4115449312752576,
+      "fixed_threshold_macro_f1_after": 0.3460946420028772,
+      "fixed_threshold_per_class_before": {
+        "0": {
+          "precision": 0.5322483423749247,
+          "recall": 0.9310417545339519,
+          "f1": 0.6773030605200583,
+          "support": 4742
+        },
+        "1": {
+          "precision": 0.5233236151603499,
+          "recall": 0.084689785326728,
+          "f1": 0.14578680203045685,
+          "support": 4239
+        },
+        "macro_f1": 0.4115449312752576
+      },
+      "fixed_threshold_per_class_after": {
+        "0": {
+          "precision": 0.5279170845870946,
+          "recall": 0.9989455925769718,
+          "f1": 0.6907765220561429,
+          "support": 4742
+        },
+        "1": {
+          "precision": 0.375,
+          "recall": 0.0007077140835102619,
+          "f1": 0.0014127619496114904,
+          "support": 4239
+        },
+        "macro_f1": 0.3460946420028772
+      },
+      "reliability_before": {
+        "bin_counts": [
+          0,
+          0,
+          0,
+          31,
+          8264,
+          651,
+          10,
+          17,
+          8,
+          0
+        ],
+        "mean_predicted": [
+          NaN,
+          NaN,
+          NaN,
+          0.3823104155761788,
+          0.4622386667143591,
+          0.5171215086871264,
+          0.6705565659683919,
+          0.7369415829384198,
+          0.8444060143379645,
+          NaN
+        ],
+        "observed_frequency": [
+          NaN,
+          NaN,
+          NaN,
+          0.45161290322580644,
+          0.4678121974830591,
+          0.5192012288786483,
+          0.7,
+          0.6470588235294118,
+          0.375,
+          NaN
+        ]
+      },
+      "reliability_after": {
+        "bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          8973,
+          8,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mean_predicted": [
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          0.4854846683407448,
+          0.5020431984392941,
+          NaN,
+          NaN,
+          NaN,
+          NaN
+        ],
+        "observed_frequency": [
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          0.47208291541290537,
+          0.375,
+          NaN,
+          NaN,
+          NaN,
+          NaN
+        ]
+      },
+      "calibration_not_meaningful": true,
+      "calibration_not_meaningful_reason": "Calib-fit 原始分數 AUC < 0.5（至少一個 OvR 類別，見本條目 auc_calib_fit_raw=0.49594377940992607）——底層訊號趨近零，校準器沒有真實排序訊號可學；Platt 擬合斜率（正負號本身即為雜訊）：{'1': -0.15389297711823016}"
+    },
+    "RidgeClassifier__isotonic": {
+      "model_name": "RidgeClassifier",
+      "method": "isotonic",
+      "auc_calib_fit_raw": 0.4959460191233702,
+      "per_class_quality": {
+        "1": {
+          "auc_before": 0.5057714068585882,
+          "auc_after": 0.49723093059775425,
+          "n_unique_calibrated_values": 20,
+          "platt_slope": null,
+          "platt_intercept": null
+        }
+      },
+      "n_unique_calibrated_values": 20,
+      "brier_before": 0.4985555507686831,
+      "brier_after": 0.4997189326152531,
+      "log_loss_before": 0.6917132860935524,
+      "log_loss_after": 0.7041269012831948,
+      "fixed_threshold_rule": "0.5 門檻（二分類）",
+      "fixed_threshold_macro_f1_before": 0.4108182238688591,
+      "fixed_threshold_macro_f1_after": 0.34555126430080885,
+      "fixed_threshold_per_class_before": {
+        "0": {
+          "precision": 0.5321045657149741,
+          "recall": 0.9314635175031633,
+          "f1": 0.6772981675994787,
+          "support": 4742
+        },
+        "1": {
+          "precision": 0.5220588235294118,
+          "recall": 0.08374616654871432,
+          "f1": 0.1443382801382395,
+          "support": 4239
+        },
+        "macro_f1": 0.4108182238688591
+      },
+      "fixed_threshold_per_class_after": {
+        "0": {
+          "precision": 0.5280035630776083,
+          "recall": 1.0,
+          "f1": 0.6911025286016177,
+          "support": 4742
+        },
+        "1": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 4239
+        },
+        "macro_f1": 0.34555126430080885
+      },
+      "reliability_before": {
+        "bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          8301,
+          652,
+          25,
+          3,
+          0,
+          0
+        ],
+        "mean_predicted": [
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          0.4810407142057178,
+          0.5092881348860733,
+          0.6354027971892026,
+          0.712906881962054,
+          NaN,
+          NaN
+        ],
+        "observed_frequency": [
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          0.4678954342850259,
+          0.5184049079754601,
+          0.64,
+          0.3333333333333333,
+          NaN,
+          NaN
+        ]
+      },
+      "reliability_after": {
+        "bin_counts": [
+          8,
+          5,
+          3,
+          30,
+          8935,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mean_predicted": [
+          0.02582241908477228,
+          0.1465420381603257,
+          0.22436352944611346,
+          0.3748807121527617,
+          0.48875823361596493,
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN
+        ],
+        "observed_frequency": [
+          0.375,
+          0.4,
+          0.3333333333333333,
+          0.5666666666666667,
+          0.47185226636821487,
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN
+        ]
+      },
+      "calibration_not_meaningful": true,
+      "calibration_not_meaningful_reason": "Calib-fit 原始分數 AUC < 0.5（至少一個 OvR 類別，見本條目 auc_calib_fit_raw=0.4959460191233702）——底層訊號趨近零，校準器沒有真實排序訊號可學"
+    },
+    "RidgeClassifier__sigmoid": {
+      "model_name": "RidgeClassifier",
+      "method": "sigmoid",
+      "auc_calib_fit_raw": 0.4959460191233702,
+      "per_class_quality": {
+        "1": {
+          "auc_before": 0.5057714068585882,
+          "auc_after": 0.4942285931414118,
+          "n_unique_calibrated_values": 8981,
+          "platt_slope": -0.3101817937943833,
+          "platt_intercept": -0.07837961244128537
+        }
+      },
+      "n_unique_calibrated_values": 8981,
+      "brier_before": 0.4985555507686831,
+      "brier_after": 0.4990193229312929,
+      "log_loss_before": 0.6917132860935524,
+      "log_loss_after": 0.6921667351464789,
+      "fixed_threshold_rule": "0.5 門檻（二分類）",
+      "fixed_threshold_macro_f1_before": 0.4108182238688591,
+      "fixed_threshold_macro_f1_after": 0.3461425345069423,
+      "fixed_threshold_per_class_before": {
+        "0": {
+          "precision": 0.5321045657149741,
+          "recall": 0.9314635175031633,
+          "f1": 0.6772981675994787,
+          "support": 4742
+        },
+        "1": {
+          "precision": 0.5220588235294118,
+          "recall": 0.08374616654871432,
+          "f1": 0.1443382801382395,
+          "support": 4239
+        },
+        "macro_f1": 0.4108182238688591
+      },
+      "fixed_threshold_per_class_after": {
+        "0": {
+          "precision": 0.5279696902161801,
+          "recall": 0.9991564740615774,
+          "f1": 0.6908719743365412,
+          "support": 4742
+        },
+        "1": {
+          "precision": 0.42857142857142855,
+          "recall": 0.0007077140835102619,
+          "f1": 0.001413094677343382,
+          "support": 4239
+        },
+        "macro_f1": 0.3461425345069423
+      },
+      "reliability_before": {
+        "bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          8301,
+          652,
+          25,
+          3,
+          0,
+          0
+        ],
+        "mean_predicted": [
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          0.4810407142057178,
+          0.5092881348860733,
+          0.6354027971892026,
+          0.712906881962054,
+          NaN,
+          NaN
+        ],
+        "observed_frequency": [
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          0.4678954342850259,
+          0.5184049079754601,
+          0.64,
+          0.3333333333333333,
+          NaN,
+          NaN
+        ]
+      },
+      "reliability_after": {
+        "bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          8974,
+          7,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mean_predicted": [
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          0.48548454867902013,
+          0.5022968373557699,
+          NaN,
+          NaN,
+          NaN,
+          NaN
+        ],
+        "observed_frequency": [
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          0.47203030978381993,
+          0.42857142857142855,
+          NaN,
+          NaN,
+          NaN,
+          NaN
+        ]
+      },
+      "calibration_not_meaningful": true,
+      "calibration_not_meaningful_reason": "Calib-fit 原始分數 AUC < 0.5（至少一個 OvR 類別，見本條目 auc_calib_fit_raw=0.4959460191233702）——底層訊號趨近零，校準器沒有真實排序訊號可學；Platt 擬合斜率（正負號本身即為雜訊）：{'1': -0.3101817937943833}"
+    }
+  },
+  "specialist_raw_auc": {
+    "lr": {
+      "0": {
+        "meta_train_auc": 0.5151267681792453,
+        "calib_fit_auc": 0.4988133500459091,
+        "calib_eval_auc": 0.4922623558690471
+      },
+      "1": {
+        "meta_train_auc": 0.5151267681792453,
+        "calib_fit_auc": 0.49881335004590915,
+        "calib_eval_auc": 0.4922623558690471
+      }
+    },
+    "rf": {
+      "0": {
+        "meta_train_auc": 0.5254906961688581,
+        "calib_fit_auc": 0.49512640843135647,
+        "calib_eval_auc": 0.5102033008946967
+      },
+      "1": {
+        "meta_train_auc": 0.5254906961688581,
+        "calib_fit_auc": 0.4951264084313564,
+        "calib_eval_auc": 0.5102033008946967
+      }
+    },
+    "lgbm": {
+      "0": {
+        "meta_train_auc": 0.5236140156958301,
+        "calib_fit_auc": 0.5001077551023658,
+        "calib_eval_auc": 0.4997205658648195
+      },
+      "1": {
+        "meta_train_auc": 0.5236140156958301,
+        "calib_fit_auc": 0.5001077551023658,
+        "calib_eval_auc": 0.4997205658648196
+      }
+    },
+    "xgb": {
+      "0": {
+        "meta_train_auc": 0.5238465790830119,
+        "calib_fit_auc": 0.49774276701963227,
+        "calib_eval_auc": 0.5029157511803444
+      },
+      "1": {
+        "meta_train_auc": 0.5238465766215451,
+        "calib_fit_auc": 0.49774276701963227,
+        "calib_eval_auc": 0.5029157263063782
+      }
+    }
+  },
+  "specialist_raw_auc_note": "target_up_down 二分類：兩個類別（0／1）的 AUC 數值理論上必然相同（class-1 機率的排序能力與 class-0 機率的排序能力是同一個排序問題的兩面，AUC(class=0, score=p0) == AUC(class=1, score=p1) 恆成立），非重複計算錯誤，保留兩欄僅為與 target_triple_barrier 的欄位結構一致。",
+  "platt_c": 1000000.0,
+  "reliability_n_bins": 10,
+  "max_rows_used": null,
+  "total_elapsed_seconds": 1.303107573010493,
+  "script_commit": "7c65b4f61aaa97cd17888f6925814ef65d5736e5",
+  "script_dirty": false,
+  "script_dirty_paths": [],
+  "script_untracked_paths": [
+    ".claude/settings.local.json"
+  ],
+  "run_timestamp": "2026-09-15T08:04:50.429808+00:00"
+}

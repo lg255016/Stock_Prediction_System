@@ -1,0 +1,58 @@
+{
+  "purpose": "UG-G3-SB1 Gate A §11 DoD 第 6 項——真實庫寫入。PO 2026-09-09 binding confirmation 核准，走 RISK-013 三項協議，範圍為 daily_ml_features 的 target_triple_barrier／label_reason 兩欄，對應 stock_prices 全部 3,713 列。",
+  "date": "2026-09-09",
+  "authorization": "PO 2026-09-09 binding confirmation：授權對 postgres@localhost:5432 的 daily_ml_features 表，以 efd0205 版本的 scripts/verify/ug_g3_sb1_write_triple_barrier_labels.py --write 執行 target_triple_barrier／label_reason 兩欄 UPDATE，範圍為 stock_prices 對應的全部 3,713 列。腳本執行過程中未修改（依授權條件）。",
+  "step_1_backup": {
+    "command": "docker exec stock_prediction_system2_devcontainer-db-1 pg_dump -h localhost -U postgres -d postgres -Fc -f /tmp/<filename>（密碼經 PGPASSWORD 環境變數傳遞，不在此重複字面值；db 容器有 pg_dump 二進位，app 容器沒有，故於 db 容器內執行後 docker cp 取出）",
+    "backup_file_path": "D:\\Python\\Database_Backups\\Stock_Prediction_System2\\stock_prediction_system2_PRE_g3_sb1_tb_labels_20260909_151621.dump",
+    "backup_file_size_bytes": 71826690,
+    "pg_dump_exit_code": 0,
+    "size_sanity_check": "71,826,690 bytes（約 68.5 MB），與 PO 提及的既有同期 dump（約 70 MB）同量級，未觸發「明顯偏小」警戒",
+    "transfer_integrity": "docker cp 前後（db 容器 /tmp 暫存 → docker cp → Windows 目的路徑）byte 數完全相同（71826690），/tmp 僅為容器間傳輸的中繼點，非最終完成備份的位置；完成後已清除 /tmp 暫存檔",
+    "container_visibility_confirmed": "app 容器內 /workspaces/Database_Backups/Stock_Prediction_System2/<filename> 可見，大小與 Windows 端一致（供 --backup 參數指向）"
+  },
+  "step_2_write": {
+    "command": "docker exec -i -u vscode -w /workspaces/Stock_Prediction_System2 stock_prediction_system2_devcontainer-app-1 python scripts/verify/ug_g3_sb1_write_triple_barrier_labels.py --write --backup /workspaces/Database_Backups/Stock_Prediction_System2/stock_prediction_system2_PRE_g3_sb1_tb_labels_20260909_151621.dump（stdin 輸入 'postgres' 完成二次確認；-i 為必要旗標，缺少會使 stdin 確認 EOFError 非零退出，fail closed）",
+    "raw_output": "備份檔檢查通過：/workspaces/Database_Backups/Stock_Prediction_System2/stock_prediction_system2_PRE_g3_sb1_tb_labels_20260909_151621.dump（71,826,690 bytes，2.7 分鐘前）\nCONN CHECK: ('postgres', 'postgres', 5432)\n即將對資料庫 'postgres' 執行 UPDATE。請輸入資料庫名稱以確認：讀取 stock_prices：3713 列\n=== 逐檔 label_reason 分布（寫入前預覽）===\nstock_id  label_reason\n2330      NaN                       975\n          ambiguous_dual_barrier      7\n          insufficient_data           4\n          no_entry                    1\n2382      NaN                       941\n          ambiguous_dual_barrier     41\n          insufficient_data           4\n          no_entry                    1\n6488      NaN                       920\n          ambiguous_dual_barrier     60\n          insufficient_data           4\n          no_entry                    1\nNVDA      NaN                       693\n          ambiguous_dual_barrier     55\n          insufficient_data           4\n          no_entry                    2\nUPDATE 影響列數核對通過：3713 == 3713\n讀回分布快篩通過：與記憶體預期逐格相符。\n逐列讀回核對通過：3713 列與記憶體預期完全相符。\nCOMMIT 完成。\n=== 寫入後真實庫逐檔統計 ===\n('2330', False, 12)\n('2330', True, 975)\n('2382', False, 46)\n('2382', True, 941)\n('6488', False, 65)\n('6488', True, 920)\n('NVDA', False, 61)\n('NVDA', True, 693)\n=== NVDA 2026-06-03／06-04 點查 ===\n(datetime.date(2026, 6, 3), None, 'no_entry')\n(datetime.date(2026, 6, 4), -1, None)",
+    "exit_code": 0,
+    "script_version": "efd0205（含逐列精確比對硬化，執行過程中未修改，依授權條件）"
+  },
+  "step_3_post_write_verification": {
+    "query_1": "SELECT stock_id, target_triple_barrier, label_reason, COUNT(*) FROM daily_ml_features GROUP BY 1,2,3 ORDER BY 1,2,3;",
+    "query_1_result": [
+      ["2330", -1, null, 490], ["2330", 0, null, 74], ["2330", 1, null, 411],
+      ["2330", null, "ambiguous_dual_barrier", 7], ["2330", null, "insufficient_data", 4], ["2330", null, "no_entry", 1],
+      ["2382", -1, null, 513], ["2382", 0, null, 24], ["2382", 1, null, 404],
+      ["2382", null, "ambiguous_dual_barrier", 41], ["2382", null, "insufficient_data", 4], ["2382", null, "no_entry", 1],
+      ["6488", -1, null, 532], ["6488", 0, null, 27], ["6488", 1, null, 361],
+      ["6488", null, "ambiguous_dual_barrier", 60], ["6488", null, "insufficient_data", 4], ["6488", null, "no_entry", 1],
+      ["NVDA", -1, null, 391], ["NVDA", 0, null, 6], ["NVDA", 1, null, 296],
+      ["NVDA", null, "ambiguous_dual_barrier", 55], ["NVDA", null, "insufficient_data", 4], ["NVDA", null, "no_entry", 2]
+    ],
+    "cross_check": "24 格逐格與 UG_G3_SB1_ambiguous_ratio_report.json 記載的四檔分布完全相符（label_1_profit_target/label_neg1_stop_loss/label_0_timeout/ambiguous_dual_barrier/insufficient_data/no_entry 各項計數一致）",
+    "query_2": "SELECT COUNT(*) FROM daily_ml_features WHERE target_triple_barrier IS NULL AND label_reason IS NULL;",
+    "query_2_result": 0,
+    "conclusion": "全部 3,713 列皆已計算，無遺漏；無任何列同時 target 與 reason 皆為 NULL（該狀態僅應出現在寫入前的初始態）"
+  },
+  "step_4_restore_verification": {
+    "container": "獨立拋棄式容器 ug_g3_sb1_restore_check_tmpdb（postgres:18，非 postgres-data 掛載）",
+    "restore_command": "pg_restore -h ug_g3_sb1_restore_check_tmpdb -U postgres -d ug_g3_sb1_restore_check_tmpdb --no-owner --no-privileges <dump>（於 db-1 容器內執行，db-1 有 pg_restore 二進位且與拋棄式容器同 docker network；dump 先由 Windows 端 docker cp 進 db-1 的 /tmp 暫存，還原後即清除）",
+    "pg_restore_exit_code": 0,
+    "verification_queries": {
+      "stock_prices_count": {"expected": 3713, "actual": 3713},
+      "daily_ml_features_count": {"expected": 3713, "actual": 3713},
+      "daily_ml_features_non_null_target_or_reason": {"expected": 0, "actual": 0, "note": "dump 拍攝於寫入前，故還原後 target_triple_barrier／label_reason 應全為 NULL"},
+      "daily_ml_features_fully_null_target_and_reason": {"expected": 3713, "actual": 3713}
+    },
+    "conclusion": "備份檔案本身完整可還原，且忠實記錄了寫入前的狀態（全部 NULL）——證明備份是在寫入操作之前拍攝的有效快照，而非某個中間或錯誤狀態"
+  },
+  "teardown": "ug_g3_sb1_restore_check_tmpdb 已 docker rm -f -v，docker ps -a 過濾輸出為空；db-1 容器內兩次 /tmp 暫存檔（pg_dump 產出、還原用副本）皆已個別清除，未殘留於任何容器",
+  "real_db_write_summary": {
+    "table": "daily_ml_features",
+    "columns_written": ["target_triple_barrier", "label_reason"],
+    "rows_affected": 3713,
+    "database": "postgres@localhost:5432（真實開發庫）",
+    "commit_confirmed": true
+  },
+  "note_on_credentials": "本檔不含任何字面 password 值（CHAL-008 教訓）"
+}

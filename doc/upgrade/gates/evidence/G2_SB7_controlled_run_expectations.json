@@ -1,0 +1,125 @@
+{
+  "purpose": "UG-G2-SB7 受控執行的**預期**。本檔於執行之前 commit，執行後只做比對、不修改。",
+  "date": "2026-09-05",
+  "authorization": "複查方 2026-09-05 §八：暫緩解除，**但只解除一次**。一次受控執行與開放例行執行是兩件事；**不得用一次成功的執行去換一個常態授權**。",
+  "target_database": "`postgres`@`localhost:5432`",
+  "binding_confirmation_required_before_run": "SELECT current_database(), inet_server_port(), current_user —— 必須先貼出（RISK-013）",
+
+  "PRE_RUN_SNAPSHOT": {
+    "label": "`VERIFIED THIS SESSION`（唯讀，執行前）",
+    "daily_ml_features_fingerprint": "0d80953debe24ba477a985080f56358f",
+    "fingerprint_definition": "md5(string_agg(stock_id||'#'||trade_date||'#'||source_status||'#'||concat_ws(',', <SOCIAL_SENTIMENT_COLUMNS 八欄，coalesce 為 '~'>), '|' ORDER BY 該字串))",
+    "daily_ml_features_rows": 117,
+    "source_status": {"SUCCESS": 37, "SUCCESS_EMPTY": 80, "SOURCE_DEGRADED": 0, "SOURCE_FAILED": 0},
+    "stock_prices_rows": 117,
+    "stock_prices_by_stock": {"2330": "14 列至 2026-08-20", "2382": "14 列至 2026-08-20", "6488": "25 列至 2026-08-21", "NVDA": "64 列至 2026-08-20"},
+    "market_articles": {"ptt_stock": 331, "unscored": 0, "total_comments_not_null": 0},
+    "sentiment_cache_rows": 36,
+    "active_keywords": 25,
+    "inactive_keywords": [{"keyword": "高端", "category": "core_stock"}],
+    "etl_run_log_rows": 6,
+    "candidate_prices_rows": 1823842,
+    "candidate_prices_for_2026_09_04": 0,
+    "previous_business_day": "2026-09-04"
+  },
+
+  "EXPECTATIONS": [
+    {
+      "id": "E1",
+      "item": "每日股價請求數",
+      "expected": "**每市場 1 個邏輯請求** —— `etl_run_log` 新增 2 列（`twse_mi_index` / `tpex_daily_quotes`），`batch_key = '2026-09-04'`",
+      "mismatch_means": "批次化沒有真的生效"
+    },
+    {
+      "id": "E2",
+      "item": "`candidate_prices` 單日新增列數（2026-09-04）",
+      "expected": "TWSE **950~1,130**、TPEx **780~930**（提案 §6 第 2 項，**取數前寫死，未因本次調整**）",
+      "mismatch_means": "報表被截斷，或過濾規則改變。**不符時先回報，不調整判準使其通過**"
+    },
+    {
+      "id": "E3",
+      "item": "看板頁面模式的**實際頁數**",
+      "expected": "**1 ~ 25 頁**（上界 = `BOARD_PAGE_BUDGET`）。`BOARD_LOOKBACK_DAYS = 2` → 預期**遠低於上界**",
+      "why_no_point_estimate": "**這正是第 5 項要量的東西** —— 複查方已裁決「預算 + 規則本身就是量測機制」，**不另做探測**。本次是它第一次有實際值。",
+      "mismatch_means": "達到 25 且 outcome 為 `SOURCE_DEGRADED` → 看板兩天的量超過 25 頁，`BOARD_LOOKBACK_DAYS` 或預算需要重新考慮"
+    },
+    {
+      "id": "E4",
+      "item": "新文章的 `source` 值",
+      "expected": "**全部為 `ptt_board_pages`**。既有 331 列維持 `ptt_stock`，**一列都不回填**",
+      "mismatch_means": "接線沒有走新路徑"
+    },
+    {
+      "id": "E5",
+      "item": "**既有 117 列的值不得變**",
+      "expected": "指紋維持 `0d80953debe24ba477a985080f56358f`",
+      "why": "步驟 1 只影響新寫入，既有 331 篇不會被重新解析；且 117 列全為 `SUCCESS`／`SUCCESS_EMPTY`，B 輪的條件式填補只改 `SOURCE_FAILED`。**全量重算應得到完全相同的結果。**",
+      "CAVEAT": "⚠ **「不變」不等於「正確」** —— 這 117 列已知含 26 篇錯置文章的貢獻（見 KNOWN_CONTAMINATION）。本項驗的是「本次執行沒有動到它們」，不是「它們是對的」。",
+      "mismatch_means": "**立即停止並回報。** 指紋改變代表全量重算改變了既有資料，那是本次執行明文不該做的事"
+    },
+    {
+      "id": "E6",
+      "item": "§7.3 軟刪除不變量：`高端`",
+      "expected": "執行後 `高端` 仍為 `is_active = FALSE` **且** `category` 仍為 `core_stock`",
+      "why": "受控執行會呼叫 `trend_discover.run_discovery(max_new_keywords=3)`，而 `CLAUDE.md` §7.3 明文禁止軟刪除狀態被 AI 熱門詞探索無意重新啟用、且禁止 category 被意外改變。",
+      "NOTE": "**那是一條寫在 `CLAUDE.md` 裡、從來沒有被實際驗證過的不變量。這次是它第一次有機會被檢驗** —— 寫死它，不要只是期待它成立（複查方 2026-09-05）。",
+      "mismatch_means": "§7.3 被違反 —— **立即停止並回報**"
+    },
+    {
+      "id": "E7",
+      "item": "Gemini 呼叫數",
+      "expected": "**既有 331 篇 = 0 次**（`unscored_articles` 執行前為 0）。新增呼叫僅來自：(a) 本次新抓到且標題未命中 `sentiment_cache` 的文章、(b) `trend_discover.run_discovery`",
+      "mismatch_means": "既有文章被重新評分 → 快取或 `WHERE sentiment_score IS NULL` 的條件失效"
+    },
+    {
+      "id": "E8",
+      "item": "`stock_prices` 的 6488（(iii) 的生產驗證）",
+      "expected": "6488 的新列由 `candidate_prices` 供應，**不經 yfinance**；`etl_run_log` 的 `tracked_stocks_daily` 來源出現 4 列（2330／2382／6488／NVDA）",
+      "why": "DoD 第 11 項要的「yfinance 落地後的實際呼叫對象」由這一批列查證 —— **NVDA 應是唯一走 yfinance 的**",
+      "mismatch_means": "(iii) 的限縮沒有生效"
+    },
+    {
+      "id": "E9",
+      "item": "`etl_run_log` 的三態總和",
+      "expected": "每個來源的 outcome 總數 **= 該來源的項目數**（批次 2、逐股 4、關鍵字 25）",
+      "mismatch_means": "靜默略過"
+    },
+    {
+      "id": "E10",
+      "item": "`target_database`",
+      "expected": "新增的每一列皆 **= `postgres`**，NULL 0 列",
+      "mismatch_means": "綁定確認流於形式"
+    }
+  ],
+
+  "CONDITION_1_EXPLICITLY_NOT_SATISFIED": {
+    "statement": "**條件 1 的「切換後 `source_status` 分佈」，本次執行不成立。**",
+    "label": "`NOT VERIFIED`",
+    "cause": "`market_articles` 有 96 列 `post_time` 錯誤（年份差 +1~+7），**其中 26 列落在 `daily_ml_features` 的日期窗內**；特徵層全量重算會讀進它們，而 `SUCCESS` 正是靠 `article_count > 0` 判定的。",
+    "PROHIBITION": "⚠⚠ **不得以本次的分佈數字充當條件 1 的「後」。** 待舊資料處置決定後重測。",
+    "why_written_here": "**這一項不寫死，日後看到那份分佈的人不會知道它是壞的**（複查方 2026-09-05）。"
+  },
+
+  "KNOWN_CONTAMINATION": {
+    "measurement": "331 篇中 96 篇 `post_time` 與網址時間戳不同日；年份差 +1:43、+2:10、+3:4、+4:8、+5:6、+6:1、+7:4、同年不同日:20。**26 篇落在 2026-05-20 ~ 2026-08-21 的特徵窗內。**",
+    "severity": "`CLAUDE.md` §7.4 的 Look-ahead 家族 —— 2019~2025 年的文章被聚合進 2026 年的特徵列。",
+    "fixed_going_forward": "`e67d3d6`（步驟 1）—— 新寫入改由網址時間戳決定，顯式 UTC+8。**既有 331 列未修。**",
+    "MIXED_STATE_MUST_BE_STATED": "⚠ **本次執行的產出是「舊的部分不變且已知污染、新的部分乾淨」** —— 報告中兩者不得看起來是同一批資料（複查方 2026-09-05）。"
+  },
+
+  "MEASURE_FOR_THE_LATER_DISPOSITION_DECISION": {
+    "why": "舊資料的處置（修正／刪除／排除）由 PO 在執行**之後**決定。本次順便把三個選項需要的數字量出來，**但不執行任何一項**。",
+    "to_measure": [
+      "`market_articles.source` 的分佈（新舊兩批各幾列）",
+      "26 篇錯置文章各自影響到哪些 (stock_id, trade_date)",
+      "若特徵層加上 `WHERE source <> 'ptt_stock'`，`source_status` 分佈會變成什麼（**只計算，不寫入**）"
+    ],
+    "note": "「排除」這個選項之所以存在，是因為第 5 項的條件 2 讓新舊兩批可以被分辨，而 `db_writer.py` 的取數 SQL **已經 SELECT 了 `source`，只是沒拿它過濾**（複查方 2026-09-05）。"
+  },
+
+  "SAFETY": {
+    "pre_backup": "執行前 `pg_dump` 全庫邏輯備份，**在報告中附檔名與位元組數**（RISK-013 協定）",
+    "scope_of_run": "`run_all_daily_tasks()` 一次，**不重跑、不迴圈**",
+    "hard_stop": "遇 403／429 立即停止並回報（DEC-032，且不在本授權內）；E5 或 E6 不符亦立即停止"
+  }
+}

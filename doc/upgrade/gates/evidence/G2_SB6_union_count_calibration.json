@@ -1,0 +1,276 @@
+{
+  "purpose": "UG-G2-SB6 §6 第 3 項：候選聯集數判準的實測校準。**每一項結論連同 SQL 逐字保存。**",
+  "date": "2026-09-02",
+  "evidence_label": "`VERIFIED THIS SESSION`（PM 於拋棄式容器 `sb6_u` 執行）。⚠ **未經獨立複核**：複查方需先還原 dump 才能重跑。",
+  "source_dump": "stock_prediction_system2_candidate_prices_twse_tpex_3y_20260902_022011.dump（53,338,453 bytes）",
+  "WHY_THIS_MEASUREMENT": "**前一版的 3a／3b 下界（TWSE 1,000／TPEx 800）是從「日均檔數」推的，那不是被量的量。** `universe_snapshots` 的候選數是「effective_date 前 60 交易日內出現過的相異 stock_id 聯集」，**聯集必然 >= 任何單日檔數**（98 檔暫停回歸、206 檔新進使某些股只出現在部分日子）。用 A 的統計量去約束 B —— **門檻說的量，和它實際約束的量不是同一件事**，與本 SB 一路在抓的是同一形狀。**且即使在同一個量裡，平均值也不是下界該用的統計量**：兩市場三年皆成長約 9%。",
+  "FALSIFIED_PREDICTION": "複查方預測 **TPEx** 下界會在第一個月 FAIL（797 < 800 的推算）。**實測是 TWSE FAIL**：首月聯集 995 < 1,000。TPEx 最小 817 > 800，**通過但餘裕僅 2.1%**。**方向正確（絕對下界會在首月誤報），市場猜錯。** 這正說明為何要量：一個看似保守的下界，錯的位置不一定在你以為的地方。",
+  "measurements": {
+    "monthly_union_counts": {
+      "note": "36 個 effective_date 中有 33 個滿足 rk>=61（60 日暖機）。逐月分市場的相異 stock_id 聯集。",
+      "sql_verbatim": "SELECT e.d AS effective_date,\n  count(DISTINCT cp.stock_id) FILTER (WHERE cp.source='twse_mi_index')     AS twse,\n  count(DISTINCT cp.stock_id) FILTER (WHERE cp.source='tpex_daily_quotes') AS tpex\nFROM eff e\nJOIN cal c ON c.rk BETWEEN e.rk-59 AND e.rk\nJOIN candidate_prices cp ON cp.trade_date=c.d\nGROUP BY e.d ORDER BY e.d;",
+      "rows": [
+        {
+          "effective_date": "2023-12-01",
+          "twse": 995,
+          "tpex": 817
+        },
+        {
+          "effective_date": "2024-01-02",
+          "twse": 1002,
+          "tpex": 820
+        },
+        {
+          "effective_date": "2024-02-01",
+          "twse": 1006,
+          "tpex": 818
+        },
+        {
+          "effective_date": "2024-03-01",
+          "twse": 1006,
+          "tpex": 817
+        },
+        {
+          "effective_date": "2024-04-01",
+          "twse": 1010,
+          "tpex": 820
+        },
+        {
+          "effective_date": "2024-05-02",
+          "twse": 1010,
+          "tpex": 819
+        },
+        {
+          "effective_date": "2024-06-03",
+          "twse": 1017,
+          "tpex": 820
+        },
+        {
+          "effective_date": "2024-07-01",
+          "twse": 1022,
+          "tpex": 823
+        },
+        {
+          "effective_date": "2024-08-01",
+          "twse": 1020,
+          "tpex": 824
+        },
+        {
+          "effective_date": "2024-09-02",
+          "twse": 1023,
+          "tpex": 825
+        },
+        {
+          "effective_date": "2024-10-01",
+          "twse": 1025,
+          "tpex": 831
+        },
+        {
+          "effective_date": "2024-11-01",
+          "twse": 1029,
+          "tpex": 832
+        },
+        {
+          "effective_date": "2024-12-02",
+          "twse": 1030,
+          "tpex": 833
+        },
+        {
+          "effective_date": "2025-01-02",
+          "twse": 1035,
+          "tpex": 839
+        },
+        {
+          "effective_date": "2025-02-03",
+          "twse": 1038,
+          "tpex": 841
+        },
+        {
+          "effective_date": "2025-03-03",
+          "twse": 1038,
+          "tpex": 844
+        },
+        {
+          "effective_date": "2025-04-01",
+          "twse": 1043,
+          "tpex": 847
+        },
+        {
+          "effective_date": "2025-05-02",
+          "twse": 1044,
+          "tpex": 848
+        },
+        {
+          "effective_date": "2025-06-02",
+          "twse": 1046,
+          "tpex": 854
+        },
+        {
+          "effective_date": "2025-07-01",
+          "twse": 1049,
+          "tpex": 853
+        },
+        {
+          "effective_date": "2025-08-01",
+          "twse": 1051,
+          "tpex": 855
+        },
+        {
+          "effective_date": "2025-09-01",
+          "twse": 1053,
+          "tpex": 857
+        },
+        {
+          "effective_date": "2025-10-01",
+          "twse": 1060,
+          "tpex": 857
+        },
+        {
+          "effective_date": "2025-11-03",
+          "twse": 1060,
+          "tpex": 861
+        },
+        {
+          "effective_date": "2025-12-01",
+          "twse": 1066,
+          "tpex": 863
+        },
+        {
+          "effective_date": "2026-01-02",
+          "twse": 1067,
+          "tpex": 874
+        },
+        {
+          "effective_date": "2026-02-02",
+          "twse": 1072,
+          "tpex": 878
+        },
+        {
+          "effective_date": "2026-03-02",
+          "twse": 1073,
+          "tpex": 880
+        },
+        {
+          "effective_date": "2026-04-01",
+          "twse": 1076,
+          "tpex": 881
+        },
+        {
+          "effective_date": "2026-05-04",
+          "twse": 1079,
+          "tpex": 884
+        },
+        {
+          "effective_date": "2026-06-01",
+          "twse": 1085,
+          "tpex": 889
+        },
+        {
+          "effective_date": "2026-07-01",
+          "twse": 1083,
+          "tpex": 893
+        },
+        {
+          "effective_date": "2026-08-03",
+          "twse": 1087,
+          "tpex": 893
+        }
+      ]
+    },
+    "summary": {
+      "twse": {
+        "min": 995,
+        "max": 1087,
+        "three_year_growth_pct": 9.2,
+        "max_mom_change_pct": 0.704
+      },
+      "tpex": {
+        "min": 817,
+        "max": 893,
+        "three_year_growth_pct": 9.3,
+        "max_mom_change_pct": 1.275
+      },
+      "note": "**60 日聯集比單日檔數穩定得多** —— 聯集本身在平滑。單月最大變動 TWSE 0.704%、TPEx 1.275%，而三年成長各約 9% —— **絕對下界必然在跨年度資料上誤報，相對變動率不會**。這與 UG-G2-SB9 由 `1085 ± 20` 收斂到「與前一交易日變動 <= 2%」是同一條路。"
+    },
+    "mom_change_pct": {
+      "twse": [
+        0.704,
+        0.399,
+        0.0,
+        0.398,
+        0.0,
+        0.693,
+        0.492,
+        0.196,
+        0.294,
+        0.196,
+        0.39,
+        0.097,
+        0.485,
+        0.29,
+        0.0,
+        0.482,
+        0.096,
+        0.192,
+        0.287,
+        0.191,
+        0.19,
+        0.665,
+        0.0,
+        0.566,
+        0.094,
+        0.469,
+        0.093,
+        0.28,
+        0.279,
+        0.556,
+        0.184,
+        0.369
+      ],
+      "tpex": [
+        0.367,
+        0.244,
+        0.122,
+        0.367,
+        0.122,
+        0.122,
+        0.366,
+        0.122,
+        0.121,
+        0.727,
+        0.12,
+        0.12,
+        0.72,
+        0.238,
+        0.357,
+        0.355,
+        0.118,
+        0.708,
+        0.117,
+        0.234,
+        0.234,
+        0.0,
+        0.467,
+        0.232,
+        1.275,
+        0.458,
+        0.228,
+        0.114,
+        0.341,
+        0.566,
+        0.45,
+        0.0
+      ]
+    }
+  },
+  "RECOMMENDATION": {
+    "criterion": "**改用相對式：與前一個 effective_date 相比，各市場候選聯集數變動 <= 3%。**",
+    "N": 3,
+    "why_3": "實測單月最大變動 TPEx 1.275%（2026-01-02）、TWSE 0.704%。3% 給 **2.4 倍餘裕**，而「整個市場缺漏」會是約 100% 的變動 —— **仍然攔得住**。3% 於 TWSE 約 32 檔、TPEx 約 26 檔，遠高於正常異動。",
+    "first_month_floor": {
+      "twse": 500,
+      "tpex": 500,
+      "why": "首月無前值可比。500 **只擋整批缺漏，不是對市場規模的宣稱** ——同 TWSE B2 的 `>=500` 與 TPEx C3a 的 `>=200` 的角色。實測首月 TWSE 995／TPEx 817，皆遠高於此。**刻意不取接近實測值的數字** —— 那正是前一版犯的錯。"
+    }
+  }
+}

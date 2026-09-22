@@ -1,0 +1,119 @@
+{
+  "purpose": "migration 009 套用至真實開發資料庫的**結果**。逐項對 `PRE_G3_03_migration009_expectations.json`（commit `23d35f6`，**觸庫之前寫死**）比對。",
+  "date": "2026-09-07",
+  "outcome": "**七項全部 PASS，未回滾**",
+
+  "RISK_013_THREE_STEPS": {
+    "1_binding": {
+      "verified": "`postgres` / `postgres` / port `5432` / addr `127.0.0.1/32`",
+      "note": "⚠ 預期檔記的 addr 是 `::1/128`（自 app 容器經 IPv6 連入），本次自 db 容器經 `-h 127.0.0.1` 連入故為 IPv4。**`current_database` 與 port 相同，是同一個伺服器**；位址族不同是連線方式造成，不是連到別的地方。**逐字記下，不含糊帶過。**"
+    },
+    "2_dump": {
+      "file": "pre_mig009_20260907_105758.dump",
+      "bytes": 70691578,
+      "format": "`pg_dump -Fc`（邏輯備份，非 physical data directory —— `CLAUDE.md` §3）",
+      "location": "**repo 外**：db 容器 `/tmp/mig009/` 與 host `/tmp/`（各一份）",
+      "table_data_entries": 12,
+      "DURABILITY_CAVEAT": "⚠ **兩處都是暫存目錄**：db 容器的 `/tmp` 在容器重建後消失，host 的 `/tmp` 亦非長期保存位置。**本備份的用途是本次操作的回滾資產，不是長期備份。** 若需長期保存需另行決定位置（不在本輪授權內）。"
+    },
+    "3_restore_verification": {
+      "container": "`mig009_restore_check`（**拋棄式**：獨立名稱、不掛 `postgres-data`、不進 compose 網路）",
+      "pg_restore_rc": 0,
+      "table_counts_compared": "**十二張表逐表比對，全部相同**",
+      "fingerprint_compared": {
+        "real_db": "4fc208b95dbc6ea9d7c4b381d6ba97b5 / 137",
+        "restored": "4fc208b95dbc6ea9d7c4b381d6ba97b5 / 137",
+        "same_sql": "**兩邊用同一段 SQL 文字**（指紋方法條件 3）"
+      },
+      "VERDICT": "**實測還原通過** —— 「有備份檔」不算：一個沒有被還原過的備份，與一個壞掉的備份，在檔案系統上長得一樣。",
+      "teardown_timing": "⚠ **刻意延後拆除**：容器保留至套用驗證全數 PASS 之後才拆。理由 —— 操作期間手上有一個**已驗證可用**的還原點，比紀律上的立即拆除更重要。**此為對 `CLAUDE.md` §13.6 流程順序的刻意偏離，在此揭露。** 拆除已完成。"
+    }
+  },
+
+  "APPLY": {
+    "command": "`psql -v ON_ERROR_STOP=1 -f database/migrations/009_stock_prices_source.sql`",
+    "output": ["ALTER TABLE", "DO", "CREATE INDEX", "INSERT 0 1"],
+    "rc": 0
+  },
+
+  "EXPECTATION_RESULTS": [
+    {
+      "id": "M1", "verdict": "PASS",
+      "detail": "十二張表列數變動僅 `schema_version` 8 → 9 列；其餘十一張表**逐表相同**"
+    },
+    {
+      "id": "M2", "verdict": "PASS",
+      "detail": "`stock_prices` 8 欄 → 9 欄；新增欄 `source`，`data_type = text`，`is_nullable = YES`，`column_default = NULL`",
+      "note": "**無 DEFAULT 已驗證** —— 這是「不把 137 列 backfill 成推測值」的機械保證"
+    },
+    {
+      "id": "M3", "verdict": "PASS",
+      "detail": "137 列，`count(source) = 0` —— **全部為 NULL**",
+      "SEMANTICS": "NULL = 「migration 009 之前寫入，血緣不可考」。**不是「資料有問題」，也不是「還沒填」。**"
+    },
+    {
+      "id": "M4", "verdict": "PASS",
+      "detail": "`max(version) = 9`；description = `stock_prices.source: price-row lineage, report-level naming, existing rows NULL (PRE-G3-03 DP1)`"
+    },
+    {
+      "id": "M5", "verdict": "PASS",
+      "constraint_definition_read_back": "CHECK (((source IS NULL) OR (source = ANY (ARRAY['twse_mi_index'::text, 'tpex_daily_quotes'::text, 'twse_stock_day'::text, 'yfinance_auto_adjusted'::text]))))",
+      "db_domain": ["tpex_daily_quotes", "twse_mi_index", "twse_stock_day", "yfinance_auto_adjusted"],
+      "python_domain": ["tpex_daily_quotes", "twse_mi_index", "twse_stock_day", "yfinance_auto_adjusted"],
+      "detail": "**從 `pg_get_constraintdef()` 讀回定義**，四值且與 `DBWriter.STOCK_PRICE_SOURCES` 逐值一致",
+      "WHY_READ_BACK": "「套用沒報錯」不等於「約束正確」。**約束存在與約束正確是兩件事。**"
+    },
+    {
+      "id": "M6", "verdict": "PASS",
+      "detail": "指紋 `4fc208b95dbc6ea9d7c4b381d6ba97b5`，137 列，與前置狀態相同",
+      "WHAT_IT_PROVES": "**本次 migration 沒有動到 `daily_ml_features`。** `VERIFIED THIS SESSION`。",
+      "WHAT_IT_DOES_NOT_PROVE": "⚠⚠ **指紋不變，只代表沒有人重跑。** 它不證明「重跑特徵生成後結果會一樣」——`PRE_G3_02` §5 已量出：若今天重跑，通過允許清單且已評分的文章只有 1 篇。"
+    },
+    {
+      "id": "M7", "verdict": "PASS",
+      "detail": "`idx_stock_prices_source` 存在（`stock_prices` 共三個索引）",
+      "note": "本項為預期檔中**唯一不觸發回滾**者；此次 PASS，該豁免未被使用"
+    }
+  ],
+
+  "CHECK_CONSTRAINT_KNOWN_FAIL": {
+    "where": "⚠ **在拋棄式容器上做，真實庫未進行任何寫入嘗試**（該容器已先套用同一份 migration）",
+    "why_needed": "M5 驗證了約束的**定義文字**。本項驗證它**真的會擋** —— `CLAUDE.md` §9A.2：出示不了 known-FAIL 案例的檢查，不計入證據。",
+    "rejected": {
+      "yFinance": "ERROR: violates check constraint \"chk_stock_prices_source\"",
+      "yfinance": "ERROR: violates check constraint \"chk_stock_prices_source\"",
+      "candidate_prices": "ERROR: violates check constraint \"chk_stock_prices_source\"",
+      "TWSE_MI_INDEX": "ERROR: violates check constraint \"chk_stock_prices_source\""
+    },
+    "accepted": {
+      "twse_mi_index": "INSERT 0 1",
+      "tpex_daily_quotes": "INSERT 0 1",
+      "twse_stock_day": "INSERT 0 1",
+      "yfinance_auto_adjusted": "INSERT 0 1",
+      "NULL": "INSERT 0 1（既有列的語意必須仍然合法）"
+    },
+    "SIGNIFICANCE": "**`'yfinance'` 與 `'yFinance'` 兩者都被擋下** —— 那正是這個約束存在的理由：沒有它，大小寫差異會安靜地變成兩個來源。",
+    "A_FALSE_ALARM_I_CAUSED": "⚠ 第一次跑 `yfinance_auto_adjusted` 時得到 `value too long for type character varying(20)`。**那不是 `source` 欄的問題** —— 我的測試 `stock_id` 是 `T_yfinance_auto_adjusted`（24 字元），而 `stock_id` 是 `varchar(20)`。查明後以短 id 重驗通過。**照實記錄，因為它一度看起來像 schema 缺陷。**"
+  },
+
+  "PROCESS_NOTES": [
+    "⚠ 套用 migration 至拋棄式容器時，第一次把 psql 的輸出導向 `/dev/null` 並用 `&&` 串接 —— **指令因路徑問題失敗，`&&` 未觸發，而我看不見**，於是後續四個 INSERT 全部得到「欄位不存在」。**這是「檢查了輸出，沒檢查它是否真的執行」在本輪的第二次。** 不抑制輸出重跑後才發現是 MSYS 路徑轉換。",
+    "⚠ 還原腳本第一版被自己的 `assert count == 1` 擋下（`DO UPDATE SET` 在 `db_writer.py` 中不只一處）。**assert 位於 `open(..., \"w\")` 之前，因此檔案未被修改。** 一個在寫入前中止的腳本，和一個把錯誤位置改下去的腳本，差的就是那一行。"
+  ],
+
+  "FINAL_STATE": {
+    "schema_version": 9,
+    "stock_prices": "137 列，`source` 非 NULL 0 列",
+    "daily_ml_features": 137,
+    "market_articles": 332,
+    "rollback_used": false,
+    "rollback_available": "備份檔仍在（見 `2_dump`），且已實測可還原"
+  },
+
+  "NEXT_NATURAL_VERIFICATION": {
+    "what": "**套用後的第一次每日 ETL 執行 = 接線的生產首驗**",
+    "criterion": "新寫入列的 `source` 分佈：各值幾列、**NULL 幾列**",
+    "expectation": "**NULL 應為 0。不是 0 就是接線漏了一條路徑。**",
+    "status": "⚠ **尚未發生，且不為此提前觸發每日任務。** 等它自然發生時回報。"
+  }
+}

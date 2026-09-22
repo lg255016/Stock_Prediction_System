@@ -1,0 +1,105 @@
+{
+  "purpose": "台股價格回補（`candidate_prices` → `stock_prices`）與 NVDA 取數的**預期**。**本檔於寫入之前 commit；寫入後只做比對，不修改本檔。**",
+  "date": "2026-09-07",
+  "authorization": "PO 2026-09-07：寫入目標 = **真實庫 `stock_prices`**（不經臨時 DB）；八項執行要求；C1 = A 類 24 列不阻擋；C2 = (a) 接受接縫並記載。",
+  "collision_baseline": "**25 列**（A 類 24 + B 類 1），全欄比對，見 `PRE_G3_03_price_collision_report.json`（commit `9acdaa8`）",
+
+  "SCOPE_VERBATIM": {
+    "in_scope": [
+      "台股三檔（2330／2382／6488）：由 `candidate_prices` **只插缺日**至 `stock_prices`",
+      "NVDA：**1 個 yfinance 請求**（`period=\"3y\"`），**只插缺日**"
+    ],
+    "NOT_authorized": [
+      "**任何 UPDATE** —— 既有 137 列一列都不碰",
+      "**不得使用 `upsert_to_stock_prices`** —— 該函式為 `ON CONFLICT ... DO UPDATE`，會覆寫既有列（`PRE-G3-03` §3.4）",
+      "任何其他資料表的變更",
+      "重跑特徵生成"
+    ],
+    "why_not_the_existing_writer": "⚠ **若沿用 `DO UPDATE` 路徑，6488 那列 935 會被 941 靜默蓋掉** —— 而它正是「DP1 為什麼必要」的展示證據。**回補會銷毀自己的論據。**"
+  },
+
+  "PRE_STATE": {
+    "binding": {"current_database": "postgres", "port": 5432},
+    "stock_prices": {
+      "rows": 137,
+      "source_not_null": 0,
+      "per_stock": {"2330": 18, "2382": 18, "6488": 26, "NVDA": 75}
+    },
+    "fingerprints": {
+      "all_137_rows_incl_source": "0e8bce2d35f0dc7ffdb6e4d43c6f77c2",
+      "existing_rows_source_is_null_excl_source_col": "e6d775e64e98bd86ddd3a69fa4d03b6d"
+    },
+    "class_B_row": {
+      "key": "6488 @ 2026-08-21",
+      "close_price": "935.00", "low_price": "933.00", "volume": 5732166
+    },
+    "daily_ml_features_fingerprint": {"md5": "4fc208b95dbc6ea9d7c4b381d6ba97b5", "rows": 137}
+  },
+
+  "EXPECTATIONS": [
+    {
+      "id": "B1",
+      "criterion": "**逐檔插入列數精確相符**",
+      "values": {"2330": 969, "2382": 969, "6488": 959, "台股合計": 2897},
+      "derivation": "`candidate_prices` 985 日 − 與既有 `stock_prices` 的交集（2330/2382 各 16、6488 為 26）",
+      "post_count": "`stock_prices` = 137 + 2897 = **3034**（NVDA 新增前）",
+      "if_mismatch": "**回滾**"
+    },
+    {
+      "id": "B2",
+      "criterion": "台股新增列的 `source` 分佈：**2330 與 2382 全為 `twse_mi_index`（各 969）；6488 全為 `tpex_daily_quotes`（959）**",
+      "note": "值由 `candidate_prices.source` **原值帶過來**，不是常數 —— 基準由原始報表決定，不由中繼表決定",
+      "if_mismatch": "回滾"
+    },
+    {
+      "id": "B3",
+      "criterion": "**既有 137 列逐位元組不變**：`source IS NULL` 的列數恰 **137**，且其指紋維持 `e6d775e64e98bd86ddd3a69fa4d03b6d`",
+      "SIGNIFICANCE": "⚠ **這是「只插缺日」的機械證明。** 任何 `DO UPDATE` 洩漏都會改變此指紋。",
+      "if_mismatch": "**回滾**"
+    },
+    {
+      "id": "B4",
+      "criterion": "B 類那列不變：6488 @ `2026-08-21` 的 `close_price = 935.00`、`low_price = 933.00`、`volume = 5732166`",
+      "why_separately": "B3 的指紋已涵蓋它，**但這一列是本輪唯一被指名保留的證據，值得有一項只講它的判準** —— 指紋不符時，這一項讓成因立刻可讀。",
+      "if_mismatch": "回滾"
+    },
+    {
+      "id": "B5",
+      "criterion": "**manifest**：本次插入的全部 `(stock_id, trade_date)` 寫入結果證據檔",
+      "WHY": "⚠ **這是回滾的精確依據。不得以 `WHERE source IS NOT NULL` 當回滾條件** —— 每日 ETL 之後的新列同樣非 NULL，**那個條件會隨時間變得越刪越多**。",
+      "if_missing": "視為未完成"
+    },
+    {
+      "id": "B6",
+      "criterion": "`daily_ml_features` 指紋維持 `4fc208b95dbc6ea9d7c4b381d6ba97b5`，137 列",
+      "WHAT_IT_DOES_NOT_PROVE": "⚠⚠ **指紋不變只代表沒有人重跑。** 回補後 `stock_prices` 約 3,034 列而 `daily_ml_features` 仍 137 列 —— **兩表深度嚴重不一致是預期狀態，不是缺陷**（特徵重算是 Gate 3 阻斷項，尚未執行）。",
+      "if_mismatch": "回滾"
+    },
+    {
+      "id": "B7",
+      "criterion": "NVDA：**恰 1 個 yfinance 請求**；插入列數 = 回傳列數 − 與既有 75 列的交集；新增列 `source = 'yfinance_auto_adjusted'`",
+      "PRECISION_CAVEAT": "⚠ **插入列數無法事前寫死** —— yfinance `period=\"3y\"` 的回傳列數取決於呼叫當下的交易日曆。**因此本項寫的是不變式，不是數字**：`插入數 + 交集數 == 回傳列數`，且**交集列一列都不得被改動**（併入 B3）。**這個限制在觸網前記錄，不是事後解釋。**",
+      "DEC_032": "403／429 立即停止並回報，不在授權內自行續跑",
+      "if_mismatch": "回滾"
+    },
+    {
+      "id": "B8",
+      "criterion": "其餘十一張表列數不變",
+      "if_mismatch": "回滾"
+    }
+  ],
+
+  "RISK_013": {
+    "1_binding": "寫入前確認 `current_database()`／`inet_server_port()`",
+    "2_dump": "**新鮮 `pg_dump`，直接落 `D:\\Python\\Database_Backups\\Stock_Prediction_System2\\`**，命名 `stock_prediction_system2_PRE_g3_price_backfill_<ts>.dump`（`TEAM_PLAYBOOK.md` §7A）",
+    "3_restore_verification": "⚠ **本次不重做實測還原。** 理由：**同一套 dump/restore 流程於數小時前（migration 009）剛以拋棄式容器完整驗證過**（十二表逐表 + 指紋，見 `PRE_G3_03_migration009_result.json`），且本操作為**純 additive 插入**、回滾有 **manifest 精確鍵集**、既有列受 B3 指紋保護。⚠⚠ **「這次沒做」不得被讀成「以後不用做」**（`TEAM_PLAYBOOK.md` §7A.4 的豁免條款）。"
+  },
+
+  "ROLLBACK_PLAN": {
+    "mechanism": "依 **manifest 的精確鍵集** `DELETE FROM stock_prices WHERE (stock_id, trade_date) IN (...)`",
+    "explicitly_not": "⚠ **不得用 `WHERE source IS NOT NULL`** —— 理由見 B5",
+    "fallback": "manifest 遺失時改用備份還原（見 `RISK_013.2_dump`）"
+  },
+
+  "SEAM_TO_RECORD_IN_RESULT": "回補後 `stock_prices.volume` 於 `2026-09-04` 出現粒度接縫（之前 25 列為 yfinance 股數粒度、之後為 `tpex_daily_quotes` 張數粒度）。**PO 已裁決接受（C2 = (a)），登記於 RISK-022 面向（三）**（commit `6c24ed1`）。結果檔須複述一句，**免得下一個人把它當成新缺陷**。"
+}

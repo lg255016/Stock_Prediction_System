@@ -1,0 +1,67 @@
+{
+  "purpose": "修正 `market_articles.comments_scraped_at`（`article_id = 1495`，+8h）的**預期**。**本檔於 UPDATE 之前 commit，跑完只做比對、不修改。**",
+  "date": "2026-09-06",
+  "authorization": "PO 2026-09-06 §B 授權，**逐字不得外推**。",
+
+  "SCOPE_VERBATIM": {
+    "target": "`market_articles.comments_scraped_at`，**`WHERE article_id = 1495`**，**恰好 1 列**",
+    "action": "`2026-09-05 05:53:32.868583` → `2026-09-05 13:53:32.868583`（**+8 小時**）",
+    "NOT_authorized": [
+      "`etl_run_log` 的 38 列 —— **維持現狀，一個位元組都不要動**",
+      "任何其他欄位、任何其他列",
+      "`total_comments`（維持 25）"
+    ],
+    "why_etl_run_log_is_not_fixed": "**它是紀錄，不是任何比較的基準。修正它沒有消費者。** **在它被拿來比較的地方修正，在它只是紀錄的地方不動 —— 這個不對稱本身就是判準。**"
+  },
+
+  "NOT_REWRITING_HISTORY": "**+8h 之後那一列說「取數發生在 13:53:32」—— 而那就是它真正發生的台北時刻。** **修正前的值是一個被錯誤標示的事實，修正後是同一個事實用專案的標準單位表示。** 偏移量**是被證明的，不是估的**：以台北值為 cutoff 時逐 tag **16／0／9** 四項相符（`PRE_G3_01_refetch_1495.json`）。UTC+8 為固定偏移，台灣無日光節約。",
+
+  "PRE_STATE": {
+    "binding": "current_database=postgres／port=5432／user=postgres／addr=::1",
+    "row_before": {"article_id": 1495, "total_comments": 25,
+                   "comments_scraped_at": "2026-09-05 05:53:32.868583"},
+    "rollback_basis": "**上一行就是回滾依據**（要求 2）",
+    "daily_ml_features_fingerprint": "4fc208b95dbc6ea9d7c4b381d6ba97b5",
+    "daily_ml_features_rows": 137
+  },
+
+  "FINGERPRINT_METHOD": {
+    "sql_shape": "`SELECT md5(string_agg(t,'|' ORDER BY t)), count(*) FROM (SELECT concat_ws(',', coalesce(<每一欄>::text,'~')) AS t FROM daily_ml_features) s`",
+    "columns": "**全部 29 欄**，順序由 `information_schema.columns.ordinal_position` 決定",
+    "condition_1_ordering": "`string_agg(... ORDER BY t)` —— **無序 `SELECT` 會讓相同資料回傳不同列順序 → 指紋不同 → 假失敗**。而假失敗會讓人開始「調查後放行」，那就毀掉了它。",
+    "condition_2_text_form": "NULL 一律 `'~'`；數值一律 `::text`。**表示法固定，不隨查詢改變。**",
+    "condition_3_same_code": "**前後用同一段程式取指紋** —— 兩段「應該一樣」的程式不算同一段。"
+  },
+
+  "EXPECTATIONS": [
+    {
+      "id": "3a",
+      "criterion": "修正後 `counts_as_of(該篇留言, 該列 comments_scraped_at)` **== 25，逐 tag 推 16／噓 0／中性 9**",
+      "why": "**這是 2a 當初 FAIL 的那條判準，同一條、同一個寫法。**",
+      "SIGNIFICANCE": "⚠ **不是改判準讓它過，是改資料讓它過。這兩件事的差別就是這次操作的全部意義。**",
+      "if_mismatch": "**回滾。** 不要調整任何東西讓它符合。"
+    },
+    {
+      "id": "3b",
+      "criterion": "`daily_ml_features` 指紋維持 **`4fc208b95dbc6ea9d7c4b381d6ba97b5`**，列數 **137**",
+      "WHAT_IT_PROVES": "**(i) 這次 UPDATE 沒有動到預期以外的東西。** 標 `VERIFIED THIS SESSION`。",
+      "WHAT_IT_DOES_NOT_PROVE": "⚠⚠ **(ii)「修正不會改變任何特徵值」——指紋證明不了。** `daily_ml_features` 是**物化輸出**，`UPDATE market_articles` 不會傳播到它，**除非有人重跑特徵生成**。**指紋不變，不代表重跑之後結果會一樣；它只代表沒有人重跑。**（複查方 2026-09-06 自行更正其原本的 3(b) 標籤範圍。）",
+      "how_ii_is_supported": "(ii) 標 **`INFERENCE`**，依據是程式路徑分析：`comments_scraped_at` 的**唯一計算消費者**是 `feature_aggregator.py:768` 的 DEC-024 過濾，而 `05:53:32` 與 `13:53:32` **同樣 `<= 2026-09-05 15:30`** —— 過濾結果相同。⚠ **「剛好沒差」是運氣**：若那次取數在台北 16:00，修正會把它從通過翻成不通過。**這一列落在同一側，純屬偶然。**"
+    },
+    {
+      "id": "3c",
+      "criterion": "其餘六表列數不變；`article_comments` 仍 **38** 列；該列 `total_comments` 仍 **25**",
+      "if_mismatch": "回滾"
+    }
+  ],
+
+  "WRITE_REQUIREMENTS": {
+    "4_old_value_condition": "`UPDATE ... WHERE article_id = 1495 AND comments_scraped_at = '2026-09-05 05:53:32.868583'`",
+    "why_4_is_load_bearing": "**若那一列的值已不是我們以為的那個，代表有別的東西動過它，而那件事比這次修正重要。** **不帶舊值條件的 `+ interval '8 hours'`，在值已被改過時會再加一次 8 小時 —— 而輸出看起來一樣正常。**",
+    "5_rowcount": "**斷言 `rowcount == 1`。0 或 >1 一律 `ROLLBACK` 並回報。**"
+  },
+
+  "FINGERPRINT_DISCIPLINE": "⚠⚠ **指紋是二元閘門，不是調查的起點。** **不符時：先回滾，再調查。不得先調查、判定「只是某某」、然後繼續。** **指紋的全部價值在於它是二元的 —— 一旦允許自己在不符時調查後放行，它就退化成一個判斷題，而那正是它要取代的東西。**",
+
+  "RECORD_REQUIREMENT": "修正後於 `MULTI_SOURCE_DATA_CONTRACT.md` §3.6B **新增子節**（既有列處置）：PO 裁決日期與範圍、修正前後值、執行 commit、不對稱的理由、修正後 2a 的重驗結果。⚠ **原本那張切換點的表不得修改內容 —— 切換發生過這件事要留著。** **一份「修正完就把問題紀錄刪掉」的文件，下一個人會以為那個問題從來沒發生過。**"
+}

@@ -1,0 +1,213 @@
+{
+  "title": "UG-G3-SB2a 段 2：458＋NVDA 檔特徵回補（daily_ml_features 真實庫寫入）",
+  "date": "2026-09-11",
+  "evidence_label_policy": "見 CLAUDE.md §9；本檔逐節標註，PO 回報標 REPORTED, NOT INDEPENDENTLY VERIFIED 由 PM 轉載",
+
+  "background": {
+    "summary": "段 2 前置（8 天缺口回補、段 1 重跑、基線比對改版）已於前一輪完成並經審查員複核通過（commit c54246c、2ee8141）。PO 核准段 2 寫入腳本設計（含五項追加要求：批次粒度 50 檔/批、每批一交易、寫前斷言股票子集、全表標籤計數取代批次計數、7 項全表不變式、對段 3 的交接記錄、預覽模式零寫入可證）。腳本與測試完成後，審查員 dry-run（拋棄式庫）發現兩處缺陷，要求併入修正，修正確認後 PO 給 binding confirmation。",
+    "design_approval": "PO 2026-09-11（段 2 前置複核通過訊息內）",
+    "reviewer_review_fixes": [
+      {
+        "id": "fix-1-decimal",
+        "summary": "_values_differ 對 psycopg2 原生 decimal.Decimal 型別漏接，落到字串比較，極小值（<1e-4）會誤判為差異",
+        "location": "scripts/verify/ug_g3_sb2a_stage2_baseline_comparison.py",
+        "fix": "_NUMERIC_TYPES 加入 decimal.Decimal，經 float() 轉換走數值容差比較",
+        "tests_added": [
+          "test_decimal_and_float_same_value_is_not_a_difference",
+          "test_decimal_scientific_notation_and_float_is_not_a_difference",
+          "test_decimal_handling_is_load_bearing（known-FAIL：inspect.getsource+exec 還原成修正前判斷式，證明 Decimal('603.00') vs 603.0、Decimal('1.5E-5') vs 1.5e-05 修正前確實被誤判為不同）"
+        ],
+        "evidence_label": "VERIFIED THIS SESSION"
+      },
+      {
+        "id": "fix-2-preview-is-evidence",
+        "summary": "唯讀預覽補上兩道守衛，使其本身即為寫入前完整證據，不只是數字預告",
+        "location": "scripts/verify/ug_g3_sb2a_backfill_features.py",
+        "fix": [
+          "常數過期守衛：main() 開始先查真實庫現況，與 EXISTING_ROWS_BEFORE／EXPECTED_LABEL_COUNTS 逐項比對，不符即 sys.exit(1)（唯讀預覽與 --write 皆拒絕）",
+          "記憶體不變式先跑一次：全量計算完成後，先對 df_features／df_prices 跑 7 項不變式，任一項違規即 sys.exit(1)，連 --write 都不授權"
+        ],
+        "tests_added": [
+          "test_row_count_mismatch_stops_before_any_computation（known-FAIL）",
+          "test_label_count_mismatch_stops_before_any_computation（known-FAIL）",
+          "test_both_constants_matching_does_not_stop_here（對照組，哨兵例外證明放行）",
+          "test_invariant_violation_in_preview_stops_before_preview_output（known-FAIL）",
+          "test_invariants_passing_does_not_stop_here（對照組）"
+        ],
+        "evidence_label": "VERIFIED THIS SESSION"
+      }
+    ],
+    "commit": "49aef94（scripts/verify/ug_g3_sb2a_backfill_features.py 新增、tests/test_sb2a_backfill_features.py 新增、scripts/verify/ug_g3_sb2a_stage2_baseline_comparison.py 修正、tests/test_sb2a_stage2_baseline_comparison.py 新增測試；四檔皆在 PO 授權清單內）",
+    "pre_commit_test_results": {
+      "full_suite": "662/662 OK",
+      "contract_check": "Part B 13/13 PASS",
+      "format_check": "numstat 與 -w 無落差、diff --check 乾淨、credential grep 無命中",
+      "evidence_label": "VERIFIED THIS SESSION，容器 Python 3.14.6"
+    }
+  },
+
+  "part_A_pre_backup": {
+    "risk_013_step": 1,
+    "filename": "stock_prediction_system2_PRE_g3_sb2a_features_20260911_103413.dump",
+    "location": "D:\\Python\\Database_Backups\\Stock_Prediction_System2\\",
+    "size_bytes": 79989682,
+    "pg_dump_rc": 0,
+    "restore_verification": {
+      "method": "拋棄式 postgres:18 容器（--memory=2g --cpus=0.5，符合與 fluora 專案共用資源協議的保留額度），空庫 createdb + pg_restore",
+      "pg_restore_rc": 0,
+      "verified_counts": {
+        "stock_prices": 449263,
+        "daily_ml_features": 3713,
+        "labels_triple_barrier": 3529,
+        "labels_reason": 184
+      },
+      "teardown": "已拆除"
+    },
+    "evidence_label": "VERIFIED THIS SESSION"
+  },
+
+  "part_B_t0_baseline": {
+    "risk_013_step": 2,
+    "t0_utc": "2026-09-11T10:37:36Z",
+    "stock_prices": {
+      "row_count": 449263,
+      "md5": "ce23c629a461359689cb63f53fd7573d",
+      "columns_included": ["stock_id", "trade_date", "open_price", "high_price", "low_price", "close_price", "volume", "source"],
+      "note": "排除 created_at（非資料內容，僅寫入時戳）"
+    },
+    "daily_ml_features": {
+      "row_count": 3713,
+      "md5": "230a3ed08ca53b75282d2c20dae23bcf",
+      "columns_included": "全 29 欄契約（含 target_triple_barrier／label_reason 兩個標籤欄）"
+    },
+    "evidence_label": "VERIFIED THIS SESSION"
+  },
+
+  "part_C_readonly_preview": {
+    "risk_013_step": 3,
+    "constants_guard": {
+      "actual_rows": 3713,
+      "expected_rows": 3713,
+      "actual_labels": [3529, 184],
+      "expected_labels": [3529, 184],
+      "result": "PASS"
+    },
+    "full_compute": {
+      "stocks": 459,
+      "rows": 449263,
+      "elapsed_seconds": 6.62
+    },
+    "in_memory_invariants": {
+      "items": 7,
+      "result": "全數 PASS",
+      "elapsed_seconds": 1.53
+    },
+    "plan": {
+      "new_rows": 445550,
+      "updated_rows": 3713,
+      "batches": 10,
+      "batch_size": 50
+    },
+    "evidence_label": "VERIFIED THIS SESSION"
+  },
+
+  "part_D_write_execution": {
+    "risk_013_step": 4,
+    "command": "printf 'postgres\\n' | MSYS_NO_PATHCONV=1 docker exec -i -u vscode -w /workspaces/Stock_Prediction_System2 -e DB_HOST=localhost -e DB_PORT=5432 stock_prediction_system2_devcontainer-app-1 python scripts/verify/ug_g3_sb2a_backfill_features.py --write --backup /workspaces/Database_Backups/Stock_Prediction_System2/stock_prediction_system2_PRE_g3_sb2a_features_20260911_103413.dump",
+    "script_exit_code": 0,
+    "batches": [
+      {"batch": 1, "stocks": 50, "rows": 49636, "result": "OK"},
+      {"batch": 2, "stocks": 50, "rows": 49593, "result": "OK"},
+      {"batch": 3, "stocks": 50, "rows": 49477, "result": "OK"},
+      {"batch": 4, "stocks": 50, "rows": 49357, "result": "OK"},
+      {"batch": 5, "stocks": 50, "rows": 49512, "result": "OK"},
+      {"batch": 6, "stocks": 50, "rows": 48071, "result": "OK"},
+      {"batch": 7, "stocks": 50, "rows": 49592, "result": "OK"},
+      {"batch": 8, "stocks": 50, "rows": 49285, "result": "OK"},
+      {"batch": 9, "stocks": 50, "rows": 46049, "result": "OK"},
+      {"batch": 10, "stocks": 9, "rows": 8691, "result": "OK"}
+    ],
+    "completed_batches": "[1,2,3,4,5,6,7,8,9,10]/10（全數完成，無中途失敗）",
+    "script_reported_segment_checks": {
+      "1_total_row_count": {"actual": 449263, "expected": 449263, "result": "PASS"},
+      "2_label_counts": {"actual": [3529, 184], "expected": [3529, 184], "result": "PASS"},
+      "3_new_stock_labels_null": {"violations": 0, "result": "PASS"},
+      "4_baseline_4_stocks": {"orphans": 0, "new_keys": 0, "column_diffs": 0, "result": "PASS"},
+      "5_invariants_7_items": {"result": "全數 PASS"}
+    },
+    "manual_review_4562_4583": {
+      "purpose": "4562（2023-10-30）／4583（2022-09-19）NULL 價格但 volume>0 的異常列，核對 NULL 傳播是否符合 W/F/U 分類",
+      "observed": "兩筆目標列 close_price=NULL、article_count=0、sentiment_mean=NULL、source_status='SUCCESS_EMPTY'、target_triple_barrier=NULL、label_reason=NULL，前後鄰近列正常有值——符合 U（數學未定義）分類，無異常傳播",
+      "result": "PASS（人工判讀）"
+    },
+    "note_unrelated_incident": "腳本本體執行期間與執行完成（exit 0）之後，主機另發生一次無關的意外重開機（與本次寫入指令無因果關係——寫入已於腳本自行回報 exit 0 完成，重開機發生在後續讀取 log 檔案時）；重開機後已對真實庫執行獨立核對（見 part_E），資料完整無損。",
+    "evidence_label": "VERIFIED THIS SESSION"
+  },
+
+  "part_E_independent_post_write_verification": {
+    "risk_013_step": 5,
+    "methodology": "不信任腳本自身回報，重開機後另用全新 SQL 查詢重新核對；標籤 md5 比對額外用第二個拋棄式容器重新還原 PRE 備份、獨立算出同一條查詢的 md5 值比對，非沿用同一次記憶體狀態",
+    "checks": {
+      "1_total_row_count": {"value": 449263, "expected": 449263, "result": "PASS"},
+      "2_label_counts": {"value": [3529, 184], "expected": [3529, 184], "result": "PASS"},
+      "3_stock_prices_md5_unchanged": {
+        "value": "ce23c629a461359689cb63f53fd7573d",
+        "expected": "ce23c629a461359689cb63f53fd7573d（T0 基準）",
+        "result": "PASS，證明段 2 完全未觸及 stock_prices"
+      },
+      "4_per_stock_row_parity": {
+        "mismatched_stocks": 0,
+        "total_stocks_checked": 459,
+        "result": "PASS，daily_ml_features 逐股列數與 stock_prices 全對"
+      },
+      "5_new_stock_labels_null": {
+        "violations": 0,
+        "scope": "stock_id NOT IN ('2330','2382','6488','NVDA')",
+        "result": "PASS"
+      },
+      "6_existing_4_stocks_label_md5_unchanged": {
+        "method": "排除本次新寫入的 20 個新鍵（2330×6、2382×6、6488×8），對剩餘 3,713 列的 target_triple_barrier／label_reason 兩欄算 md5，與 PRE 備份獨立還原後算出的同一條查詢比對",
+        "note": "md5 相同不足以單獨為證——兩邊皆為空集合時 md5 也會「相同」，因此兩側都明記列數，審查員 2026-09-11 複核要求補上（PM 原稿只在段落內文提過列數，未在此結構化欄位重複列出，本次補齊）",
+        "post_write_md5": "b3719c82231acf82fd0ca94e0baa6660",
+        "post_write_row_count": 3713,
+        "pre_write_md5_from_independent_restore": "b3719c82231acf82fd0ca94e0baa6660",
+        "pre_write_row_count_from_independent_restore": 3713,
+        "result": "PASS，md5 與列數兩側皆完全相同——標籤欄位在段 2 寫入前後逐位元組一致，非空集合巧合"
+      }
+    },
+    "re_verified_after_subsequent_reboot": {
+      "reason": "驗證期間主機又發生一次無關的意外重開機，容器靠 restart:unless-stopped 自動恢復後，再次獨立核對關鍵數字",
+      "total_rows": 449263,
+      "labels": [3529, 184],
+      "stock_prices": 449263,
+      "result": "PASS，與重開機前完全一致"
+    },
+    "evidence_label": "VERIFIED THIS SESSION"
+  },
+
+  "part_F_post_backup": {
+    "risk_013_step": 6,
+    "filename": "stock_prediction_system2_POST_g3_sb2a_features_20260911_110211.dump",
+    "location": "D:\\Python\\Database_Backups\\Stock_Prediction_System2\\",
+    "size_bytes": 121190834,
+    "pg_dump_rc": 0,
+    "evidence_label": "VERIFIED THIS SESSION"
+  },
+
+  "disclosure_distribution": {
+    "purpose": "誠實揭露，不美化（關聯 RISK-015：情緒資料稀疏度）",
+    "sentiment_mean_null_ratio_overall": 0.998,
+    "source_status_distribution": {
+      "SUCCESS_EMPTY": 448490,
+      "SUCCESS": 773
+    },
+    "interpretation": "絕大多數股票絕大多數交易日沒有對應的社群文章討論，情緒特徵欄位結構性稀疏——這是資料現況，不是本次寫入造成的缺陷；已知風險見 REMAINING_RISKS.md RISK-015",
+    "evidence_label": "VERIFIED THIS SESSION"
+  },
+
+  "segment_3_handoff": {
+    "note": "既有 2330／2382／6488 在 2026-08-21 之後（涵蓋缺口回補窗口 08-24～09-02）的既有 SB1 標籤已過期——H=5 窗口內容因缺口回補而改變，含原本因『剩餘不足 H』記 insufficient_data 的尾端列，現在可能有足夠未來列。段 3 必須對 458 檔全部重算標籤（本來就是計畫內），不是只補 455 檔新股；預期既有 3 檔重算後與現有標籤的差異只落在該日期帶，NVDA 應零差異。"
+  },
+
+  "note_on_credentials": "本檔不含任何字面密碼值；拋棄式容器密碼皆為 openssl rand -hex 12 隨機產生，執行後即隨容器銷毀；真實庫連線密碼取自環境變數，未記入本檔"
+}

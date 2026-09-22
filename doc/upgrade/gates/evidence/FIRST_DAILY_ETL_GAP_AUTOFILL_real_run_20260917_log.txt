@@ -1,0 +1,626 @@
+/workspaces/Stock_Prediction_System2/src/extractors/trend_discover.py:7: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+[HARNESS] connection_target: [{'current_database': 'postgres', 'inet_server_port': 5432}]
+Building prefix dict from the default dictionary ...
+Loading model from cache /tmp/jieba.cache
+Loading model cost 0.785 seconds.
+Prefix dict has been built successfully.
+[NLPProcessor] 已成功初始化 Gemini 混合管線 (gemini-flash-latest)
+[FeatureAggregator] 已初始化 ML 特徵聚合器 (支援雙模式時間對齊、研究指標與題材情緒溢出)
+
+========== UG-G2-SB7 全市場批次取價 ==========
+  [2026-09-07] tpex OK｜列數 887｜HTTP 嘗試 1
+  [2026-09-07] twse OK｜列數 1087｜HTTP 嘗試 1
+[Batch] tpex_daily_quotes 2026-09-07｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+[Batch] twse_mi_index 2026-09-07｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+  [2026-09-08] tpex OK｜列數 887｜HTTP 嘗試 1
+  [2026-09-08] twse OK｜列數 1087｜HTTP 嘗試 1
+[Batch] tpex_daily_quotes 2026-09-08｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+[Batch] twse_mi_index 2026-09-08｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+  [2026-09-09] tpex OK｜列數 888｜HTTP 嘗試 1
+  [2026-09-09] twse OK｜列數 1087｜HTTP 嘗試 1
+[Batch] tpex_daily_quotes 2026-09-09｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+[Batch] twse_mi_index 2026-09-09｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+  [2026-09-10] tpex OK｜列數 886｜HTTP 嘗試 1
+  [2026-09-10] twse OK｜列數 1084｜HTTP 嘗試 1
+[Batch] tpex_daily_quotes 2026-09-10｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+[Batch] twse_mi_index 2026-09-10｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+  [2026-09-11] tpex OK｜列數 886｜HTTP 嘗試 1
+  [2026-09-11] twse OK｜列數 1084｜HTTP 嘗試 1
+[Batch] tpex_daily_quotes 2026-09-11｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+[Batch] twse_mi_index 2026-09-11｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+  [2026-09-14] tpex OK｜列數 887｜HTTP 嘗試 1
+  [2026-09-14] twse OK｜列數 1084｜HTTP 嘗試 1
+[Batch] tpex_daily_quotes 2026-09-14｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+[Batch] twse_mi_index 2026-09-14｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+  [2026-09-15] tpex OK｜列數 887｜HTTP 嘗試 1
+  [2026-09-15] twse OK｜列數 1084｜HTTP 嘗試 1
+[Batch] tpex_daily_quotes 2026-09-15｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+[Batch] twse_mi_index 2026-09-15｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+  [2026-09-16] tpex OK｜列數 888｜HTTP 嘗試 1
+  [2026-09-16] twse OK｜列數 1084｜HTTP 嘗試 1
+[Batch] tpex_daily_quotes 2026-09-16｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+[Batch] twse_mi_index 2026-09-16｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+
+========== 正在載入追蹤股票標的清單 ==========
+[INFO] 取得 8 檔啟用標的: ['2454', '2059', '2330', '3008', '6488', '2382', 'NVDA', '8069']
+
+========== 逐股標的由 candidate_prices 供應 [2454 2026-09-07] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2454 2026-09-08] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2454 2026-09-09] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2454 2026-09-10] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2454 2026-09-11] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2454 2026-09-14] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2454 2026-09-15] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2454 2026-09-16] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2059 2026-09-07] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2059 2026-09-08] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2059 2026-09-09] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2059 2026-09-10] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2059 2026-09-11] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2059 2026-09-14] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2059 2026-09-15] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2059 2026-09-16] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2330 2026-09-07] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2330 2026-09-08] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2330 2026-09-09] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2330 2026-09-10] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2330 2026-09-11] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2330 2026-09-14] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2330 2026-09-15] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2330 2026-09-16] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [3008 2026-09-07] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [3008 2026-09-08] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [3008 2026-09-09] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [3008 2026-09-10] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [3008 2026-09-11] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [3008 2026-09-14] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [3008 2026-09-15] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [3008 2026-09-16] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [6488 2026-09-07] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [6488 2026-09-08] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [6488 2026-09-09] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [6488 2026-09-10] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [6488 2026-09-11] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [6488 2026-09-14] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [6488 2026-09-15] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [6488 2026-09-16] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2382 2026-09-07] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2382 2026-09-08] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2382 2026-09-09] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2382 2026-09-10] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2382 2026-09-11] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2382 2026-09-14] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2382 2026-09-15] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2382 2026-09-16] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 開始執行美股 ETL 管線 [NVDA] ==========
+
+[Extract] 正在透過 yfinance 抓取 NVDA 的資料...
+✅ [Extract] NVDA 原始資料抓取成功！
+
+[Transform] 開始清洗 NVDA 的股價資料...
+[Transform] NVDA 股價資料清洗完成！
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 64 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [8069 2026-09-07] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [8069 2026-09-08] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [8069 2026-09-09] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [8069 2026-09-10] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [8069 2026-09-11] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [8069 2026-09-14] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [8069 2026-09-15] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [8069 2026-09-16] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+[Batch] tracked_stocks_daily 2026-09-16｜OK 57／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 57
+
+========== 啟動 AI 熱門趨勢探索 ==========
+[Discover] 正在掃描 PTT 股板最新 3 頁尋找熱門話題...
+[Discover] 收集到 27 篇熱門標題，正在呼叫 Gemini 分析題材趨勢與成分股...
+[Discover][WARNING] 遭遇 API 暫態限制 (429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 5, model: gemini-3.8-flash
+Please retry in 9.482923728s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.8-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 5
+}
+, retry_delay {
+  seconds: 9
+}
+])，將於 2 秒後重試...
+[Discover] AI 探索完成！本日熱門題材：['記憶體', 'AI伺服器與運算', '蘋果供應鏈']
+[Discover] 成功辨識 12 筆題材成分股關聯：[('記憶體', '2344', '華邦電', 1.0), ('記憶體', '8299', '群聯', 1.0), ('記憶體', '2408', '南亞科', 0.8), ('記憶體', 'MU', '美光', 0.9), ('AI伺服器與運算', '6669', '緯穎', 1.0), ('AI伺服器與運算', '8358', '金居', 0.8), ('AI伺服器與運算', '2382', '廣達', 0.9), ('AI伺服器與運算', 'NVDA', '輝達', 1.0), ('蘋果供應鏈', '2317', '鴻海', 1.0), ('蘋果供應鏈', '3008', '大立光', 0.9), ('蘋果供應鏈', 'AAPL', '蘋果', 1.0), ('蘋果供應鏈', '4938', '和碩', 0.7)]
+[Load] 成功執行資料庫作業。已處理 3 筆資料。
+
+[Load] 準備寫入 12 筆題材成分股映射至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 12 筆資料。
+
+========== 正在載入追蹤關鍵字清單 ==========
+[INFO] 取得 28 個追蹤關鍵字：['環球晶', '廣達', '台積電', '輝達', '降息', '非農', 'AI伺服器', '矽光子', '凌巨', '記憶體', '川湖', '聯發科', '美債', '元太', '大立光', 'ASIC/AI晶片', '電子紙應用', '光學鏡頭', '散熱模組', 'CoWoS', 'AI晶片與ASIC', '電子紙與電子標籤', 'ASIC/IC設計', '加密貨幣概念', '電子紙', '生技醫療', 'AI伺服器與運算', '蘋果供應鏈']
+
+[Extract] 看板頁面模式：28 個關鍵字，預算 25 頁，回溯至 1789404312.9645357
+[Extract] 本頁最新一篇 1789387475 <= 1789404312.9645357，已回溯到目標時間，停止翻頁。
+[Extract] 看板頁面模式完成：7 頁請求，10 筆命中，outcome=OK
+
+[Transform] 開始清洗 PTT 文章資料...
+[Transform] PTT 資料清洗完成！
+
+[Load] 準備寫入文章資料至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 10 筆資料。
+[Extract] 準備解析 10 篇文章內頁留言...
+
+[Load] 準備回填 10 筆留言計數至 market_articles（write-once）...
+[Load] 成功執行資料庫作業。已處理 10 筆資料。
+
+[Load] 準備寫入 908 則逐則留言至 article_comments...
+[Load] 成功執行資料庫作業。已處理 908 筆資料。
+[Batch] ptt 2026-09-17｜OK 6／NO_DATA 22／FETCH_FAILED 0／REFUSED 0｜合計 28
+
+========== 開始執行 NLP 情緒運算管線 (Batch Checkpointing 模式) ==========
+⏳ 撈取 10 筆待處理資料，啟動 Hybrid 管線...
+[Gemini API] 正在批次處理 4 筆複雜標題 (具備 429 指數退避防護)...
+[Gemini API][WARNING] 遭遇 API 暫態限制或 429 限速 (429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.8-flash
+Please retry in 53.170503096s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.8-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 20
+}
+, retry_delay {
+  seconds: 53
+}
+])，將於 2 秒後進行第 2/5 次重試...
+[Gemini API][WARNING] 遭遇 API 暫態限制或 429 限速 (429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.8-flash
+Please retry in 44.366784557s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.8-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 20
+}
+, retry_delay {
+  seconds: 44
+}
+])，將於 4 秒後進行第 3/5 次重試...
+[Gemini API][WARNING] 遭遇 API 暫態限制或 429 限速 (429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.8-flash
+Please retry in 40.159520232s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.8-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 20
+}
+, retry_delay {
+  seconds: 40
+}
+])，將於 8 秒後進行第 4/5 次重試...
+[Gemini API][WARNING] 遭遇 API 暫態限制或 429 限速 (429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.8-flash
+Please retry in 31.96109579s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.8-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 20
+}
+, retry_delay {
+  seconds: 31
+}
+])，將於 16 秒後進行第 5/5 次重試...
+[Gemini API][ERROR] 遭遇 429 暫態異常且已達最大重試次數 (5 次)，終止重試: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.8-flash
+Please retry in 15.781704143s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.8-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 20
+}
+, retry_delay {
+  seconds: 15
+}
+]
+[HARNESS] run_all_daily_tasks() raised: ResourceExhausted('You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.8-flash\nPlease retry in 15.781704143s.')
+Traceback (most recent call last):
+  File "/tmp/real_run_all_daily_tasks.py", line 49, in <module>
+    pipeline.run_all_daily_tasks()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/workspaces/Stock_Prediction_System2/main_etl_pipeline.py", line 885, in run_all_daily_tasks
+    self.run_nlp_sentiment_pipeline(batch_size=500)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/tmp/real_run_all_daily_tasks.py", line 27, in wrapper
+    return fn(*a, **k)
+  File "/workspaces/Stock_Prediction_System2/main_etl_pipeline.py", line 534, in run_nlp_sentiment_pipeline
+    df_processed = self.nlp_processor.process_batch_hybrid(df_raw, self.db_writer)
+  File "/workspaces/Stock_Prediction_System2/src/transform/nlp_processor.py", line 229, in process_batch_hybrid
+    llm_results = self._batch_llm_api(llm_input)
+  File "/workspaces/Stock_Prediction_System2/src/transform/nlp_processor.py", line 161, in _batch_llm_api
+    response = self._generate_content_with_retry(prompt)
+  File "/workspaces/Stock_Prediction_System2/src/transform/nlp_processor.py", line 128, in _generate_content_with_retry
+    raise exc
+  File "/workspaces/Stock_Prediction_System2/src/transform/nlp_processor.py", line 113, in _generate_content_with_retry
+    return self.model.generate_content(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        prompt,
+        ^^^^^^^
+    ...<3 lines>...
+        )
+        ^
+    )
+    ^
+  File "/home/vscode/.local/lib/python3.14/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+        request,
+        **request_options,
+    )
+  File "/home/vscode/.local/lib/python3.14/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+        request,
+    ...<2 lines>...
+        metadata=metadata,
+    )
+  File "/home/vscode/.local/lib/python3.14/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+  File "/home/vscode/.local/lib/python3.14/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+        target,
+    ...<3 lines>...
+        on_error=on_error,
+    )
+  File "/home/vscode/.local/lib/python3.14/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+        exc,
+    ...<6 lines>...
+        timeout,
+    )
+  File "/home/vscode/.local/lib/python3.14/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/home/vscode/.local/lib/python3.14/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+  File "/home/vscode/.local/lib/python3.14/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+  File "/home/vscode/.local/lib/python3.14/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ResourceExhausted: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.8-flash
+Please retry in 15.781704143s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-3.8-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 20
+}
+, retry_delay {
+  seconds: 15
+}
+]
+
+[HARNESS] ===== 逐段計時（秒） =====
+  1_batch: 71.98
+  2_per_stock_inferred: 5.27
+  3_ai_trend: 79.75
+  4_ptt: 62.45
+  5_nlp: 151.61
+  _total: 371.06
+
+[HARNESS] ===== 結果 =====
+error_type: ResourceExhausted
+error: ResourceExhausted('You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.8-flash\nPlease retry in 15.781704143s.')
+{
+  "timings": {
+    "1_batch": 71.9793906211853,
+    "3_ai_trend": 79.75393319129944,
+    "4_ptt": 62.44662809371948,
+    "5_nlp": 151.6121060848236,
+    "2_per_stock_inferred": 5.268918514251709,
+    "_total": 371.06097650527954
+  },
+  "error_type": "ResourceExhausted",
+  "error": "ResourceExhausted('You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.8-flash\\nPlease retry in 15.781704143s.')"
+}

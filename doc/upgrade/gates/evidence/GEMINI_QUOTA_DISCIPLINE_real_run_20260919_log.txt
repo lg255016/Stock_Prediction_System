@@ -1,0 +1,141 @@
+/workspaces/Stock_Prediction_System2/src/extractors/trend_discover.py:7: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+======================================================================
+§0.5 #31+#33 段 C：第三次真實每日 ETL——真實庫執行
+PO 2026-09-19 00:xx 綁定確認（RISK-013：新 PRE → 還原驗證 → 執行 → 驗證 → POST）
+======================================================================
+[BINDING] current_database=postgres inet_server_port=5432（預期 postgres/5432）
+[PRE-STATE] now_taipei() = 2026-09-19 00:26:09.307966
+[PRE-STATE] today_taipei() = 2026-09-19
+[PRE-STATE] previous_business_day() = 2026-09-18
+[PRE-STATE] fetch_feature_lag() = {'feature_max_date': datetime.date(2026, 9, 17), 'price_max_date': datetime.date(2026, 9, 17), 'n_lag': 0}
+[PRE-STATE] fetch_last_discovery_probed_date() = None （預期 None）
+[PRE-STATE] fetch_failed_source_keys() count = 47
+
+======================================================================
+開始執行 run_all_daily_tasks()（真實庫，恰好一次）
+======================================================================
+
+Building prefix dict from the default dictionary ...
+Loading model from cache /tmp/jieba.cache
+Loading model cost 0.738 seconds.
+Prefix dict has been built successfully.
+[NLPProcessor] 已成功初始化 Gemini 混合管線 (gemini-3.8-flash)
+[FeatureAggregator] 已初始化 ML 特徵聚合器 (支援雙模式時間對齊、研究指標與題材情緒溢出)
+
+========== UG-G2-SB7 全市場批次取價 ==========
+  [2026-09-18] tpex OK｜列數 888｜HTTP 嘗試 1
+  [2026-09-18] twse OK｜列數 1082｜HTTP 嘗試 1
+[Batch] tpex_daily_quotes 2026-09-18｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+[Batch] twse_mi_index 2026-09-18｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+
+========== 正在載入追蹤股票標的清單 ==========
+[INFO] 取得 8 檔啟用標的: ['2454', '2059', '2330', '3008', '6488', '2382', 'NVDA', '8069']
+
+========== 逐股標的由 candidate_prices 供應 [2454 2026-09-18] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2059 2026-09-18] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2330 2026-09-18] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [3008 2026-09-18] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [6488 2026-09-18] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2382 2026-09-18] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 開始執行美股 ETL 管線 [NVDA] ==========
+
+[Extract] 正在透過 yfinance 抓取 NVDA 的資料...
+✅ [Extract] NVDA 原始資料抓取成功！
+
+[Transform] 開始清洗 NVDA 的股價資料...
+[Transform] NVDA 股價資料清洗完成！
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 64 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [8069 2026-09-18] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+[Batch] tracked_stocks_daily 2026-09-18｜OK 8／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 8
+[INFO] 特徵表落後股價表：daily_ml_features.max=2026-09-17，stock_prices.max=2026-09-18，n_lag=1 個交易日
+
+========== 啟動 AI 熱門趨勢探索 ==========
+[Discover] 正在掃描 PTT 股板最新 3 頁尋找熱門話題...
+[Discover] 收集到 29 篇熱門標題，正在呼叫 Gemini 分析題材趨勢與成分股...
+[Discover][ERROR] AI 萃取熱門詞彙失敗: DeadlineExceeded
+
+========== 正在載入追蹤關鍵字清單 ==========
+[INFO] 取得 31 個追蹤關鍵字：['環球晶', '廣達', '台積電', '輝達', '降息', '非農', 'AI伺服器', '矽光子', '凌巨', '記憶體', '川湖', '聯發科', '美債', '元太', '大立光', 'ASIC/AI晶片', '電子紙應用', '光學鏡頭', '散熱模組', 'CoWoS', 'AI晶片與ASIC', '電子紙與電子標籤', 'ASIC/IC設計', '加密貨幣概念', '電子紙', '生技醫療', 'AI伺服器與運算', '蘋果供應鏈', '高頻寬記憶體(HBM)', '銅箔基板(CCL)', '營建營造']
+
+[Extract] 看板頁面模式：31 個關鍵字，預算 25 頁，回溯至 1789576587.452351
+[Extract] 本頁最新一篇 1789552155 <= 1789576587.452351，已回溯到目標時間，停止翻頁。
+[Extract] 看板頁面模式完成：7 頁請求，12 筆命中，outcome=OK
+
+[Transform] 開始清洗 PTT 文章資料...
+[Transform] PTT 資料清洗完成！
+
+[Load] 準備寫入文章資料至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 12 筆資料。
+[Extract] 留言計數已存在，跳過 10 篇（write-once，DEC-024）。
+[Extract] 準備解析 2 篇文章內頁留言...
+
+[Load] 準備回填 2 筆留言計數至 market_articles（write-once）...
+[Load] 成功執行資料庫作業。已處理 2 筆資料。
+
+[Load] 準備寫入 30 則逐則留言至 article_comments...
+[Load] 成功執行資料庫作業。已處理 30 筆資料。
+[Batch] ptt 2026-09-19｜OK 4／NO_DATA 27／FETCH_FAILED 0／REFUSED 0｜合計 31
+
+========== 開始執行 NLP 情緒運算管線 (Batch Checkpointing 模式) ==========
+⏳ 撈取 2 筆待處理資料，啟動 Hybrid 管線...
+
+[Load] 準備更新 2 筆情緒分數至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 2 筆資料。
+✅ 本批次完成，累積已處理 2 筆。繼續下一批...
+🎉 所有文章情緒分數計算完畢！本次總共處理了 2 筆資料。
+
+========== 啟動 ML 特徵工程管線 ==========
+[INFO] [Feature] 開始聚合特徵：股價 449342 筆, 文章 1269 筆 (Cutoff: 15:30:00)
+[INFO] [Feature] 特徵表聚合完成！
+
+[Load] 準備寫入 449342 筆特徵數據至 daily_ml_features...
+[Load] 成功執行資料庫作業。已處理 449342 筆資料。
+
+========== UG-G3-SB2 每日尾端重算掛點 ==========
+
+[Load] 準備更新 2754 筆 Triple-Barrier 尾端重算標籤...
+[Load] Triple-Barrier 尾端重算完成，實際影響 2754 列（預期 2754 列）。
+
+========== 所有 ETL 任務執行完畢 ==========
+
+======================================================================
+執行完畢，未拋例外，exit 0
+======================================================================

@@ -1,0 +1,66 @@
+DB IDENTITY: ('rehearsal_db', 55440)
+===== Python fetch_failed_source_keys() (BEFORE running pipeline) =====
+count: 47
+  ('2059', '2026-09-07')
+  ('2059', '2026-09-08')
+  ('2059', '2026-09-09')
+  ('2059', '2026-09-10')
+  ('2059', '2026-09-11')
+  ('2059', '2026-09-14')
+  ('2330', '2026-09-07')
+  ('2330', '2026-09-08')
+  ('2330', '2026-09-09')
+  ('2330', '2026-09-10')
+===== SQL cross-check (proposal Sec3.3, eligible_stocks filtered) =====
+count: 47
+  ('2059', '2026-09-07')
+  ('2059', '2026-09-08')
+  ('2059', '2026-09-09')
+  ('2059', '2026-09-10')
+  ('2059', '2026-09-11')
+  ('2059', '2026-09-14')
+  ('2330', '2026-09-07')
+  ('2330', '2026-09-08')
+  ('2330', '2026-09-09')
+  ('2330', '2026-09-10')
+===== python_keys == sql_keys ? ===== True
+===== BEFORE snapshot =====
+rows: 449326
+===== Running run_feature_engineering_pipeline() for real (feature stage only) =====
+/workspaces/Stock_Prediction_System2/src/extractors/trend_discover.py:7: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+[FeatureAggregator] 已初始化 ML 特徵聚合器 (支援雙模式時間對齊、研究指標與題材情緒溢出)
+
+========== 啟動 ML 特徵工程管線 ==========
+[INFO] [Feature] 開始聚合特徵：股價 449326 筆, 文章 1266 筆 (Cutoff: 15:30:00)
+[INFO] [Feature] 特徵表聚合完成！
+
+[Load] 準備寫入 449326 筆特徵數據至 daily_ml_features...
+[Load] 成功執行資料庫作業。已處理 449326 筆資料。
+===== AFTER snapshot =====
+rows: 449326
+===== total differing rows ===== 47
+price-derived column violations (must be 0): 0
+target/label column violations (must be 0, this run has no tail-recompute): 0
+non-social/source_status violations (must be 0): 0
+===== rows flipped to SOURCE_FAILED ===== 47
+  ('2059', '2026-09-07')
+  ('2059', '2026-09-08')
+  ('2059', '2026-09-09')
+  ('2059', '2026-09-10')
+  ('2059', '2026-09-11')
+  ('2059', '2026-09-14')
+  ('2330', '2026-09-07')
+  ('2330', '2026-09-08')
+  ('2330', '2026-09-09')
+  ('2330', '2026-09-10')
+article_count NOT NULL violations on SOURCE_FAILED rows (must be 0): 0
+===== flipped_to_failed == python_keys ? ===== True
+===== flipped_to_failed == sql_keys ? ===== True

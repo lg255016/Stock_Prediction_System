@@ -1,0 +1,40 @@
+{
+  "purpose": "第 6 案 R3/B13 修法——紅色證據（新邏輯對未修正資料 FAIL）+ 舊邏輯對比 + 原始狀態行文字保存。",
+  "date": "2026-09-08",
+  "authorization": "PO 2026-09-08 裁決：B13 改為逐則遍歷 ## DEC- 條目、每則須恰一行可辨識狀態；4 則舊格式（005/006/008/022）正規化，原格式存證；DEC-009 由 PO 裁決補 APPROVED。",
+
+  "SCOPE_DEVIATION_DISCLOSED": "⚠ PO 原始裁決列出 4 則舊格式 ADR（DEC-005/006/008/022）。實際以新 B13 邏輯（掃描全部 DECISIONS.md，非僅 PROJECT_STATUS.md 引用者）執行後，額外發現 DEC-007 同屬同一類缺陷（`- **Status**：APPROVED（已核准）` 舊式粗體格式，未被 R3 抓到是因為 R3 的範圍僅限『PROJECT_STATUS.md 引用的 ADR』，DEC-007 未被 PROJECT_STATUS.md 引用；但 B13 的範圍是『DECISIONS.md 全部 ADR』，不受此限）。本次比照 4 則同類項目的處置，一併正規化 DEC-007，非擅自擴大範圍——同一失敗類型，同一修法，如實揭露此為執行中發現而非 PO 原始列表的一部分。",
+
+  "OLD_B13_LOGIC_OUTPUT_ON_UNFIXED_DATA": {
+    "method": "現行（修正前）gate0_contract_check.py，於主工作目錄直接執行（未修改任何檔案，唯讀）",
+    "raw_output": "B13  PASS | DECISIONS.md 狀態欄字首為全大寫的詞彙成員（反查法）\n       掃描 25 則；豁免 4 則（DEC-001~004 為前一團隊的描述性狀態）；不合規 0 則\n       [待轉] 無 —— 目前沒有停在 PROPOSED 的 ADR",
+    "significance": "假 PASS——舊邏輯只在遇到 `^- 狀態：` 開頭的行時才計數，DEC-005/006/007/008/009/022 因格式不符或欄位缺席，從未進入 b13_seen，這個 PASS 是在對這 6 則視而不見的子集合上通過的"
+  },
+
+  "NEW_B13_LOGIC_OUTPUT_ON_SAME_UNFIXED_DATA": {
+    "method": "拋棄式 git worktree（容器內 /tmp/b13_wt，非主工作目錄），套用新 B13 邏輯（逐則遍歷 ## DEC- 區塊）後於同一份（未修正）DECISIONS.md 上執行；worktree 執行後已 `git worktree remove --force` 拆除並確認",
+    "raw_output": "B13  FAIL | DECISIONS.md 狀態欄字首為全大寫的詞彙成員（反查法）\n       逐則遍歷（反查法）：掃描 27 則；豁免 4 則（DEC-001~004 為前一團隊的描述性狀態）；不合規 6 則\n       [VIOLATION] 狀態欄非詞彙成員或非全大寫: DEC-005: 找不到可辨識狀態行\n       [VIOLATION] 狀態欄非詞彙成員或非全大寫: DEC-006: 找不到可辨識狀態行\n       [VIOLATION] 狀態欄非詞彙成員或非全大寫: DEC-007: 找不到可辨識狀態行\n       [VIOLATION] 狀態欄非詞彙成員或非全大寫: DEC-008: 找不到可辨識狀態行\n       [VIOLATION] 狀態欄非詞彙成員或非全大寫: DEC-009: 找不到可辨識狀態行\n       [VIOLATION] 狀態欄非詞彙成員或非全大寫: DEC-022: 找不到可辨識狀態行\n       [待轉] 無 —— 目前沒有停在 PROPOSED 的 ADR",
+    "significance": "紅——DEC-009 是活的 known-FAIL，不必構造；其餘 5 則的『找不到可辨識狀態行』是因為它們的狀態行不符 `^- 狀態：` 正則（舊式粗體格式），非真的沒有狀態宣告",
+    "PAIRED_WITH_OLD_LOGIC": "同一份資料、同一次量測範圍，新舊邏輯給出相反結論（PASS vs FAIL）——兩份並排即盲點存在過的直接證明"
+  },
+
+  "ORIGINAL_STATUS_LINE_TEXT_PRESERVED": {
+    "DEC-005": "- **Status（狀態）**：Approved by Human（2026-08-20 由 Project Owner 拍板核准）",
+    "DEC-006": "- **Status（狀態）**：Approved by Human（2026-08-20 由 Project Owner 拍板核准）",
+    "DEC-007": "- **Status**：APPROVED（已核准）",
+    "DEC-008": "- **Status**：APPROVED（已核准）",
+    "DEC-009": "（無——原區塊自 `## DEC-009` 標題後直接進入 `### Context / Problem`，無任何狀態欄位）",
+    "DEC-022": "- **Status**：APPROVED（Project Owner，2026-08-26，UG-G1-SB5）"
+  },
+
+  "NORMALIZED_STATUS_LINE_TEXT": {
+    "DEC-005": "- 狀態：APPROVED（2026-08-20 由 Project Owner 拍板核准；狀態行格式於 2026-09-08 正規化，原格式見本檔 ORIGINAL_STATUS_LINE_TEXT_PRESERVED）",
+    "DEC-006": "- 狀態：APPROVED（2026-08-20 由 Project Owner 拍板核准；狀態行格式於 2026-09-08 正規化，原格式見本檔 ORIGINAL_STATUS_LINE_TEXT_PRESERVED）",
+    "DEC-007": "- 狀態：APPROVED（已核准，核准日期見下方 Date 欄；狀態行格式於 2026-09-08 正規化，原格式見本檔 ORIGINAL_STATUS_LINE_TEXT_PRESERVED——第 6 案執行中發現，非 PO 原始列表項目，見 SCOPE_DEVIATION_DISCLOSED）",
+    "DEC-008": "- 狀態：APPROVED（已核准，核准日期見下方 Date 欄；狀態行格式於 2026-09-08 正規化，原格式見本檔 ORIGINAL_STATUS_LINE_TEXT_PRESERVED）",
+    "DEC-009": "- 狀態：APPROVED（PO 2026-09-08 追認核准——原始核准日期不可考，經跨文件狀態一致性稽核第 6 案反查發現本 ADR 自始缺少狀態欄位；歷史已實作見 TRACEABILITY.md §3.2「AI 題材概念股映射與知識庫」SB-TH1 列；核准歷史決定，不背書過期內文——已知內文缺陷見 DEC-022 缺陷索引 doc/evidence/DECISIONS.md:1603）",
+    "DEC-022": "- 狀態：APPROVED（Project Owner，2026-08-26，UG-G1-SB5；狀態行格式於 2026-09-08 正規化，原格式見本檔 ORIGINAL_STATUS_LINE_TEXT_PRESERVED）"
+  },
+
+  "WHAT_WAS_NOT_TOUCHED": "除上述六則的『狀態』一行（DEC-009 為新增一行）之外，DECISIONS.md 其餘全部內容（含這六則 ADR 自己的 Context/Decision/Rationale 等本文）逐位元組未動——符合 CLAUDE.md §16.1『只增不減』對內容本身的保護；本次授權範圍僅限狀態欄位本身，由 PO 2026-09-08 明確裁決"
+}

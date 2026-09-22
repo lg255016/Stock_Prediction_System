@@ -1,0 +1,138 @@
+{
+  "title": "UG-G3-SB3 面板凍結匯出——拋棄式容器還原 POST 備份 + build_panel_dataset() 兩種 target",
+  "date": "2026-09-12",
+  "background": {
+    "summary": "PO 2026-09-12 裁決：面板凍結時點為每日 ETL 首跑之前，凍結基準為 RISK-027 段 2 重跑的 POST 備份（stock_prediction_system2_POST_g3_sb2a_stage2_rerun_risk027_20260912_121252.dump）。本次還原該備份至拋棄式容器（與真實庫零接觸），呼叫既有 build_panel_dataset() 兩種 target_column 各一次，匯出成 parquet 靜態檔，供本 SB 後續所有 Fold 切分、耗時實測、訓練評估重複使用，不再即時查詢任何資料庫。",
+    "sb3_implementation_commits": ["cae860f", "eda08f5"],
+    "storage_decision": "parquet 檔案與 manifest 不進版控（各約 11MB 二進位檔，且每次重新凍結會改變內容，版控只會累積歷史二進位差異）；只有本檔（JSON，含 sha256／列數／欄位/日期範圍）進版控，檔案本身存放於 D:\\Python\\Database_Backups\\Stock_Prediction_System2\\ml_panels\\（與既有 DB 備份同一層級目錄，非 repo 內），PO 2026-09-12 核准此存放方式。"
+  },
+  "part_A_disposable_restore": {
+    "risk_013_analog": "本步驟不寫入任何真實資料庫，僅單向讀取備份還原至拋棄式容器，故不適用 RISK-013 三步驟協議，但沿用其還原驗證紀律（獨立容器、與運行中容器零接觸）",
+    "container_name": "sb3_panel_export_tmpdb",
+    "source_backup": "D:\\Python\\Database_Backups\\Stock_Prediction_System2\\stock_prediction_system2_POST_g3_sb2a_stage2_rerun_risk027_20260912_121252.dump",
+    "restore_command": "pg_restore -h localhost -U postgres -d postgres --no-owner --role=postgres -j 4 /tmp/post.dump",
+    "network": "stock_prediction_system2_devcontainer_default（與 app 容器同網段，供 app 容器連線讀取，容器本身不掛任何 bind mount，不影響開發資料）",
+    "post_restore_verification": {
+      "daily_ml_features_row_count": 449263,
+      "label_counts": [410443, 38820],
+      "stock_prices_row_count": 449263,
+      "universe_snapshots_row_count": 85641,
+      "result": "PASS，與 POST 備份記載現況完全一致"
+    },
+    "container_removed_after_export": true,
+    "evidence_label": "VERIFIED THIS SESSION"
+  },
+  "part_B_panel_export": {
+    "function_called": "src.ml.panel_dataset.build_panel_dataset(df_universe, df_features, df_prices, target_column=<target>, holding_period=5)",
+    "targets": {
+      "target_up_down": {
+        "rows": 139585,
+        "stocks": 458,
+        "nvda_in_panel": false,
+        "trade_date_min": "2022-11-01",
+        "trade_date_max": "2026-09-04",
+        "target_null_count": 185,
+        "file": "D:\\Python\\Database_Backups\\Stock_Prediction_System2\\ml_panels\\panel_target_up_down_20260912.parquet",
+        "sha256": "39dc6b8e6160add20f39a7265bad04de50c76199fa7ab81b979a7aabeabbd014",
+        "bytes": 11442443
+      },
+      "target_triple_barrier": {
+        "rows": 139585,
+        "stocks": 458,
+        "nvda_in_panel": false,
+        "trade_date_min": "2022-11-01",
+        "trade_date_max": "2026-09-04",
+        "target_null_count": 15147,
+        "file": "D:\\Python\\Database_Backups\\Stock_Prediction_System2\\ml_panels\\panel_target_triple_barrier_20260912.parquet",
+        "sha256": "4c4657c4e7e36b227fef01d2f6f667b8e613b23587db40f2907d024db9b3f729",
+        "bytes": 11471083
+      }
+    },
+    "columns": [
+      "trade_date", "stock_id", "close_price", "volume", "article_count",
+      "sentiment_mean", "sentiment_3d_ma", "return_1d", "rsi_14",
+      "volatility_5d", "volatility_20d", "bullishness_index", "agreement_index",
+      "sentiment_5d_ma", "sentiment_lag_1", "sentiment_lag_2", "amplitude_ratio",
+      "ma5_bias_ratio", "ma20_bias_ratio", "volume_ratio_5d",
+      "comment_volume_ratio", "comment_polarization", "net_push_momentum",
+      "target_next_close", "target_return_1d", "target_up_down",
+      "target_triple_barrier", "source_status", "label_reason",
+      "label_end_date", "label_end_date_tb", "target"
+    ],
+    "note": "兩種 target 的面板列數／股票數／日期範圍完全相同（139,585 列、458 檔、無 NVDA），僅 target 欄來源與 target_null_count 不同——與 §2.2（UG_G3_SB3_GATE_A_PROPOSAL.md）先前的小型合成測試結果一致，本次為對完整真實資料的正式匯出。",
+    "manifest_file": "D:\\Python\\Database_Backups\\Stock_Prediction_System2\\ml_panels\\manifest_20260912.json",
+    "manifest_file_path_note": "manifest_20260912.json 內部的 'file' 欄記錄的是產生當下（容器內執行 build_panel_dataset() 匯出時）的容器路徑 /tmp/sb3_panels/panel_<target>.parquet，非本檔（repo 內證據 JSON）記載的主機路徑；兩者並存、互不矛盾，僅記錄來源不同（manifest 由容器內腳本產生，本 JSON 由後續複製到主機後人工整理）。",
+    "sentiment_coverage_within_panel": {
+      "correction_note": "**訂正（PO 2026-09-12 複核第二輪）**：初版以「全表有情緒的 23 檔（含 NVDA）」與「面板 458 檔股票集合」取交集，得到 22 檔——但這個算法只檢查股票是否同時出現在兩邊，沒有檢查該股票『有情緒訊號的那幾列』是否真的落在面板涵蓋的日期範圍內。3141（唯一情緒列在 2026-02-24，面板列只到 2023-04-28）與 3362（情緒列在 2026-06～09，面板列只到 2024-05-31）皆通過交集檢查，但面板實際列裡沒有它們的任何非 NULL sentiment_mean。",
+      "correct_method": "直接在 parquet 面板上數 sentiment_mean 非 NULL 的相異 stock_id",
+      "count": 20,
+      "ratio": "20/458 = 4.4%",
+      "stock_ids": ["2059", "2317", "2330", "2344", "2382", "2408", "2454", "3008", "3081", "3131", "3163", "3363", "3406", "3583", "5289", "6187", "6442", "6488", "6669", "8069"],
+      "evidence_label": "VERIFIED THIS SESSION"
+    }
+  },
+  "part_C_purged_samples_exact_vs_approximate": {
+    "target": "target_up_down",
+    "splitter_config": "train_window_size=60, test_window_size=20, mode=rolling, label_horizon=1, embargo_days=0",
+    "exact_path": "label_end_date_col='label_end_date', require_label_end_date=True",
+    "approximate_path": "同一 splitter 設定，面板複本移除 label_end_date 欄後執行（label_end_date_col 找不到欄，落入近似 fallback）",
+    "n_folds": 43,
+    "n_folds_with_diff": 4,
+    "diff_direction": "approximate 全部低估（approx_purged < exact_purged）——approximate 少剔除了本應被 Purge 的訓練列，即論文/docstring 警示的低估 Purge 風險方向，非過度剔除",
+    "diffs": [
+      {"fold": 29, "exact_purged": 150, "approx_purged": 149, "stocks_under_purged_by_approx": ["4763"]},
+      {"fold": 30, "exact_purged": 150, "approx_purged": 149, "stocks_under_purged_by_approx": ["2888"]},
+      {"fold": 31, "exact_purged": 151, "approx_purged": 149, "stocks_under_purged_by_approx": ["2327", "2888"]},
+      {"fold": 32, "exact_purged": 151, "approx_purged": 150, "stocks_under_purged_by_approx": ["2888"]}
+    ],
+    "correction_note": "**訂正（PO 2026-09-12 複核第二輪）**：初版把面板（PIT 過濾後）上量到的股票列數／缺口套用到 label_end_date 的成因分析，但 label_end_date 是從 stock_prices（未經 PIT 過濾）算的，兩者不是同一份序列，宇宙進出不會改變 label_end_date。逐列查證後的正確機制如下。",
+    "row_level_mechanism": [
+      {
+        "folds": [30, 31, 32],
+        "row": "2888 @ trade_date=2025-07-11",
+        "own_next_trading_day": "NaT（stock_prices 於 2025-07-11 即為該股最後一列，之後 candidate_prices 亦零列——序列終止，非缺口）",
+        "global_next_trading_day": "2025-07-14（全域聯集日曆的下一個交易日）",
+        "mechanism": "序列終止：精確路徑對 NaT 保守判定需 Purge；近似路徑仍用全域日曆推出 2025-07-14 而誤判為安全、未剔除。三個 Fold 的差異其實是同一列。",
+        "practical_impact": "零——該列 target_up_down 為 NULL（label_reason=no_entry），規則 (a) 本就會把它剔除，不影響實際訓練資料"
+      },
+      {
+        "fold": 29,
+        "row": "4763 @ trade_date=2025-06-18",
+        "own_next_trading_day": "2025-06-30（stock_prices 顯示 06-16/17/18 有列，接著跳到 06-30——個股停牌，2025-06-19~06-27 全市場交易 7 個交易日、4763 於 stock_prices 與 candidate_prices 皆零列）",
+        "global_next_trading_day": "2025-06-19",
+        "mechanism": "個股停牌：精確路徑用該股自身序列正確得出 06-30；近似路徑用全域日曆誤判為 06-19，兩者相差超過測試窗起點，導致近似路徑少剔除 1 列。",
+        "practical_impact": "真實：該列若不剔除，會把一個標籤資訊實際發生在測試窗之後的樣本留在訓練集，屬於真正的邊界洩漏（雖然只有 1 列）"
+      },
+      {
+        "fold": 31,
+        "row": "2327 @ trade_date=2025-08-13",
+        "own_next_trading_day": "2025-08-25（08-11/12/13 有列，接著跳到 08-25——個股停牌，2025-08-14~08-22 全市場交易 7 個交易日、2327 兩表皆零列）",
+        "global_next_trading_day": "2025-08-14",
+        "mechanism": "與 4763 同一種機制（個股停牌）。",
+        "practical_impact": "同上，真實邊界洩漏 1 列"
+      }
+    ],
+    "stock_gap_diagnosis_superseded": "刪除——初版的「2888 有 308 天缺口／退出重新進入宇宙」與「4763／2327 缺口 4～13 天／假期叢集量級」皆為錯誤歸因（假期是全市場休市，不會造成個股與全域日曆不同步；308 天缺口是面板 PIT 視角的假象，stock_prices 顯示 2888 是序列終止於 2025-07-11，非中途缺口），已由上方 row_level_mechanism 取代。",
+    "conclusion": "43 Fold 中 4 個有差異，逐列查證後歸因為兩種真實機制：(1) 序列終止（2888，3 次差異實為同一列，且因 target 為 NULL 已被規則 (a) 剔除，實務零影響）；(2) 個股停牌（4763、2327 各 1 列，全市場正常交易但個股停牌 7 個交易日，其 T+1 標籤實際落在測試窗首日附近，近似路徑因誤用全域日曆而少剔除，構成真正的邊界洩漏）。近似路徑低估 Purge 的方向與程式碼既有 docstring 的警示一致；量級很小（43 Fold 中僅 4 個受影響、扣除零影響的序列終止列後僅 2 列真實洩漏），但確認了 require_label_end_date + purge_mode 誠實回報這項修法的必要性——這類洩漏在近似路徑下沒有任何訊號會被察覺。",
+    "evidence_label": "VERIFIED THIS SESSION"
+  },
+  "part_D_single_configuration_timing": {
+    "target": "target_triple_barrier",
+    "mode": "rolling",
+    "model": "RandomForestClassifier(n_estimators=200, random_state=42, n_jobs=1)",
+    "arm": "B（ARM_B_FEATURE_COLS，16 欄）",
+    "n_folds": 43,
+    "total_seconds": 125.55,
+    "per_fold_seconds": {"min": 2.62, "median": 2.88, "max": 3.19},
+    "note": "與 UG_G3_SB3_GATE_A_PROPOSAL.md §2.3 的外推估計（單 Fold ~2.88 秒）幾乎完全吻合——外推方法本身在此配置下準確；expanding 模式訓練列數中位數為 rolling 的 8.6 倍，真實耗時待該配置實測時另補，不預先外推。",
+    "evidence_label": "VERIFIED THIS SESSION"
+  },
+  "reproduction": {
+    "command_shape": "docker exec -u vscode <app-container> python3 -c \"... build_panel_dataset(df_universe, df_features, df_prices, target_column=<target>, holding_period=5).to_parquet(...); hashlib.sha256(...)\"",
+    "note": "完整可重跑指令已在本次操作中實際執行並記錄於上；若 sha256 與本檔記載不符，代表來源資料庫或程式碼已變動，須重新查明原因，不得逕行更新本檔雜湊值了事。"
+  },
+  "not_done": [
+    "訓練迴圈本體與邊界窗/內部窗洩漏診斷實作——下一步，紅測先行",
+    "expanding 模式與其餘模型（LightGBM／XGBoost）／對照臂 A 的耗時實測——待訓練迴圈本體完成後一併量測"
+  ]
+}

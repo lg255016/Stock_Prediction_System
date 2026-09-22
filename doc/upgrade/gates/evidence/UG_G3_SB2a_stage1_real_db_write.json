@@ -1,0 +1,80 @@
+{
+  "purpose": "UG-G3-SB2a 段 1——458 檔 Universe 股價回補（stock_prices ← candidate_prices）。PO 2026-09-10 binding confirmation 核准，走 RISK-013 三項協議，範圍為 stock_prices 的缺席 (stock_id, trade_date) 組合，僅補齊不覆寫既有列。",
+  "date": "2026-09-10",
+  "authorization": "PO 2026-09-10 binding confirmation：授權對 postgres@localhost:5432 的 stock_prices 表，以 961b69f 版本的 scripts/verify/ug_g3_sb2a_backfill_stock_prices.py --write 執行純 INSERT（不用 ON CONFLICT），範圍為 candidate_prices 458 檔宇宙中 stock_prices 尚缺席的全部日期。腳本執行過程中未修改（依授權條件）。步驟依 PO 2026-09-10 訂正版逐項執行，順序未調換。",
+  "step_1_pre_backup": {
+    "command": "docker exec stock_prediction_system2_devcontainer-db-1 bash -c 'pg_dump -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\" -Fc -f /tmp/<filename>'（本機 socket 免密碼，指令內不出現 PGPASSWORD；db 容器有 pg_dump 二進位，app 容器沒有，故於 db 容器內執行後 docker cp 取出）",
+    "backup_file_path": "D:\\Python\\Database_Backups\\Stock_Prediction_System2\\stock_prediction_system2_PRE_g3_sb2a_stock_prices_20260910_231049.dump",
+    "backup_file_size_bytes": 71832965,
+    "pg_dump_exit_code": 0,
+    "transfer_integrity": "docker cp 前後（db 容器 /tmp 暫存 → docker cp → Windows 目的路徑）byte 數完全相同（71832965）；/tmp 僅為容器間傳輸的中繼點，非最終完成備份的位置，複製確認後已清除該容器 /tmp 暫存檔（ls 確認 No such file or directory）",
+    "container_visibility_confirmed": "app 容器內 /workspaces/Database_Backups/Stock_Prediction_System2/stock_prediction_system2_PRE_g3_sb2a_stock_prices_20260910_231049.dump 可讀（執行時「備份檔檢查通過」訊息已核對其大小與此處一致）"
+  },
+  "step_2_restore_verification": {
+    "container": "獨立拋棄式容器 sb2a_restore_check（postgres:18，隨機密碼，未掛載 postgres-data，接在 stock_prediction_system2_devcontainer_default 網路上），資料庫名 sb2a_restore_check_tmpdb",
+    "restore_command": "pg_restore -h sb2a_restore_check -U postgres -d sb2a_restore_check_tmpdb --no-owner --no-privileges <dump>（於 db-1 容器內執行，db-1 有 pg_restore 二進位且與拋棄式容器同 docker network；dump 先由 Windows 端 docker cp 進 db-1 的 /tmp 暫存，還原後即清除）",
+    "pg_restore_exit_code": 0,
+    "verification_queries": {
+      "candidate_prices_count": {"expected": 1825814, "actual": 1825814},
+      "universe_snapshots_count": {"expected": 85641, "actual": 85641},
+      "stock_prices_count": {"expected": 3713, "actual": 3713},
+      "daily_ml_features_count": {"expected": 3713, "actual": 3713},
+      "schema_version_max": {"expected": 9, "actual": 9}
+    },
+    "conclusion": "-Fc 備份檔本身含 schema，還進全新空庫（非先套 schema.sql／migration 再還原——後者會因物件已存在報錯）；還原成功且四張表列數、schema 版本皆與寫入前真實庫吻合，證明備份是寫入操作之前拍攝的完整有效快照"
+  },
+  "step_3_pre_write_baseline": {
+    "T0": "2026-09-10 15:17:23.855706+00:00",
+    "query_stock_prices": "SELECT count(*), md5(string_agg(concat_ws('|', stock_id, trade_date, open_price, high_price, low_price, close_price, volume, coalesce(source, '<null>')), ',' ORDER BY stock_id, trade_date)) FROM stock_prices;",
+    "stock_prices_baseline": {"count": 3713, "md5": "b809e1bf3f3e75a69eab57ff42798fb5"},
+    "daily_ml_features_baseline": {"count": 3713, "target_triple_barrier_non_null": 3529, "label_reason_non_null": 184}
+  },
+  "step_4_write": {
+    "command": "printf 'postgres\\n' | docker exec -i -u vscode -w /workspaces/Stock_Prediction_System2 -e DB_HOST=localhost -e DB_PORT=5432 stock_prediction_system2_devcontainer-app-1 python scripts/verify/ug_g3_sb2a_backfill_stock_prices.py --write --backup /workspaces/Database_Backups/Stock_Prediction_System2/stock_prediction_system2_PRE_g3_sb2a_stock_prices_20260910_231049.dump（-i 為必要旗標，缺少會使 stdin 確認 EOFError 非零退出，fail closed；POSTGRES_USER／POSTGRES_PASSWORD／POSTGRES_DB 沿用 app 容器既有環境變數，不從 host 額外傳遞）",
+    "raw_output": "備份檔檢查通過：/workspaces/Database_Backups/Stock_Prediction_System2/stock_prediction_system2_PRE_g3_sb2a_stock_prices_20260910_231049.dump（71,832,965 bytes，6.4 分鐘前）\nCONN CHECK: ('postgres', 'postgres', 5432)\n即將對資料庫 'postgres' 執行 INSERT。請輸入資料庫名稱以確認：候選池（458 檔全部列）：444877 列，458 檔\nstock_prices 現有：3713 列\n\n候選池（458 檔全部列）：444877 列\nstock_prices 現有 (stock_id, trade_date) 組合：3713 列\n待插入（缺席日期）：441922 列\n跳過（已存在，不覆寫）：2955 列\n\n依 source 分布（待插入）：\n  'twse_mi_index': 315593\n  'tpex_daily_quotes': 126329\n\n依股票待插入列數：min=179（7769）、max=985（1101）、檔數=455\n\n待插入列中 SQL NULL 價格列（§3.3，非 RISK-024）：80 列——照插，不特殊處理（UG-G3-SB1 Triple-Barrier 消費端已正確處理，874b3bf）\n\n既有股票 2330：candidate_prices 985 列，待插入 0 列，跳過（已存在）985 列\n\n既有股票 2382：candidate_prices 985 列，待插入 0 列，跳過（已存在）985 列\n\n既有股票 6488：candidate_prices 985 列，待插入 0 列，跳過（已存在）985 列\n（核對 1/4）INSERT 影響列數核對通過：441922 == 441922\n（核對 2/4）總列數核對通過：445635 == 445635（寫入前 + 插入）。\n（核對 3/4）逐股列數核對通過：458 檔皆等於「插入前 + 待插入」。\n抽樣核對通過：180 列（隨機樣本 + 全部 SQL NULL 價格列）逐欄讀回與記憶體預期完全相符。\n（核對 4/4）抽樣讀回核對通過。\nCOMMIT 完成。\n=== 寫入後真實庫 stock_prices 總列數 === (445635,)",
+    "exit_code": 0,
+    "script_version": "961b69f（執行過程中未修改，依授權條件）"
+  },
+  "step_5_post_write_verification": {
+    "query_1_total_count": "SELECT count(*) FROM stock_prices;",
+    "query_1_result": 445635,
+    "query_2_source_distribution": "SELECT source, count(*) FROM stock_prices GROUP BY source ORDER BY source NULLS FIRST;",
+    "query_2_result": [
+      [null, 137], ["tpex_daily_quotes", 127288], ["twse_mi_index", 317531], ["yfinance_auto_adjusted", 679]
+    ],
+    "query_3_null_close_price": "SELECT count(*) FROM stock_prices WHERE close_price IS NULL;",
+    "query_3_result": 80,
+    "query_4_distinct_stocks": "SELECT count(DISTINCT stock_id) FROM stock_prices;",
+    "query_4_result": 459,
+    "query_5_existing_3_stocks": "SELECT stock_id, count(*) FROM stock_prices WHERE stock_id IN ('2330','2382','6488') GROUP BY stock_id ORDER BY stock_id;",
+    "query_5_result": [["2330", 987], ["2382", 987], ["6488", 985]],
+    "query_6_daily_ml_features_count": "SELECT count(*) FROM daily_ml_features;",
+    "query_6_result": 3713,
+    "query_7_pre_existing_rows_unchanged": "SELECT count(*), md5(string_agg(concat_ws('|', stock_id, trade_date, open_price, high_price, low_price, close_price, volume, coalesce(source, '<null>')), ',' ORDER BY stock_id, trade_date)) FROM stock_prices WHERE created_at < '2026-09-10 15:17:23.855706+00:00';",
+    "query_7_result": {"count": 3713, "md5": "b809e1bf3f3e75a69eab57ff42798fb5"},
+    "query_7_cross_check": "count 與 md5 皆與 step_3_pre_write_baseline 完全相同——既有 3,713 列一個位元組都沒被本次寫入動到",
+    "query_8_newly_inserted_rows": "SELECT count(*) FROM stock_prices WHERE created_at >= '2026-09-10 15:17:23.855706+00:00';",
+    "query_8_result": 441922,
+    "query_9_daily_ml_features_full": "SELECT count(*), count(target_triple_barrier), count(label_reason) FROM daily_ml_features;",
+    "query_9_result": {"count": 3713, "target_triple_barrier_non_null": 3529, "label_reason_non_null": 184},
+    "conclusion": "全部 9 項查詢結果與段 1 腳本預覽、與寫入時的 raw_output、與寫入前基線逐項相符；既有 3,713 列的 md5 雜湊在寫入前後完全一致，直接證明本次回補只新增（441,922 列，created_at >= T0），未覆寫任何既有列；daily_ml_features 完全未受影響（段 1 不動它）"
+  },
+  "step_6_post_backup": {
+    "command": "同 step_1（pg_dump -Fc 於 db-1 容器內執行，docker cp 取出，容器 /tmp 暫存已清除）",
+    "backup_file_path": "D:\\Python\\Database_Backups\\Stock_Prediction_System2\\stock_prediction_system2_POST_g3_sb2a_stock_prices_20260910_231920.dump",
+    "backup_file_size_bytes": 79322398,
+    "pg_dump_exit_code": 0,
+    "size_sanity_check": "79,322,398 bytes，較 PRE 備份（71,832,965 bytes）大約 7.5 MB，與新增 441,922 列（約 168 bytes/列估算）同量級，未觸發「明顯異常」警戒"
+  },
+  "teardown": "sb2a_restore_check 已 docker rm -f，docker ps -a 過濾輸出為空；db-1 容器內兩次 /tmp 暫存檔（PRE 備份、還原用副本、POST 備份）皆已個別清除，未殘留於任何容器",
+  "real_db_write_summary": {
+    "table": "stock_prices",
+    "operation": "純 INSERT（不用 ON CONFLICT），僅補缺席 (stock_id, trade_date) 組合",
+    "rows_inserted": 441922,
+    "rows_unchanged": 3713,
+    "total_after": 445635,
+    "database": "postgres@localhost:5432（真實開發庫）",
+    "commit_confirmed": true
+  },
+  "note_on_credentials": "本檔不含任何字面 password 值（CHAL-008 教訓）"
+}

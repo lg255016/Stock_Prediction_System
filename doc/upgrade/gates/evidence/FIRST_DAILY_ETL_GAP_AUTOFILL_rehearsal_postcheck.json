@@ -1,0 +1,830 @@
+{
+  "connection_target": {
+    "db": "postgres",
+    "port": 59991
+  },
+  "row_counts_after": {
+    "stock_prices": 449319,
+    "candidate_prices": 1855399,
+    "market_articles": 1330,
+    "article_comments": 136185,
+    "daily_ml_features": 449319,
+    "etl_run_log": 147,
+    "sentiment_cache": 36
+  },
+  "row_counts_diff": {
+    "stock_prices": 56,
+    "candidate_prices": 13805,
+    "market_articles": 0,
+    "article_comments": 0,
+    "daily_ml_features": 56,
+    "etl_run_log": 90,
+    "sentiment_cache": 0
+  },
+  "target_triple_barrier_counts_after": [
+    {
+      "target_triple_barrier": -1.0,
+      "n": 226984
+    },
+    {
+      "target_triple_barrier": 0.0,
+      "n": 21199
+    },
+    {
+      "target_triple_barrier": 1.0,
+      "n": 162309
+    },
+    {
+      "target_triple_barrier": NaN,
+      "n": 38827
+    }
+  ],
+  "label_reason_counts_after": [
+    {
+      "label_reason": NaN,
+      "n": 410492
+    },
+    {
+      "label_reason": "ambiguous_dual_barrier",
+      "n": 36395
+    },
+    {
+      "label_reason": "insufficient_data",
+      "n": 1892
+    },
+    {
+      "label_reason": "no_entry",
+      "n": 540
+    }
+  ],
+  "pre_0905_feature_md5_after": "a34a82f26619fb0c8d3609147fe8dc99",
+  "pre_0905_feature_rowcount": 449263,
+  "pre_0905_distinct_stock_count": 459,
+  "etl_run_log_new_rows_count": 90,
+  "etl_run_log_new_rows": [
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "AI伺服器",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "AI晶片與ASIC",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "ASIC/AI晶片",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "ASIC/IC設計",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "CoWoS",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "元太",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "光學鏡頭",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "凌巨",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "加密貨幣概念",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "台積電",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "大立光",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "川湖",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "廣達",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "散熱模組",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "環球晶",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "生技醫療",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "矽光子",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "美債",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "聯發科",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "記憶體",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "輝達",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "降息",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "電子紙",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "電子紙應用",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "電子紙與電子標籤",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "ptt",
+      "batch_key": "2026-09-16",
+      "item_key": "非農",
+      "outcome": "FETCH_FAILED",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:47.830111"
+    },
+    {
+      "source": "tpex_daily_quotes",
+      "batch_key": "2026-09-07",
+      "item_key": "tpex",
+      "outcome": "OK",
+      "http_attempts": "1.0",
+      "created_at": "2026-09-16 14:01:48.273322"
+    },
+    {
+      "source": "tpex_daily_quotes",
+      "batch_key": "2026-09-08",
+      "item_key": "tpex",
+      "outcome": "OK",
+      "http_attempts": "1.0",
+      "created_at": "2026-09-16 14:01:57.281705"
+    },
+    {
+      "source": "tpex_daily_quotes",
+      "batch_key": "2026-09-09",
+      "item_key": "tpex",
+      "outcome": "OK",
+      "http_attempts": "1.0",
+      "created_at": "2026-09-16 14:02:07.018217"
+    },
+    {
+      "source": "tpex_daily_quotes",
+      "batch_key": "2026-09-10",
+      "item_key": "tpex",
+      "outcome": "OK",
+      "http_attempts": "1.0",
+      "created_at": "2026-09-16 14:02:16.393113"
+    },
+    {
+      "source": "tpex_daily_quotes",
+      "batch_key": "2026-09-11",
+      "item_key": "tpex",
+      "outcome": "OK",
+      "http_attempts": "1.0",
+      "created_at": "2026-09-16 14:02:25.147556"
+    },
+    {
+      "source": "tpex_daily_quotes",
+      "batch_key": "2026-09-14",
+      "item_key": "tpex",
+      "outcome": "OK",
+      "http_attempts": "1.0",
+      "created_at": "2026-09-16 14:02:33.428254"
+    },
+    {
+      "source": "tpex_daily_quotes",
+      "batch_key": "2026-09-15",
+      "item_key": "tpex",
+      "outcome": "OK",
+      "http_attempts": "1.0",
+      "created_at": "2026-09-16 14:02:41.725136"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-07",
+      "item_key": "2059",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-07",
+      "item_key": "2330",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-07",
+      "item_key": "2382",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-07",
+      "item_key": "2454",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-07",
+      "item_key": "3008",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-07",
+      "item_key": "6488",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-07",
+      "item_key": "8069",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-08",
+      "item_key": "2059",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-08",
+      "item_key": "2330",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-08",
+      "item_key": "2382",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-08",
+      "item_key": "2454",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-08",
+      "item_key": "3008",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-08",
+      "item_key": "6488",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-08",
+      "item_key": "8069",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-09",
+      "item_key": "2059",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-09",
+      "item_key": "2330",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-09",
+      "item_key": "2382",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-09",
+      "item_key": "2454",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-09",
+      "item_key": "3008",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-09",
+      "item_key": "6488",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-09",
+      "item_key": "8069",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-10",
+      "item_key": "2059",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-10",
+      "item_key": "2330",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-10",
+      "item_key": "2382",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-10",
+      "item_key": "2454",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-10",
+      "item_key": "3008",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-10",
+      "item_key": "6488",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-10",
+      "item_key": "8069",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-11",
+      "item_key": "2059",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-11",
+      "item_key": "2330",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-11",
+      "item_key": "2382",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-11",
+      "item_key": "2454",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-11",
+      "item_key": "3008",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-11",
+      "item_key": "6488",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-11",
+      "item_key": "8069",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-14",
+      "item_key": "2059",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-14",
+      "item_key": "2330",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-14",
+      "item_key": "2382",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-14",
+      "item_key": "2454",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-14",
+      "item_key": "3008",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-14",
+      "item_key": "6488",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-14",
+      "item_key": "8069",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-15",
+      "item_key": "2059",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-15",
+      "item_key": "2330",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-15",
+      "item_key": "2382",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-15",
+      "item_key": "2454",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-15",
+      "item_key": "3008",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-15",
+      "item_key": "6488",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-15",
+      "item_key": "8069",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "batch_key": "2026-09-16",
+      "item_key": "NVDA",
+      "outcome": "OK",
+      "http_attempts": NaN,
+      "created_at": "2026-09-16 14:02:43.448359"
+    },
+    {
+      "source": "twse_mi_index",
+      "batch_key": "2026-09-07",
+      "item_key": "twse",
+      "outcome": "OK",
+      "http_attempts": "1.0",
+      "created_at": "2026-09-16 14:01:48.273322"
+    },
+    {
+      "source": "twse_mi_index",
+      "batch_key": "2026-09-08",
+      "item_key": "twse",
+      "outcome": "OK",
+      "http_attempts": "1.0",
+      "created_at": "2026-09-16 14:01:57.281705"
+    },
+    {
+      "source": "twse_mi_index",
+      "batch_key": "2026-09-09",
+      "item_key": "twse",
+      "outcome": "OK",
+      "http_attempts": "1.0",
+      "created_at": "2026-09-16 14:02:07.018217"
+    },
+    {
+      "source": "twse_mi_index",
+      "batch_key": "2026-09-10",
+      "item_key": "twse",
+      "outcome": "OK",
+      "http_attempts": "1.0",
+      "created_at": "2026-09-16 14:02:16.393113"
+    },
+    {
+      "source": "twse_mi_index",
+      "batch_key": "2026-09-11",
+      "item_key": "twse",
+      "outcome": "OK",
+      "http_attempts": "1.0",
+      "created_at": "2026-09-16 14:02:25.147556"
+    },
+    {
+      "source": "twse_mi_index",
+      "batch_key": "2026-09-14",
+      "item_key": "twse",
+      "outcome": "OK",
+      "http_attempts": "1.0",
+      "created_at": "2026-09-16 14:02:33.428254"
+    },
+    {
+      "source": "twse_mi_index",
+      "batch_key": "2026-09-15",
+      "item_key": "twse",
+      "outcome": "OK",
+      "http_attempts": "1.0",
+      "created_at": "2026-09-16 14:02:41.725136"
+    }
+  ],
+  "etl_run_log_summary": [
+    {
+      "source": "ptt",
+      "outcome": "FETCH_FAILED",
+      "n": 26
+    },
+    {
+      "source": "tpex_daily_quotes",
+      "outcome": "OK",
+      "n": 7
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "outcome": "OK",
+      "n": 50
+    },
+    {
+      "source": "twse_mi_index",
+      "outcome": "OK",
+      "n": 7
+    }
+  ],
+  "new_stock_source_domain": [
+    "tpex_daily_quotes",
+    "twse_mi_index"
+  ],
+  "orphan_article_count_after": [
+    {
+      "stock_id": "2059",
+      "total": 13
+    },
+    {
+      "stock_id": "2454",
+      "total": 100
+    },
+    {
+      "stock_id": "3008",
+      "total": 22
+    },
+    {
+      "stock_id": "8069",
+      "total": 20
+    }
+  ]
+}

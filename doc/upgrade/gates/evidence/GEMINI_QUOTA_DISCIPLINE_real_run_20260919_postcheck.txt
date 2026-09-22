@@ -1,0 +1,38 @@
+[BINDING] before(PRE) config: localhost 55505 pre_baseline_third
+[BINDING] after(real) config: localhost 5432
+[BINDING] after actual: ('postgres', 5432)
+
+=== 條件 4：daily_ml_features 新增列數 ===
+PRE 列數: 449334 POST 列數: 449342
+新增列數（僅存在於 POST）: 8
+  2059 ['2026-09-18']
+  2330 ['2026-09-18']
+  2382 ['2026-09-18']
+  2454 ['2026-09-18']
+  3008 ['2026-09-18']
+  6488 ['2026-09-18']
+  8069 ['2026-09-18']
+  NVDA ['2026-09-18']
+
+=== 條件 1：價格衍生 10 欄，F(=2026-09-17) 以前逐列零差異 ===
+F 以前、共同列中價格衍生欄有差異的筆數: 0
+
+=== 條件 2：情緒／留言／source_status 欄變動集合 ===
+共同列中情緒／source_status 欄有變動的筆數: 0
+fetch_failed_source_keys() 現在筆數: 47
+情緒/status 有變動但不在 47 鍵集合內的筆數（預期 0，因本次映射零變動）: 0
+
+=== 條件 3：標籤／目標欄變動須落在 tail_window 內 ===
+共同列中標籤欄有變動的筆數: 16
+標籤變動但超出尾端 window 的筆數（預期 0）: 0
+
+=== 條件 5：source_status 翻轉為 SOURCE_FAILED 的列集合 ===
+共同列中翻轉為 SOURCE_FAILED 的筆數: 0
+與 47 鍵集合是否逐列相等（翻轉集合是否為子集且元素數相符）: True
+SOURCE_FAILED 列中 article_count 非 NULL 違規筆數（預期 0）: 0
+
+=== 額外：theme_stock_mapping 零變動核對 ===
+PRE 列數: 66 POST 列數: 66
+完全相等（含 updated_at）: True
+
+全部檢查完畢。

@@ -1,0 +1,544 @@
+{
+  "purpose": "UG-G2-SB9 階段一取數報告",
+  "target_database": {
+    "name": "sb6_ext_tmpdb",
+    "host": "sb6_ext",
+    "port": 5432,
+    "is_temporary": true
+  },
+  "environment": {
+    "timestamp_utc": "2026-09-02T17:25:36.313878+00:00"
+  },
+  "market": "tpex",
+  "segment": {
+    "prior_common_supplied": 807,
+    "first_day_continuity_checked": true,
+    "note": "本段首日已與前一段最後一天做 2% 連續性比對（前值 807）。"
+  },
+  "expectations": {
+    "max_daily_change_ratio": 0.02,
+    "first_day_min_common": 200,
+    "first_day_floor_note": "**只擋分頁碎片，不是對市場規模的宣稱。** TPEx 用 200（同判準 C3a），**刻意不用 C7 的量測值 887** —— 先寫一個數字再拿它當判準就是在猜。",
+    "median_turnover": [
+      1000000.0,
+      100000000.0
+    ],
+    "note": "提案 §6.2a，取數前寫死。2026-09-01 由絕對區間改為相對變動率——絕對區間是兩天觀測推出來的，在跨年度資料上必然誤報。"
+  },
+  "trading_days_collected": 28,
+  "trading_days_requested": 188,
+  "logical_requests_made": 33,
+  "http_attempts_made": 40,
+  "logical_request_budget": 850,
+  "pk_collisions": 0,
+  "db_summary": {
+    "rows": 1693538,
+    "distinct_stocks": 2011,
+    "distinct_dates": 983,
+    "min_date": "2022-08-03",
+    "max_date": "2026-08-21"
+  },
+  "per_day_log": [
+    {
+      "date": "20230516",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 906,
+        "rows_common_stock": 807,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 8,
+        "rows_zero_volume": 8,
+        "rows_no_trade_at_all": 8,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 807,
+      "median_turnover": 5887400,
+      "attempted": 807,
+      "inserted": 807
+    },
+    {
+      "date": "20230515",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 906,
+        "rows_common_stock": 807,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 12,
+        "rows_zero_volume": 12,
+        "rows_no_trade_at_all": 12,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 807,
+      "median_turnover": 5844800,
+      "attempted": 807,
+      "inserted": 807
+    },
+    {
+      "date": "20230512",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 905,
+        "rows_common_stock": 806,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 10,
+        "rows_zero_volume": 10,
+        "rows_no_trade_at_all": 10,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 806,
+      "median_turnover": 6663100,
+      "attempted": 806,
+      "inserted": 806
+    },
+    {
+      "date": "20230511",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 905,
+        "rows_common_stock": 806,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 13,
+        "rows_zero_volume": 13,
+        "rows_no_trade_at_all": 13,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 806,
+      "median_turnover": 10599000,
+      "attempted": 806,
+      "inserted": 806
+    },
+    {
+      "date": "20230510",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 905,
+        "rows_common_stock": 806,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 13,
+        "rows_zero_volume": 13,
+        "rows_no_trade_at_all": 13,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 806,
+      "median_turnover": 5889000,
+      "attempted": 806,
+      "inserted": 806
+    },
+    {
+      "date": "20230509",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 905,
+        "rows_common_stock": 806,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 18,
+        "rows_zero_volume": 18,
+        "rows_no_trade_at_all": 18,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 806,
+      "median_turnover": 8557250,
+      "attempted": 806,
+      "inserted": 806
+    },
+    {
+      "date": "20230508",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 905,
+        "rows_common_stock": 806,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 13,
+        "rows_zero_volume": 13,
+        "rows_no_trade_at_all": 13,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 806,
+      "median_turnover": 6701500,
+      "attempted": 806,
+      "inserted": 806
+    },
+    {
+      "date": "20230505",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 905,
+        "rows_common_stock": 806,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 14,
+        "rows_zero_volume": 14,
+        "rows_no_trade_at_all": 14,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 806,
+      "median_turnover": 6398350,
+      "attempted": 806,
+      "inserted": 806
+    },
+    {
+      "date": "20230504",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 905,
+        "rows_common_stock": 806,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 14,
+        "rows_zero_volume": 14,
+        "rows_no_trade_at_all": 14,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 806,
+      "median_turnover": 6487500,
+      "attempted": 806,
+      "inserted": 806
+    },
+    {
+      "date": "20230503",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 905,
+        "rows_common_stock": 806,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 19,
+        "rows_zero_volume": 19,
+        "rows_no_trade_at_all": 19,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 806,
+      "median_turnover": 5102200,
+      "attempted": 806,
+      "inserted": 806
+    },
+    {
+      "date": "20230502",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 905,
+        "rows_common_stock": 806,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 15,
+        "rows_zero_volume": 15,
+        "rows_no_trade_at_all": 15,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 806,
+      "median_turnover": 6728150,
+      "attempted": 806,
+      "inserted": 806
+    },
+    {
+      "date": "20230501",
+      "outcome": "NO_TRADING_DAY",
+      "stat": "ok"
+    },
+    {
+      "date": "20230428",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 905,
+        "rows_common_stock": 806,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 12,
+        "rows_zero_volume": 12,
+        "rows_no_trade_at_all": 12,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 806,
+      "median_turnover": 5409400,
+      "attempted": 806,
+      "inserted": 806
+    },
+    {
+      "date": "20230427",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 905,
+        "rows_common_stock": 806,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 22,
+        "rows_zero_volume": 22,
+        "rows_no_trade_at_all": 22,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 806,
+      "median_turnover": 4382050,
+      "attempted": 806,
+      "inserted": 806
+    },
+    {
+      "date": "20230426",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 905,
+        "rows_common_stock": 806,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 21,
+        "rows_zero_volume": 21,
+        "rows_no_trade_at_all": 21,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 806,
+      "median_turnover": 5205550,
+      "attempted": 806,
+      "inserted": 806
+    },
+    {
+      "date": "20230425",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 904,
+        "rows_common_stock": 805,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 12,
+        "rows_zero_volume": 12,
+        "rows_no_trade_at_all": 12,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 805,
+      "median_turnover": 8957600,
+      "attempted": 805,
+      "inserted": 805
+    },
+    {
+      "date": "20230424",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 904,
+        "rows_common_stock": 805,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 15,
+        "rows_zero_volume": 15,
+        "rows_no_trade_at_all": 15,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 805,
+      "median_turnover": 5401950,
+      "attempted": 805,
+      "inserted": 805
+    },
+    {
+      "date": "20230421",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 904,
+        "rows_common_stock": 805,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 10,
+        "rows_zero_volume": 10,
+        "rows_no_trade_at_all": 10,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 805,
+      "median_turnover": 10533600,
+      "attempted": 805,
+      "inserted": 805
+    },
+    {
+      "date": "20230420",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 904,
+        "rows_common_stock": 805,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 9,
+        "rows_zero_volume": 9,
+        "rows_no_trade_at_all": 9,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 805,
+      "median_turnover": 10451600,
+      "attempted": 805,
+      "inserted": 805
+    },
+    {
+      "date": "20230419",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 904,
+        "rows_common_stock": 805,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 10,
+        "rows_zero_volume": 10,
+        "rows_no_trade_at_all": 10,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 805,
+      "median_turnover": 10687000,
+      "attempted": 805,
+      "inserted": 805
+    },
+    {
+      "date": "20230418",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 905,
+        "rows_common_stock": 806,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 12,
+        "rows_zero_volume": 12,
+        "rows_no_trade_at_all": 12,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 806,
+      "median_turnover": 10305800,
+      "attempted": 806,
+      "inserted": 806
+    },
+    {
+      "date": "20230417",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 905,
+        "rows_common_stock": 806,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 4,
+        "rows_zero_volume": 4,
+        "rows_no_trade_at_all": 4,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 806,
+      "median_turnover": 10518700,
+      "attempted": 806,
+      "inserted": 806
+    },
+    {
+      "date": "20230414",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 905,
+        "rows_common_stock": 806,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 14,
+        "rows_zero_volume": 14,
+        "rows_no_trade_at_all": 14,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 806,
+      "median_turnover": 8517450,
+      "attempted": 806,
+      "inserted": 806
+    },
+    {
+      "date": "20230413",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 905,
+        "rows_common_stock": 806,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 15,
+        "rows_zero_volume": 15,
+        "rows_no_trade_at_all": 15,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 806,
+      "median_turnover": 9166350,
+      "attempted": 806,
+      "inserted": 806
+    },
+    {
+      "date": "20230412",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 905,
+        "rows_common_stock": 806,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 10,
+        "rows_zero_volume": 10,
+        "rows_no_trade_at_all": 10,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 806,
+      "median_turnover": 8422850,
+      "attempted": 806,
+      "inserted": 806
+    },
+    {
+      "date": "20230411",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 905,
+        "rows_common_stock": 806,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 10,
+        "rows_zero_volume": 10,
+        "rows_no_trade_at_all": 10,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 806,
+      "median_turnover": 8081400,
+      "attempted": 806,
+      "inserted": 806
+    },
+    {
+      "date": "20230410",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 905,
+        "rows_common_stock": 806,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 9,
+        "rows_zero_volume": 9,
+        "rows_no_trade_at_all": 9,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 806,
+      "median_turnover": 7503500,
+      "attempted": 806,
+      "inserted": 806
+    },
+    {
+      "date": "20230407",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 906,
+        "rows_common_stock": 807,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 19,
+        "rows_zero_volume": 19,
+        "rows_no_trade_at_all": 19,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 807,
+      "median_turnover": 6379800,
+      "attempted": 807,
+      "inserted": 807
+    },
+    {
+      "date": "20230406",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 906,
+        "rows_common_stock": 807,
+        "rows_excluded_by_code_shape": 99,
+        "rows_without_prices": 15,
+        "rows_zero_volume": 15,
+        "rows_no_trade_at_all": 15,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 807,
+      "median_turnover": 6232700,
+      "attempted": 807,
+      "inserted": 807
+    },
+    {
+      "date": "20230405",
+      "outcome": "NO_TRADING_DAY",
+      "stat": "ok"
+    },
+    {
+      "date": "20230404",
+      "outcome": "NO_TRADING_DAY",
+      "stat": "ok"
+    },
+    {
+      "date": "20230403",
+      "outcome": "NO_TRADING_DAY",
+      "stat": "ok"
+    },
+    {
+      "date": "20230331",
+      "outcome": "ERROR",
+      "detail": "HTTP 520 —— 退避重試 1 次後仍失敗，停止本段"
+    }
+  ]
+}

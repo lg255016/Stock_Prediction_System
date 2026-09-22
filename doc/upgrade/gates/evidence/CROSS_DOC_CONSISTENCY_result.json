@@ -1,0 +1,117 @@
+{
+  "purpose": "跨文件狀態一致性稽核（第 6 案）—— Gate B 執行結果，依 CROSS_DOC_CONSISTENCY_criteria.json（commit e8a018a）方法執行。",
+  "date": "2026-09-08",
+  "script": "scripts/verify/cross_doc_consistency_check.py（本次建立，可重跑，非拋棄式）",
+  "rerun_command": "python scripts/verify/cross_doc_consistency_check.py",
+
+  "SUMMARY": "R1、R4 合規；R2、R3 各發現真實不合規案例，皆非本腳本的誤判——逐一查證見下方 details。R2/R3/R4 known-FAIL 四案（含 R1）皆實際執行於拋棄式 worktree 並確認能偵測、已完整還原。",
+
+  "R1": {
+    "verdict": "PASS",
+    "detail": "檢查 30 個 PROJECT_STATUS.md 中 CLOSED 列引用的 closed/ 路徑，全部存在，0 不合規"
+  },
+
+  "R2": {
+    "verdict": "FAIL（9 個孤兒，皆已逐一查證分類，非單純缺陷清單）",
+    "orphans_categorized": [
+      {
+        "category": "索引式引用（設計性缺口，非疏漏）",
+        "explanation": "PROJECT_STATUS.md §0.2／§0.5 對每個已結案的 SB/案，只指向該案的 GATE_B_SUBMISSION.md 作為『完整 commit 序列見 XXX』的單一索引點，不逐一列名該案底下的 Gate A 提案或子報告——這是刻意的文件經濟性設計（一個結案對應一份索引文件），但代表這些子文件對純文字搜尋『不可見』。",
+        "files": [
+          "PRE_G3_01_GATE_A_PROPOSAL.md",
+          "PRE_G3_01_B1_PILOT_PROPOSAL.md",
+          "PRE_G3_01_B1_PILOT_REPORT.md",
+          "PRE_G3_02_COVERAGE_MEASUREMENT_REPORT.md",
+          "PRE_G3_02_COVERAGE_THRESHOLD_PROPOSAL.md",
+          "PRE_G3_02_INPUTS.md",
+          "PRE_G3_03_BACKFILL_PROPOSAL.md",
+          "STUB_AUDIT_GATE_A_PROPOSAL.md"
+        ],
+        "STUB_AUDIT_note": "STUB_AUDIT_GATE_A_PROPOSAL.md 與其他 7 檔性質相同：PROJECT_STATUS.md §0.5 #19 只引用 STUB_AUDIT_GATE_B_SUBMISSION.md，未提及同一結案 commit 5811bdc 一併移入的 Gate A 提案——與 PRE-G3 系列同一模式，非孤立個案，確認是本文件慣例的通例，不是單一疏漏"
+      },
+      {
+        "category": "縮寫式引用（機械掃描盲點）",
+        "explanation": "PROJECT_STATUS.md §0.5 #9 原文寫『G2_SB5_DP5_GATE_A_PROPOSAL.md／_GATE_B_SUBMISSION.md』——第二個檔名以『／_GATE_B_SUBMISSION.md』後綴縮寫形式呈現，省略共用前綴，仰賴讀者從上下文推斷完整檔名。字面上『G2_SB5_DP5_GATE_B_SUBMISSION.md』這個完整字串確實不存在於 PROJECT_STATUS.md 全文中——機械掃描的正確結果，不是誤判；但人類讀者看得懂這個引用，代表文件被『承認』，只是不能被子字串比對捕捉。",
+        "files": ["G2_SB5_DP5_GATE_B_SUBMISSION.md"]
+      }
+    ],
+    "conclusion": "9 個孤兒皆非『被遺忘』，而是『機械可驗性與人類可讀性之間的落差』——這正是反查法要找的東西：不是文件錯了，是『被引用』這件事在不同層次上有不同答案。建議（僅記錄，不在本案內修）：日後結案 commit 若採『單一索引文件』模式，可在該索引列額外加一句『含 N 份子文件，見 closed/ 同名字首』，讓機械掃描與人類意圖對齊；縮寫式引用建議改寫全名，一次性、低成本。"
+  },
+
+  "R3": {
+    "verdict": "FAIL（5 個不合規，查證後為既有機制的既有盲點，非新缺陷）",
+    "non_compliant": ["DEC-005", "DEC-006", "DEC-008", "DEC-009", "DEC-022"],
+    "root_cause_investigation": {
+      "DEC-005": "DECISIONS.md:454 狀態行為『- **Status（狀態）**：Approved by Human（2026-08-20 由 Project Owner 拍板核准）』——格式為舊式雙語粗體標記，不符 `^- 狀態：` 正則。實質已核准，格式不匹配。",
+      "DEC-006": "DECISIONS.md:540，同 DEC-005 格式（『- **Status（狀態）**：Approved by Human』）。實質已核准，格式不匹配。",
+      "DEC-008": "DECISIONS.md:690，格式為『- **Status**：APPROVED（已核准）』（英文單語粗體）。實質已核准，格式不匹配。",
+      "DEC-009": "⚠⚠ 與其餘四則不同——逐段讀過 DEC-009 全文區塊（DECISIONS.md:764-834），**完全沒有任何狀態欄位**（無論何種格式）。這不是格式不匹配，是狀態宣告本身缺席。",
+      "DEC-022": "DECISIONS.md:1568，格式為『- **Status**：APPROVED（Project Owner，2026-08-26，UG-G1-SB5）』。實質已核准，格式不匹配。"
+    },
+    "IMPORTANT_FINDING": "⚠⚠ 本項發現的不是『PROJECT_STATUS.md 引用了未核准的 ADR』，而是『gate0_contract_check.py 既有的 B13 檢查與本次 R3（沿用同一套解析慣例）對這 5 則 ADR 從未真正檢查過』——B13 的迴圈只在遇到 `^- 狀態：` 開頭的行時才計數（`b13_seen += 1`），DEC-005/006/008/009/022 因格式不符，從未進入過 `b13_seen`，B13 過去回報的『PASS，掃描 25 則』實際上是在一個對這 5 則 ADR 視而不見的子集合上通過的——這正是本案奠基實例（CLAUDE.md §9A.1『只看已知沒問題的地方』）的第三個實例，且是在既有機制本身（非本次新腳本）裡發現的。",
+    "conclusion": "4 則（DEC-005/006/008/022）實質內容確認已核准，僅格式歷史遺留不匹配；DEC-009 需要 PO 判斷是否補一則明確狀態宣告（目前實質上不可考證是否核准，只能從 TRACEABILITY.md 或其被引用的上下文推斷）。建議（僅記錄，不在本案內修）：擴大 B13／本檢查的狀態行解析，涵蓋 `- **Status`/`- **Status（狀態）**` 兩種舊格式；或統一改寫這 5 則 ADR 的狀態行格式為現行慣例（後者需 evidence-sync skill 的既有紀律，ADR 內容修改需 PO 授權）。"
+  },
+
+  "R4": {
+    "verdict": "PASS",
+    "detail": "DECISIONS.md 中可被解析為 APPROVED（非豁免）的 21 則 ADR，全數出現於 TRACEABILITY.md §3 起始章節",
+    "CAVEAT": "⚠ 此 PASS 建立在與 R3 相同的解析集合上——DEC-005/006/008/009/022 因格式問題從未進入『APPROVED 集合』，故 R4 也從未檢查過它們是否被 TRACEABILITY.md 索引。R4 的『0 不合規』因此不是『5 則以外全部合規』的獨立證明，而是同一個盲點的下游影響，已如實揭露，不得誤讀為『R4 比 R3 更完整』。"
+  },
+
+  "R5": {
+    "trigger_matches": ["RISK-006", "RISK-013", "RISK-017"],
+    "table": [
+      {
+        "宣稱原文": "根本解已落地（UG-G1-SB4 階段一，2026-08-26，commit `d2a4d48`；DEC-021）：`database/db_target_guard.py` 的 `assert_safe_migration_target()`……已實測確認：以真實 DB 座標、未設定覆寫確認變數執行 → 連線前即被拒絕（`doc/upgrade/gates/closed/SB4_STEP2_GATE_B_SUBMISSION.md` E2E 驗證項 4）",
+        "引用之證據位置": "commit `d2a4d48`；doc/upgrade/gates/closed/SB4_STEP2_GATE_B_SUBMISSION.md",
+        "判定": "成立",
+        "性質": "機械可驗——`git cat-file -e d2a4d48` 確認存在（`feat(db): add RISK-013 root-fix guard (UG-G1-SB4 phase 1)`）；`SB4_STEP2_GATE_B_SUBMISSION.md` 確認存在於 closed/；同一 commit hash 亦逐字出現於 PROJECT_STATUS.md §0.5 #1（『已解決（2026-08-26，UG-G1-SB4 階段一，commit `d2a4d48`，DEC-021）』），兩處敘述完全一致"
+      },
+      {
+        "宣稱原文": "MITIGATED（2026-08-31，UG-G2-MIG 完成）……已完成：`pg_dump` 備份並實際還原至臨時容器驗證通過（RISK-006 的還原流程第一次實地驗證）；migration 001～004 已套用至 `postgres`@`localhost:5432`（`MAX(version) = 4`）；`market_articles` 10 → 16 欄、`daily_ml_features` 7 → 29 欄……`run_feature_engineering_pipeline()` 對真實庫實際執行成功（117 列寫入）",
+        "引用之證據位置": "PROJECT_STATUS.md §0.2 UG-G2-MIG 列（無可機械核對的 commit hash——該列本身未附 commit）",
+        "判定": "成立",
+        "性質": "人工判讀——兩處敘述（步驟順序：pg_dump 備份→還原驗證→套用 migration 001-004→market_articles 10→16 欄→daily_ml_features 7→29 欄→pipeline 實際執行 117 列）逐項相符，無矛盾；但因 REMAINING_RISKS.md 該行本身不含可機械比對的 commit hash 或明確路徑，無法用 R5 mechanical_part 的規則驗證，故性質判為人工判讀而非機械可驗"
+      },
+      {
+        "宣稱原文": "真實開發資料庫與 migration 狀態脫節……MITIGATED（未標為『已解決』）：緩解第 1 條（現況）已完成，第 3 條（偵測）已交付，但第 2 條（成因：DoD 措辭必須指名目標資料庫）是一條需要每個 SB 持續遵守的規則，不是一次性動作，故本項維持開啟",
+        "引用之證據位置": "PROJECT_STATUS.md §0.5 #12（RISK-017 緩解第 2 條的常設標準切法，與 gate-submit skill 產出 7 呼應）",
+        "判定": "成立",
+        "性質": "人工判讀——REMAINING_RISKS.md 的『未標已解決、原因是常設規則』與 PROJECT_STATUS.md §0.5 #12 的切法邏輯（常設標準留在風險登記簿、一次性動作才結案）完全對應，語意不矛盾；無單一 commit hash 可機械比對（此為分散式規則落地，非單次事件）"
+      }
+    ],
+    "verdict_summary": "3/3 成立，0 矛盾，0 無法判定"
+  },
+
+  "KNOWN_FAIL_EXECUTED": {
+    "environment": "拋棄式 git worktree（容器內 /tmp/xdc_wt，非主工作目錄），四案皆實際執行、還原後以 diff 確認與 baseline 逐位元組相同",
+    "R1": {
+      "construction": "把 PROJECT_STATUS.md 中一個 CLOSED 列的 closed/ 路徑改為不存在檔名",
+      "raw_output": "R1   FAIL | ... 不合規 1：['doc/upgrade/gates/closed/NONEXISTENT_FILE.md']"
+    },
+    "R2": {
+      "construction": "於 closed/ 新增一份無人引用的檔案 ZZZ_TEST_ORPHAN_FILE.md",
+      "raw_output": "R2   FAIL | ... 孤兒 10（含新增的 ZZZ_TEST_ORPHAN_FILE.md，原有 9 個仍在，符合預期）"
+    },
+    "R3": {
+      "construction": "把 DEC-010 的狀態行由 APPROVED 改為 Proposed",
+      "raw_output": "R3   FAIL | ... 不合規 6（原有 5 個 + 新增 'DEC-010: PROPOSED'）",
+      "note": "第一次構造嘗試用正則替換失敗（assert 攔下，未落地任何變更），第二次改用直接字串替換 DEC-010 的確切狀態行成功——此為方法本身在執行前的自我檢查生效，非缺陷"
+    },
+    "R4": {
+      "construction": "把 TRACEABILITY.md 中全部 'DEC-010' 字串改為 'DEC-XXX-REMOVED'",
+      "raw_output": "R4   FAIL | ... 未見於 TRACEABILITY §3+ 者 1：['DEC-010']"
+    },
+    "restoration_confirmed": "四案結束後執行 `python scripts/verify/cross_doc_consistency_check.py` 並與初始 baseline 逐位元組 diff，確認 IDENTICAL；worktree 已 `git worktree remove --force` 拆除並確認 `git worktree list` 僅剩主工作樹"
+  },
+
+  "MAIN_TREE_UNCHANGED": "全程未修改 doc/governance/PROJECT_STATUS.md、doc/evidence/DECISIONS.md、doc/evidence/TRACEABILITY.md、doc/upgrade/contracts/REMAINING_RISKS.md、doc/upgrade/gates/closed/ 任何檔案；僅新增 scripts/verify/cross_doc_consistency_check.py（新腳本）與本結果檔，皆未 commit，留待覆核",
+
+  "POST_FIX_RERUN_2026_09_08": {
+    "note": "PO 裁決後續處置全數落地（§0.5 #9 展開、R2 豁免表、B13 根治 + 6 則 ADR 狀態修正）之後，於完整修正集合上重跑，見下方 §三「完整集合重跑結果」。",
+    "commits": ["8100556", "633a336", "989206b", "64e9ae2", "bdf6036"],
+    "raw_output": "R1   PASS | 檢查 30 個路徑引用；不合規 0\nR2   PASS | closed/ 共 55 檔；豁免 8（皆附理由）；孤兒 0\nR3   PASS | PROJECT_STATUS.md 引用 27 個 ADR（扣豁免 4，實查 23）；不合規 0\nR4   PASS | DECISIONS.md 中 APPROVED（非豁免）共 27 則；未見於 TRACEABILITY §3+ 者 0\nR1~R4：4/4 PASS，exit=0",
+    "R4_note": "APPROVED 集合由修正前的 21 則擴大為 27 則（含新修正的 6 則），R4 現於完整集合上驗證，不再是先前受限子集的下游延伸——先前的 CAVEAT 已解除",
+    "gate0_contract_check": "同步重跑，Part B 13/13 PASS，B13 由「掃描 25 則」轉為「掃描 27 則」"
+  }
+}

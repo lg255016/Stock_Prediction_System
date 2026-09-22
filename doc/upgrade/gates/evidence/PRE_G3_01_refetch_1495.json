@@ -1,0 +1,108 @@
+{
+ "date": "2026-09-06 14:42:02.098947",
+ "article_id": 1495,
+ "http_requests": 1,
+ "binding": [
+  "postgres",
+  5432,
+  "postgres"
+ ],
+ "article_comments_before": 0,
+ "market_articles_before": 332,
+ "target": {
+  "url": "https://www.ptt.cc/bbs/Stock/M.1788574058.A.A94.html",
+  "post_time_in_db": "2026-09-05 10:07:38",
+  "total_comments_before": 25,
+  "comments_scraped_at_before": "2026-09-05 05:53:32.868583"
+ },
+ "anchor_from_url": "2026-09-05 10:07:38",
+ "scraped_at_this_run": "2026-09-06 14:42:06.857021",
+ "parsed": {
+  "push_count": 19,
+  "boo_count": 0,
+  "neutral_count": 19,
+  "total_comments": 38,
+  "full_datetime": "Sat Sep  5 10:07:36 2026",
+  "comment_entries_len": 38
+ },
+ "validate_comment_bounds": [],
+ "EXPECTATIONS": {
+  "2a_counts_as_of_original_cutoff": {
+   "push_count": 0,
+   "boo_count": 0,
+   "neutral_count": 0,
+   "total_comments": 0
+  },
+  "2a_verdict": "FAIL",
+  "2b_len_article_comments": 38,
+  "2b_verdict": "PASS",
+  "2c_new_comments_since": 38,
+  "3_market_articles_unchanged": "PASS",
+  "4_article_row_untouched": "PASS"
+ },
+ "outcome": "WRITTEN",
+ "rows_written": 38,
+ "article_comments_after": 38,
+ "market_articles_after": 332,
+ "comment_time_range": [
+  "2026-09-05 10:09:00",
+  "2026-09-06 08:43:00",
+  "38"
+ ],
+ "market_articles_row_after": {
+  "total_comments": 25,
+  "comments_scraped_at": "2026-09-05 05:53:32.868583"
+ },
+ "EXPECTATIONS_NOTE": "**預期於 07b0c71 寫定（送出請求之前）。以下為對照結果，未事後調整任何判準。**",
+ "2a_FAIL_DIAGNOSIS": {
+  "verdict_against_pre_registered_criterion": "**FAIL** —— 不改判準，如實記錄。",
+  "cause": "該列的 `comments_scraped_at` 是 **UTC 基準**（`2026-09-05 05:53:32`）—— 它寫於時區政策 `87256e4` 之前，正是 `MULTI_SOURCE_DATA_CONTRACT.md` §3.6B 記載的切換前列（`etl_run_log run_id <= 43`，以及 `market_articles.comments_scraped_at` **1 列**）。",
+  "measurement": {
+   "cutoff = DB 值（UTC 基準）2026-09-05 05:53:32": {
+    "total": 0,
+    "推": 0,
+    "噓": 0,
+    "→": 0
+   },
+   "cutoff = 同一時刻的台北值 2026-09-05 13:53:32": {
+    "total": 25,
+    "推": 16,
+    "噓": 0,
+    "→": 9
+   },
+   "market_articles 上次取數記載": {
+    "total": 25,
+    "推": 16,
+    "噓": 0,
+    "→": 9
+   }
+  },
+  "SIGNIFICANCE": "⚠ **改以台北基準讀，`counts_as_of` 與 `market_articles` 逐 tag 四項全部相符** —— 不只是總數 25，而是 16／0／9 逐項一致。**那是兩條獨立程式路徑在同一個時點上的四項相符。**",
+  "what_this_confirms": [
+   "**`counts_as_of` 在真實資料上正確** —— 它第一次被拿來回答生產問題，而它答對了",
+   "**§3.6B 記載的時區切換點是真的，且影響範圍與記載一致** —— 就是這 1 列 `comments_scraped_at`，差 8 小時",
+   "**§3.6B 那句「記載切換點本身是義務」在這裡兌現** —— 沒有那份記載，這個 FAIL 會被讀成解析器壞掉"
+  ],
+  "NOT_A_CRITERION_CHANGE": "⚠ **上述台北基準的計算是診斷，不是修正後的判準。** 判準寫的是「以該列的 `comments_scraped_at` 為 cutoff」，而該列的值就是 UTC 的那個 —— **2a 對它 FAIL，這一點不因診斷而改變。**"
+ },
+ "2c_INTERPRETATION": "38 − 0 = 38（以 DB 值計）；**以台北基準計則為 38 − 25 = 13** —— 即 2026-09-05 13:53 之後新增的留言數。文章確實在兩次取數之間長出新留言，**這正是 2b 拆出來要容納的情形**。",
+ "W4_AT_THIS_RUN": {
+  "total_comments": 38,
+  "comment_entries_len": 38,
+  "verdict": "PASS（38 == 38）"
+ },
+ "2a_OFFICIAL_RECORD": {
+  "verdict": "FAIL —— **判準不成立**",
+  "cause": "該列 `comments_scraped_at` 為 UTC 基準（§3.6B 切換點之前，1 列）",
+  "evidence": "以同一時刻的台北值為 cutoff，逐 tag **16／0／9** 與上次取數四項相符",
+  "disposition": "**非缺陷**；成因已登記於 `MULTI_SOURCE_DATA_CONTRACT.md` §3.6B",
+  "WHY_NOT_REWRITTEN_AS_PASS": "⚠ **這條判準之所以有偵測能力，正是因為它天真。** 若當初寫成「時區正規化後的 cutoff」，它會 PASS，**而那 8 小時的差異在這一次執行裡不會出現** —— 把它改成「聰明」的版本，等於把唯一一次會讓它說話的機會拿掉。**2a 的 FAIL 不是「程式壞了」，是「判準不成立」—— 那是兩件事，而證據標籤存在的理由就是把它們分開。**"
+ },
+ "THIRTEEN_NEW_COMMENTS": {
+  "count": 13,
+  "window": "2026-09-05 13:53（上次取數，台北基準）~ 2026-09-06 14:42（本次）",
+  "significance": "**這篇文章在兩次取數之間真的長出了 13 則留言** —— **那正是 PO 當初擔心的「回補的留言計數帶前視偏誤」在真實資料上的第一次量測。**",
+  "label": "`VERIFIED THIS SESSION`（n = 1）",
+  "use": "作為第二部分（B1 預算與規模預期）的輸入 —— **它不再是假設了，只是樣本數還是 1。**"
+ }
+}

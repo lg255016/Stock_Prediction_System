@@ -1,0 +1,128 @@
+{
+  "purpose": "migration 009（`stock_prices.source`）套用至真實開發資料庫的**預期**。**本檔於套用之前 commit；套用後只做比對，不修改本檔。**",
+  "date": "2026-09-07",
+  "authorization": "PO 2026-09-07（`PRE-G3-03` DP1 = 選項 (i)）。流程五步 + 兩項補充預期。",
+  "migration": "database/migrations/009_stock_prices_source.sql（commit `f3bcc0e`）",
+
+  "SCOPE_VERBATIM": {
+    "action": "ALTER TABLE stock_prices ADD COLUMN IF NOT EXISTS source TEXT；新增 CHECK 約束 chk_stock_prices_source；新增索引 idx_stock_prices_source；schema_version 插入第 9 版",
+    "additive_only": "**不刪欄、不改型別、不改既有值、不設 DEFAULT、不設 NOT NULL**",
+    "NOT_authorized": [
+      "任何 UPDATE／DELETE",
+      "任何對既有 137 列 `source` 值的填補 —— **一律維持 NULL**",
+      "任何其他資料表的變更",
+      "重跑特徵生成"
+    ],
+    "why_existing_rows_stay_null": "**沒有任何紀錄說明它們是誰寫的。** 實測比對 `candidate_prices` 後 79 列（58%）連比對都做不了（NVDA 不在該表）；且 `run_twse_pipeline` 的 yfinance 備援與自建爬蟲在無股利區間會給出相同的值 —— **相等只證明沒有分歧，不證明同源**。用結果回推過程，是製造一份看起來完整、實際上是推測的血緣。"
+  },
+
+  "PRE_STATE": {
+    "binding": {
+      "current_database": "postgres",
+      "current_user": "postgres",
+      "port": 5432,
+      "addr": "::1/128"
+    },
+    "table_counts": {
+      "article_comments": 38,
+      "candidate_prices": 1825814,
+      "daily_ml_features": 137,
+      "entity_mapping": 5,
+      "etl_run_log": 38,
+      "market_articles": 332,
+      "schema_version": 8,
+      "sentiment_cache": 36,
+      "stock_prices": 137,
+      "theme_stock_mapping": 43,
+      "tracking_keywords": 27,
+      "universe_snapshots": 85641
+    },
+    "schema_version": 8,
+    "stock_prices_columns": [
+      "stock_id", "trade_date", "open_price", "high_price",
+      "low_price", "close_price", "volume", "created_at"
+    ],
+    "stock_prices_constraints": [
+      "stock_prices_pkey",
+      "stock_prices_stock_id_not_null",
+      "stock_prices_trade_date_not_null"
+    ],
+    "daily_ml_features_fingerprint": {
+      "md5": "4fc208b95dbc6ea9d7c4b381d6ba97b5",
+      "rows": 137,
+      "columns": 29
+    },
+    "cross_check": "⚠ 該指紋與 `PRE_G3_01_tz_row_fix_expectations.json`（2026-09-06）記錄的值**逐字相同** —— 該表自那次起未被改動。**這是兩次獨立擷取對上了，不是複製。**"
+  },
+
+  "FINGERPRINT_METHOD": {
+    "sql_shape": "`SELECT md5(string_agg(t,'|' ORDER BY t)), count(*) FROM (SELECT concat_ws(',', coalesce(<每一欄>::text,'~')) AS t FROM daily_ml_features) s`",
+    "columns": "全部 29 欄，順序由 `information_schema.columns.ordinal_position` 決定",
+    "condition_1_ordering": "`ORDER BY t` —— 無序 `SELECT` 會讓相同資料回傳不同列順序 → 假失敗。而假失敗會讓人開始「調查後放行」，那就毀掉了它。",
+    "condition_2_text_form": "NULL 一律 `'~'`；數值一律 `::text`",
+    "condition_3_same_code": "前後用同一段程式取指紋"
+  },
+
+  "EXPECTATIONS": [
+    {
+      "id": "M1",
+      "criterion": "十二張表的列數**全部不變**（見 `PRE_STATE.table_counts`），`schema_version` 除外（8 → 9 列）",
+      "if_mismatch": "**回滾。**"
+    },
+    {
+      "id": "M2",
+      "criterion": "`stock_prices` 欄位由 8 欄變 9 欄，新增者恰為 `source`，型別 `text`，`is_nullable = YES`，`column_default` 為 **NULL**",
+      "why": "**無 DEFAULT 是承重的** —— 設了就等於把 137 列 backfill 成一個推測值。",
+      "if_mismatch": "回滾"
+    },
+    {
+      "id": "M3",
+      "criterion": "`stock_prices` 全部 **137 列的 `source` 皆為 NULL**（`count(*) FILTER (WHERE source IS NOT NULL) = 0`）",
+      "SIGNIFICANCE": "**NULL 的語意是「migration 009 之前寫入，血緣不可考」，不是「資料有問題」，也不是「還沒填」。**",
+      "if_mismatch": "回滾"
+    },
+    {
+      "id": "M4",
+      "criterion": "`max(schema_version.version) = 9`",
+      "if_mismatch": "回滾"
+    },
+    {
+      "id": "M5",
+      "criterion": "**CHECK 約束 `chk_stock_prices_source` 存在，且從 `pg_constraint.consrc`／`pg_get_constraintdef()` 讀回的定義所含值域恰為四值 + NULL**：`twse_mi_index`、`tpex_daily_quotes`、`twse_stock_day`、`yfinance_auto_adjusted`",
+      "WHY_READ_IT_BACK": "⚠⚠ **「套用沒報錯」不等於「約束正確」。** CHECK 是這個欄位防止值域碎裂的唯一機械防線（`'yfinance'` vs `'yFinance'`）—— **它若靜默沒建立，要到第一筆寫錯值的時候才會被發現，而那時它已經放行了一筆。**",
+      "additional": "同時比對 `src/loaders/db_writer.py` 的 `STOCK_PRICE_SOURCES`（`tests/test_stock_prices_source.py` S3 已在測試層比對檔案，本項比對**實際落地的資料庫**）",
+      "if_mismatch": "回滾"
+    },
+    {
+      "id": "M6",
+      "criterion": "`daily_ml_features` 指紋維持 `4fc208b95dbc6ea9d7c4b381d6ba97b5`，列數 137",
+      "WHAT_IT_PROVES": "**本次 migration 沒有動到 `daily_ml_features`。** 標 `VERIFIED THIS SESSION`。",
+      "WHAT_IT_DOES_NOT_PROVE": "⚠⚠ **它不證明「重跑特徵生成後結果會一樣」。** `daily_ml_features` 是**物化輸出** —— **指紋不變，只代表沒有人重跑。**（同 `PRE_G3_01_tz_row_fix_expectations.json` 3(b) 的第二次兌現；而 `PRE_G3_02` §5 已量出：若今天重跑，可用文章只有 1 篇。）",
+      "if_mismatch": "回滾"
+    },
+    {
+      "id": "M7",
+      "criterion": "索引 `idx_stock_prices_source` 存在",
+      "if_mismatch": "**不回滾，回報** —— 索引缺失不影響正確性，只影響稽核查詢效率。⚠ **這是本檔唯一不觸發回滾的項目，刻意標明，以免「哪些不符要回滾」變成執行時的判斷題。**"
+    }
+  ],
+
+  "RISK_013_THREE_STEPS": {
+    "1_binding": "套用前再次確認 `current_database()`／`inet_server_port()`／`inet_server_addr()` 與 `PRE_STATE.binding` 相同",
+    "2_dump": "`pg_dump` 邏輯備份（非 physical data directory —— `CLAUDE.md` §3）",
+    "3_restore_verification": "⚠⚠ **實測還原**：把該備份還原到一個**拋棄式容器**，並在其中比對表列數與 `daily_ml_features` 指紋。**「有備份檔」不算 —— 一個沒有被還原過的備份，與一個壞掉的備份，在檔案系統上長得一樣。**"
+  },
+
+  "ROLLBACK_PLAN": {
+    "mechanism": "本 migration 為 additive，回滾即 `ALTER TABLE stock_prices DROP COLUMN source`（連帶 CHECK 與索引）＋ `DELETE FROM schema_version WHERE version = 9`",
+    "why_safe": "**既有 137 列的既有八欄一個位元組都沒有被改過** —— 這是 M1／M3／M6 要證明的事。",
+    "if_rollback_also_fails": "停止並回報，**不得繼續嘗試** —— 此時已有備份與實測還原可用。"
+  },
+
+  "POST_APPLY_NATURAL_VERIFICATION": {
+    "what": "**套用後的第一次每日 ETL 執行，就是接線的生產首驗。**",
+    "criterion": "新寫入列的 `source` 分佈 —— 各值幾列、**NULL 幾列**。",
+    "expectation": "**NULL 應為 0。不是 0 就是接線漏了一條路徑。**",
+    "NOT_TRIGGERED_EARLY": "⚠ **不為此提前跑每日任務** —— 等它自然發生。本項先寫下要看什麼。"
+  }
+}

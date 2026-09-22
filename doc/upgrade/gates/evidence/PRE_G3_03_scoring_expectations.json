@@ -1,0 +1,60 @@
+{
+  "purpose": "PRE-G3-03 評分階段的**預期**。判準：`PRE_G3_03_ptt_segment_A_criteria.json`（commit `60a8d6e`）§N1~N5、§API_COST_ESTIMATE。**本檔於呼叫 Gemini API 之前 commit；執行後只做比對，不修改本檔。**",
+  "date": "2026-09-07",
+  "authorization": "PO 2026-09-07：段 A（段 1~7）完成後裁示，「評分開始前把批次數與預估呼叫量先寫死 —— 它是花錢的階段，和觸網同一等級的紀律」",
+
+  "SCOPE": {
+    "target_db": "**`b1_pilot_tmpdb`（臨時 DB）**，匯入真實庫之前完成（PO 2026-09-07 裁決三理由：規模時機失控／臨時 DB 可整批重來／匯入的東西是完成品）",
+    "NOT_in_scope": ["不寫真實庫", "不重算 daily_ml_features"]
+  },
+
+  "PRE_STATE_MEASURED": {
+    "market_articles_total": 1250,
+    "already_scored": 0,
+    "to_score": 1250,
+    "sentiment_cache_rows": 0,
+    "note": "**與提案原估的 ~1,441 篇不同** —— 用段 A 實測完成後的真實數字（1,250），不用提案階段的估計"
+  },
+
+  "ESTIMATE": {
+    "fuzzy_rate": {
+      "value": 0.102,
+      "label": "PREVIOUSLY VERIFIED",
+      "basis": "S1 試點 98 篇標題於 `PRE_G3_03_ptt_segment_A_criteria.json` §API_COST_ESTIMATE 實測（本機 SnowNLP 計算，零 API 呼叫）",
+      "not_rerun_because": "段 A 命中的 1,250 篇標題分佈未必與 98 篇樣本相同，但重新量測 fuzzy 率需要對這 1,250 篇跑 SnowNLP —— 那正是評分流程本身要做的事，不提前重複執行"
+    },
+    "expected_fuzzy_articles": {
+      "value": 128,
+      "derivation": "1250 × 0.102 ≈ 127.5，取整 128",
+      "label": "INFERENCE"
+    },
+    "batch_size": 500,
+    "expected_db_batches": 3,
+    "expected_llm_calls": {
+      "value": 3,
+      "derivation": "每個 DB 批次（≤500 篇）至多觸發 1 次 `_batch_llm_api`（批次 API，非逐篇）；ceil(1250/500) = 3",
+      "insensitivity_note": "⚠ 呼叫次數由**批次數**決定，不由 fuzzy 篇數決定 —— 即使 fuzzy 率翻倍至 20.4%，呼叫次數仍是 3。這是本估算最穩固的部分（沿用 `60a8d6e` 已記載的推論）"
+    },
+    "N2_stop_threshold": {
+      "value": 5,
+      "rationale": "不是 5 有什麼特殊，而是實際呼叫數超過估計兩倍以上即代表對這條路徑的理解有問題，該先查明再繼續（`60a8d6e` 原文）"
+    },
+    "cache_hit_assumption": {
+      "assumption": "接近 0",
+      "label": "**升級為 VERIFIED THIS SESSION**（原提案標 ASSUMPTION）",
+      "why_upgraded": "`b1_pilot_tmpdb` 的 `sentiment_cache` 實測為 **0 列**（唯讀查詢已於本檔 PRE_STATE_MEASURED 記錄）—— 這是臨時 DB 的全新複本，沒有任何既有快取可命中，不是推測，是量到的事實"
+    }
+  },
+
+  "N1_binding_requirement": "執行前確認 `current_database() = 'b1_pilot_tmpdb'`，不符即中止，不呼叫任何 LLM API",
+
+  "N3_checkpoint_discipline": {
+    "requirement": "§7.2：批次檢查點只有在確實成功完成後才能推進；LLM 呼叫失敗不得把未完成分數誤標為完成",
+    "structural_guarantee": "**由程式結構保證，非由額外檢查保證**：`_batch_llm_api` 失敗會拋出例外，該例外在 `process_batch_hybrid` 內未被攔截，直接中止該次呼叫；`db_writer.update_sentiment_scores(df_processed)` 位於呼叫之後，**例外發生時這一行永遠不會執行**——失敗的批次不會有任何一筆被寫回 `sentiment_score`。此為程式碼讀出的事實（`src/transform/nlp_processor.py:225-242`），標 `IMPLEMENTATION EVIDENCE`",
+    "no_fallback_branch_exists": "⚠ 逐行核對 `_batch_llm_api` 與 `process_batch_hybrid`：**沒有任何『LLM 失敗時改用替代分數』的分支**。失敗即整個批次中止，不是「用 SnowNLP 分數頂替」。因此 N3 要求的『不得誤標』在此管線中沒有可觸發的路徑——不是因為防護生效，是因為沒有可能誤標的分支"
+  },
+
+  "N4_acceptance": "評分完成後 `SELECT count(*) FROM market_articles WHERE sentiment_score IS NULL` 應為 0；不為 0 則列出該批文章與原因分佈，不得逕行重跑掩蓋",
+
+  "N5_cache_report": "評分完成後 `sentiment_cache` 的新增筆數一併回報 —— 該表下次回補的成本基礎"
+}

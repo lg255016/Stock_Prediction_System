@@ -1,0 +1,121 @@
+{
+  "purpose": "階段 2 匯入（PO 裁決 (B)：刪 251 篇舊批、改用臨時庫版本）的**預期**。**本檔於觸庫之前 commit；執行後只做比對，不修改本檔。**",
+  "date": "2026-09-07",
+  "authorization": "PO 2026-09-07 裁決 (B)，執行防護七項（本檔對應第 7 項）",
+
+  "SCOPE": {
+    "delete": "真實庫 `market_articles` WHERE `url` IN（251 篇碰撞清單，見 `PRE_G3_03_import_collision_report.json`）AND `source='ptt_stock'`",
+    "insert_articles": "臨時庫 `market_articles` 1,250 篇中，**排除 1495 的對應列**（`pilot article_id=2`）—— 共 **1,249 篇**（251 替換 + 998 全新）",
+    "insert_comments": "上述 1,249 篇對應的 `article_comments`，經 `url` → 新 `article_id` 重新對映後寫入",
+    "transaction": "刪除與插入**同一交易**，驗證通過才 COMMIT，否則 ROLLBACK",
+    "skip_1495": "1495 整篇（文章與留言）**不從臨時庫匯入**；真實庫既有 38 列留言與該篇文章列**不碰**"
+  },
+
+  "PRE_STATE": {
+    "real_binding": {"database": "postgres", "port": 5432},
+    "real_market_articles": 332,
+    "real_article_comments": 38,
+    "pilot_market_articles": 1250,
+    "pilot_article_comments": 136185,
+    "pilot_1495_counterpart": {"article_id": 2, "comment_count": 38},
+    "collision_report_ref": "PRE_G3_03_import_collision_report.json（commit 2bfa519）",
+    "pre_delete_export_ref": "PRE_G3_03_pre_delete_export_251.json（commit a967d13，251 篇完整內容已匯出）"
+  },
+
+  "ARITHMETIC": {
+    "deleted": 251,
+    "inserted_articles": 1249,
+    "inserted_articles_derivation": "1249 = 251（替換)＋998（全新）＝ 1250（臨時庫總數）－ 1（1495 排除）",
+    "expected_market_articles_final": {
+      "value": 1330,
+      "derivation": "332（現有）－ 251（刪除）＋ 1249（插入）＝ 1330",
+      "independently_verified": "PO 原始算式與本檔獨立重算一致（未直接抄，逐步核對過）"
+    },
+    "expected_article_comments_final": {
+      "value": 136185,
+      "derivation": "38（既有 1495，不變）＋（136185（臨時庫總留言）－ 38（臨時庫 1495 留言，被排除））＝ 136185",
+      "note": "⚠ 恰好等於臨時庫總留言數 —— 非巧合以外的錯誤，是因為兩邊 1495 的留言數剛好都是 38（已於 `PRE_G3_03_import_collision_report.json` E1 驗證：38>=25 PASS，且雙方逐值相符）"
+    }
+  },
+
+  "EXPECTATIONS": [
+    {
+      "id": "M1",
+      "criterion": "刪除語句 `rowcount == 251`",
+      "guard": "**雙重條件**：`url IN (...) AND source='ptt_stock'` —— 若某 url 因故已不是 `ptt_stock`（不預期，但寫死判準以防萬一），該列不刪，`rowcount` 會小於 251，觸發 ROLLBACK",
+      "if_mismatch": "**ROLLBACK，不得調整條件使其通過**"
+    },
+    {
+      "id": "M2",
+      "criterion": "插入語句回傳列數 == 1249（articles）",
+      "if_mismatch": "ROLLBACK"
+    },
+    {
+      "id": "M3",
+      "criterion": "`market_articles` 交易後總列數 == **1330**",
+      "if_mismatch": "ROLLBACK"
+    },
+    {
+      "id": "M4",
+      "criterion": "`article_comments` 交易後總列數 == **136185**",
+      "if_mismatch": "ROLLBACK"
+    },
+    {
+      "id": "M5",
+      "criterion": "80 篇倖存 `ptt_stock`（不在刪除清單內）逐位元組不變",
+      "baseline_fingerprint": "41b5ca64a25b0fddb90852ce307fd724",
+      "baseline_row_count": 80,
+      "note": "含全部 16 欄",
+      "if_mismatch": "ROLLBACK"
+    },
+    {
+      "id": "M6",
+      "criterion": "`article_id=1495` 的文章列與其 38 列留言逐位元組不變",
+      "baseline_fingerprints": {
+        "article": "f447f80647824b9117f640374d072631",
+        "comments": "9cfef4e815a64c1b2c18b2855a362a2e",
+        "comments_row_count": 38
+      },
+      "if_mismatch": "ROLLBACK"
+    },
+    {
+      "id": "M7",
+      "criterion": "`daily_ml_features` 指紋維持 `4fc208b95dbc6ea9d7c4b381d6ba97b5`，137 列",
+      "why": "本次操作不觸碰該表；若指紋變動代表交易做了計畫外的事",
+      "if_mismatch": "ROLLBACK"
+    },
+    {
+      "id": "M8",
+      "criterion": "**抽樣驗收**：以下 10 個 url（5 替換 + 5 全新，`random.seed(42)` 抽樣）——匯入後真實庫的留言列數須與臨時庫**逐一相等**",
+      "samples": [
+        {"url": "https://www.ptt.cc/bbs/Stock/M.1780642616.A.B4A.html", "category": "replacement(251)", "expected_comment_count": 48},
+        {"url": "https://www.ptt.cc/bbs/Stock/M.1786686697.A.EF2.html", "category": "replacement(251)", "expected_comment_count": 154},
+        {"url": "https://www.ptt.cc/bbs/Stock/M.1787197384.A.C83.html", "category": "replacement(251)", "expected_comment_count": 148},
+        {"url": "https://www.ptt.cc/bbs/Stock/M.1778679157.A.37C.html", "category": "replacement(251)", "expected_comment_count": 44},
+        {"url": "https://www.ptt.cc/bbs/Stock/M.1785999168.A.FCA.html", "category": "replacement(251)", "expected_comment_count": 146},
+        {"url": "https://www.ptt.cc/bbs/Stock/M.1782283035.A.FDB.html", "category": "new(998)", "expected_comment_count": 59},
+        {"url": "https://www.ptt.cc/bbs/Stock/M.1782535336.A.CDF.html", "category": "new(998)", "expected_comment_count": 131},
+        {"url": "https://www.ptt.cc/bbs/Stock/M.1784211406.A.B4D.html", "category": "new(998)", "expected_comment_count": 89},
+        {"url": "https://www.ptt.cc/bbs/Stock/M.1772581393.A.1AC.html", "category": "new(998)", "expected_comment_count": 121},
+        {"url": "https://www.ptt.cc/bbs/Stock/M.1784639274.A.684.html", "category": "new(998)", "expected_comment_count": 69}
+      ],
+      "if_mismatch": "回報不符的 url 與差異，不得逕行調整"
+    },
+    {
+      "id": "M9",
+      "criterion": "刪除的 251 個 `article_id` 於交易後**完全不存在**於 `market_articles`（非復用同號）；新插入的 1,249 篇取得**全新** `article_id`（SERIAL 遞增，不重用剛刪除的號碼——PostgreSQL 序列本身不回收，此為結構保證，非需檢查項，僅記錄預期）",
+      "if_mismatch": "不適用（結構保證）"
+    }
+  ],
+
+  "RISK_013": {
+    "1_binding": "交易前確認 `current_database()='postgres'`",
+    "2_dump": "交易前新鮮 `pg_dump`，直接落 `TEAM_PLAYBOOK.md` §7A.1 位置",
+    "3_restore_verification": "還原至拋棄式容器，比對表列數與 `daily_ml_features` 指紋"
+  },
+
+  "ROLLBACK_PLAN": {
+    "in_transaction": "任一 M1~M8 不符 -> `conn.rollback()`，資料庫回到交易前狀態（PostgreSQL MVCC 保證）",
+    "if_already_committed_and_later_found_wrong": "備份還原（見 RISK_013.2），非本次預期路徑"
+  }
+}

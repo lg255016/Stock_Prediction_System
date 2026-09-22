@@ -1,0 +1,167 @@
+{
+  "purpose": "UG-G2-SB9 階段一取數報告",
+  "target_database": {
+    "name": "sb9_tpex_tmpdb",
+    "host": "sb9_tpex_tmpdb",
+    "port": 5432,
+    "is_temporary": true
+  },
+  "environment": {
+    "timestamp_utc": "2026-09-01T15:29:11.806189+00:00"
+  },
+  "market": "tpex",
+  "segment": {
+    "prior_common_supplied": 889,
+    "first_day_continuity_checked": true,
+    "note": "本段首日已與前一段最後一天做 2% 連續性比對（前值 889）。"
+  },
+  "expectations": {
+    "max_daily_change_ratio": 0.02,
+    "first_day_min_common": 200,
+    "first_day_floor_note": "**只擋分頁碎片，不是對市場規模的宣稱。** TPEx 用 200（同判準 C3a），**刻意不用 C7 的量測值 887** —— 先寫一個數字再拿它當判準就是在猜。",
+    "median_turnover": [
+      1000000.0,
+      100000000.0
+    ],
+    "note": "提案 §6.2a，取數前寫死。2026-09-01 由絕對區間改為相對變動率——絕對區間是兩天觀測推出來的，在跨年度資料上必然誤報。"
+  },
+  "trading_days_collected": 7,
+  "trading_days_requested": 735,
+  "logical_requests_made": 8,
+  "http_attempts_made": 10,
+  "logical_request_budget": 850,
+  "pk_collisions": 0,
+  "db_summary": {
+    "rows": 777166,
+    "distinct_stocks": 1987,
+    "distinct_dates": 740,
+    "min_date": "2023-08-07",
+    "max_date": "2026-08-21"
+  },
+  "per_day_log": [
+    {
+      "date": "20260814",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 1013,
+        "rows_common_stock": 889,
+        "rows_excluded_by_code_shape": 124,
+        "rows_without_prices": 20,
+        "rows_zero_volume": 20,
+        "rows_no_trade_at_all": 20,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 889,
+      "median_turnover": 4239700,
+      "attempted": 889,
+      "inserted": 889
+    },
+    {
+      "date": "20260813",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 1013,
+        "rows_common_stock": 889,
+        "rows_excluded_by_code_shape": 124,
+        "rows_without_prices": 12,
+        "rows_zero_volume": 12,
+        "rows_no_trade_at_all": 12,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 889,
+      "median_turnover": 4684500,
+      "attempted": 889,
+      "inserted": 889
+    },
+    {
+      "date": "20260812",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 1013,
+        "rows_common_stock": 889,
+        "rows_excluded_by_code_shape": 124,
+        "rows_without_prices": 19,
+        "rows_zero_volume": 19,
+        "rows_no_trade_at_all": 19,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 889,
+      "median_turnover": 4139800,
+      "attempted": 889,
+      "inserted": 889
+    },
+    {
+      "date": "20260811",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 1013,
+        "rows_common_stock": 889,
+        "rows_excluded_by_code_shape": 124,
+        "rows_without_prices": 15,
+        "rows_zero_volume": 15,
+        "rows_no_trade_at_all": 15,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 889,
+      "median_turnover": 3903100,
+      "attempted": 889,
+      "inserted": 889
+    },
+    {
+      "date": "20260810",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 1013,
+        "rows_common_stock": 889,
+        "rows_excluded_by_code_shape": 124,
+        "rows_without_prices": 15,
+        "rows_zero_volume": 15,
+        "rows_no_trade_at_all": 15,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 889,
+      "median_turnover": 4620500,
+      "attempted": 889,
+      "inserted": 889
+    },
+    {
+      "date": "20260807",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 1012,
+        "rows_common_stock": 888,
+        "rows_excluded_by_code_shape": 124,
+        "rows_without_prices": 24,
+        "rows_zero_volume": 24,
+        "rows_no_trade_at_all": 24,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 888,
+      "median_turnover": 3775950,
+      "attempted": 888,
+      "inserted": 888
+    },
+    {
+      "date": "20260806",
+      "outcome": "OK",
+      "stats": {
+        "rows_total": 1012,
+        "rows_common_stock": 888,
+        "rows_excluded_by_code_shape": 124,
+        "rows_without_prices": 22,
+        "rows_zero_volume": 22,
+        "rows_no_trade_at_all": 22,
+        "rows_unparseable_volume_or_amount": 0
+      },
+      "written": 888,
+      "median_turnover": 3386500,
+      "attempted": 888,
+      "inserted": 888
+    },
+    {
+      "date": "20260805",
+      "outcome": "ERROR",
+      "detail": "HTTP 520 —— 退避重試 1 次後仍失敗，停止本段"
+    }
+  ]
+}

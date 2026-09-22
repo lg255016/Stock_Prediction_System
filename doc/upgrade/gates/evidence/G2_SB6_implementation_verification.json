@@ -1,0 +1,187 @@
+{
+  "purpose": "UG-G2-SB6 實作執行與 §6／§5／DoD 的驗證結果。",
+  "date": "2026-09-03",
+  "evidence_label": "`VERIFIED THIS SESSION`（PM 執行）。驗證範圍：真實開發庫 `postgres`@`localhost:5432`、dev container Python 3.14.6。**不含**：其他環境、雲端、migration 回退路徑。",
+  "artifacts": [
+    "database/migrations/006_universe_snapshots.sql",
+    "src/transform/universe_builder.py",
+    "tests/test_universe_builder.py"
+  ],
+  "MIGRATION_006": {
+    "applied_via": "database/apply_migrations.py（走正式遷移器，非手動 psql）",
+    "schema_version": "5 -> 6",
+    "risk013_guard_demonstrated": "**先在不設確認變數的情況下執行一次，守門如預期拒絕**：「偵測到連線目標疑似為真實開發 DB (host=localhost, port=5432, database=postgres)，拒絕執行。」**這是一個實際跑出來的 FAIL，不是宣稱**（§9A.2）。設 `CONFIRM_REAL_DB_MIGRATION_TARGET` 後才套用成功。",
+    "pre_backup": "stock_prediction_system2_PRE_sb6_migration006_20260903_115218.dump（69,792,360 bytes）",
+    "constraints_created": [
+      "chk_universe_snapshots_exclusion_reason",
+      "chk_universe_snapshots_rank",
+      "chk_universe_snapshots_nonneg"
+    ]
+  },
+  "THE_WINDOW_CONFLICT": {
+    "summary": "實作時發現**已核准提案內部對窗口邊界給了兩個相反的答案**。完整記載見 `G2_SB6_union_count_calibration_pit.json` 的 `THE_CONFLICT`。",
+    "resolution": "採 DEC-017 的「嚴格早於 `effective_date`」。",
+    "measured_impact": "46 列逐月基準中 **8 列改變**，差異 1~2 檔。",
+    "process_note": "`REPORTED, NOT INDEPENDENTLY VERIFIED`（複查方 2026-09-03 判定）—— **修正後的判準於 `universe_builder` 首次執行之前落檔**，順序若顛倒就成了照著結果改判準。⚠ **但這項順序無法被獨立驗證**：mtime 記的是**最後一次寫入**而非**首次執行**（兩者不是同一件事），mtime 本身可被改寫，且兩個檔在**同一個 commit** 裡、git 歷史不帶順序。**回報者：PM；不可重跑：產物不記錄事件發生的先後。**\n**這不影響本次結論** —— 判準的正確性建立在 DEC-017 的逐字條文上，**與它何時被寫下無關**。**有風險的不是判準錯，是無法證明過程是乾淨的。**\n**機制化**：見 DEC-033 §Decision 第 6 條 —— 往後判準在實作期被修改時，**單獨 commit 一次再跑**，git 歷史即帶順序。"
+  },
+  "EXECUTION": {
+    "target_database": "postgres @ localhost:5432",
+    "snapshots": 46,
+    "first": "2022-11-01",
+    "last": "2026-08-03",
+    "total_rows": 85641,
+    "included_per_snapshot": 150,
+    "note": "每一期皆為 150，無「候選不足」的情形。"
+  },
+  "SECTION_6_EXPECTATIONS": {
+    "1_snapshot_count": {
+      "expected": 46,
+      "actual": 46,
+      "verdict": "PASS"
+    },
+    "2_included_count": {
+      "expected": 150,
+      "actual": "46 期皆為 150",
+      "verdict": "PASS"
+    },
+    "3_monthly_reconciliation": {
+      "baseline": "G2_SB6_union_count_calibration_pit.json（修正後，46 列）",
+      "pipeline_path": "從 `universe_snapshots` **自己寫入的列**去數（每個 `effective_date` 的列數 = 相異 stock_id 數，因 PK 為 `(effective_date, stock_id)`），**未重跑校準 SQL**",
+      "mismatches": 0,
+      "verdict": "**PASS —— 46/46 逐一相等**",
+      "LIMIT": "⚠ 對號的是 `union_all`，**不是分市場的 twse／tpex**。`universe_snapshots` 沒有 `source` 欄（universe 以 `stock_id` 為身分，提案 §2.3），要分市場就得回頭 join `candidate_prices` —— **那就是重跑校準 SQL，會變成拿自己比自己**。分市場的數字保留在校準檔內作為紀錄，不作為管線的驗證項。"
+    },
+    "4_median_turnover_magnitude": {
+      "expected": "10^6 ~ 10^11 元",
+      "actual": {
+        "min_included": 253152500,
+        "max_included": 93497841527,
+        "min_rank150": 253152500,
+        "max_rank1": 93497841527
+      },
+      "verdict": "PASS（2.5×10^8 ~ 9.3×10^10，落在區間內）"
+    },
+    "5_adjacent_overlap": {
+      "expected": ">= 85%（提案明示為待驗證的預期，非硬門檻）",
+      "actual": {
+        "min": 85.33,
+        "avg": 90.21,
+        "max": 94.67
+      },
+      "verdict": "PASS",
+      "HONEST_NOTE": "⚠ **最小值 85.33% 距門檻只有 0.33 個百分點。** 提案寫明「若實測顯著偏離，先回報再判斷，不調整判準使其通過」——本次沒有偏離，但**餘裕極薄這件事本身要說**：換一批資料、或窗長／top_n 稍變，這條線就會被跨過。**它現在通過，不代表它是一條寬鬆的線。**"
+    },
+    "6_exit_stocks": {
+      "exit_stocks_in_4y_data": 43,
+      "NUMBER_CORRECTION": "⚠ 提案 §6 第 6 項寫「**32 檔**退出股」，**那是 `UG-G2-SB9` 三年資料的數字**。四年資料實測為 **43 檔**（新進 247、停牌後回來 149）。**又一次同型的過期數字** —— 延伸回補後，提案本體改了、§6 這個數字沒跟著改。判準的**形式**不受影響（下面兩項違規數皆為 0），但數字本身必須更正。",
+      "violation_included_after_exit_plus_k": 0,
+      "violation_retroactively_removed_before_exit": 0,
+      "exit_stocks_ever_included": 4,
+      "included_rows_for_exit_stocks": 41,
+      "verdict": "PASS —— 兩類違規皆 0，且 **4 檔退出股在退出前確實被納入過 41 期**。**後者是 P4 的正面證據**：只有違規數為 0 的話，也可能是因為根本沒有退出股進過 universe。"
+    }
+  },
+  "PIT_CHECKS_P1_TO_P5": {
+    "where": "tests/test_universe_builder.py（13 項，**零資料庫依賴**）",
+    "why_hermetic": "`CLAUDE.md` §13.4 記載本專案有 9 個測試其行為取決於環境是否具備 DB。**PIT 的正確性不能靠那種測試守** —— 一個在沒有 DB 時就悄悄跳過的 PIT 測試，與一個永遠通過的檢查沒有區別。",
+    "P1": {
+      "test": "test_p1_universe_point_in_time_no_future_data",
+      "known_FAIL": "餵進 `effective_date` 當天／之後的資料 → 實作 raise `LookaheadError`。**已實際跑出**（`assertRaises` 兩次）。"
+    },
+    "P2": {
+      "test": "test_p2_rebuild_is_deterministic",
+      "known_FAIL": "十檔中位數完全相同時，無穩定 tie-break 會讓兩次結果互換名次。測試以反序輸入重跑並要求逐筆相同。"
+    },
+    "P3": {
+      "test": "test_p3_history_unchanged_by_later_data",
+      "known_FAIL": "**已實際跑出** —— `survivor_filtered` 是倖存者過濾的錯誤實作，其輸出被斷言為必須與正確快照**不同**，且 `1101` 必須從中消失。"
+    },
+    "P4": {
+      "test": "test_p4_universe_handles_delisting",
+      "known_FAIL": "回溯移除已下市股會讓 `assertIn('1101')` 失敗。真實資料上的對應證據見 §6 第 6 項的 41 個 included 列。"
+    },
+    "P5": {
+      "test": "test_p5_suspension_is_not_delisting",
+      "known_FAIL": "把停牌當退出而整列不寫入 → `assertIn('1102')` 失敗。並斷言理由為 `no_recent_activity` 而**非** `delisted`。"
+    },
+    "COVERAGE_LIMIT": "⚠ **`UniverseBuilder`（資料庫存取層）不在這 13 項的覆蓋內。** 那一層由本檔的 46 期實際執行與 §6 逐項比對負責，**是不同種類的證據，不得混為一談。**"
+  },
+  "V1_V2_SEVEN_DAY_SPIKE": {
+    "note": "提案 §0.3 的判準**取數前已寫死**：V2 為主判準，V1 為佐證；並明文寫下不成立時的處置。四年資料上缺口 = 7 的事件共 **117 次／107 檔**。",
+    "V1_gap_start_month": {
+      "distribution": {
+        "9月": 36,
+        "11月": 18,
+        "8月": 17,
+        "10月": 16,
+        "12月": 7,
+        "2月": 6,
+        "7月": 4,
+        "3月": 4,
+        "6月": 4,
+        "1月": 3,
+        "4月": 2
+      },
+      "reading": "8~11 月合計 87／117 = **74%**，有聚集但**不是單一月份**。",
+      "verdict": "**部分成立** —— 佐證而已，不足以單獨支撐分類。"
+    },
+    "V2_reopen_price_jump": {
+      "n_events": 117,
+      "jump_up_gt_10pct": 80,
+      "jump_down_gt_10pct": 14,
+      "within_10pct": 22,
+      "null_price": 1,
+      "verdict": "**不成立（FAIL）**",
+      "reasoning": "判準逐字是「復牌首日的價格是否呈現**一致的**跳變方向」。實測 80 上跳、**14 下跳**、22 幾乎不動 —— **那不是一致。**",
+      "REFRAMING_I_AM_NOT_USING": "⚠ 存在一個更有利的讀法：**在有跳變的 94 次中，80 次（85%）是上跳**。**我不採用它**，因為那是看到數字之後才選的切法 —— 把「不動的 22 次」排除在分母外沒有事前的理由。**事前寫下的判準是「一致」，而 14 次反向不是一致。** 採用那個讀法會讓判準變成一件在結果出來後才決定的事，而那正是本 SB 一路在防的東西。"
+    },
+    "DISPOSITION": "依提案 §0.3 事前寫下的處置：**7 天尖峰只記錄為觀測，不作為分類依據**；停牌成因的判定退回「無外部資料源即無法判定」，記為已知限制。**成本為零**：本 SB 的實作完全沒有用到 7 天尖峰 —— 停牌的處置由 K = 1 與中位數計 0 兩條規則承擔。**但零成本不是採用它的理由，也不是降低門檻的理由。**"
+  },
+  "DOD_SUSPENSION_PAIRS": {
+    "question": "提案 DoD：46 個 `effective_date` 上，有多少組 `(stock_id, effective_date)` 因停牌橫跨該日而 `included=FALSE`，**且該股在前一個或後一個快照中排名進前 150**。",
+    "prior_estimate": "提案粗估為「個位數」。",
+    "measured": {
+      "rows_excluded_by_recency_total": 183,
+      "of_which_exited": {
+        "rows": 110,
+        "stocks": 38
+      },
+      "of_which_suspended_or_returned": {
+        "rows": 73,
+        "stocks": 46
+      },
+      "pairs_with_adjacent_top150": 1,
+      "the_single_pair": {
+        "stock_id": "2888",
+        "security_name": "新光金",
+        "effective_date": "2025-08-01",
+        "adjacent_best_rank": 118,
+        "median_turnover": 514993790,
+        "observation_days": 46
+      }
+    },
+    "FINDING": "**答案是 1，而且那 1 個不是停牌 —— 是退出。** `2888 新光金` 末見日 2025-07-11 之後再未出現，快照序列為 2025-05 rank 133 → 06 rank 124 → **07 rank 118（included）** → 08 起 `no_recent_activity`。 **也就是說：「前 150 的股票因停牌橫跨重建日而掉出、下月回歸」這個被擔心的洞，在 46 次重建中一次都沒有發生。** 唯一長得像它的那一筆，其排除是正確且永久的。 ⚠ **這是四年資料上的實測，不是不可能性的證明**（同 K 校準的限制）。Gate 3 的 panel dataset 仍需能承受一次進出。",
+    "note_2888": "這正是 K 校準中唯一 `gap > 0` 的那一檔，其末見日是三年來成交最大的一天（提案 §8 第 6 項）。**同一檔股票同時是三個不同量測的唯一例外。**"
+  },
+  "TEST_SUITE": {
+    "command": "python -m unittest discover -s tests -p \"test_*.py\"",
+    "environment": "dev container，Python 3.14.6",
+    "result": "Ran 345 tests / OK",
+    "baseline_before": "332 tests / 30 檔",
+    "now": "345 tests / 32 檔（本 SB 新增 13 項）",
+    "contract_check": "scripts/verify/gate0_contract_check.py exit 0"
+  },
+  "UNTOUCHED": {
+    "daily_ml_features": 117,
+    "stock_prices": 117,
+    "candidate_prices": 1821870,
+    "schema_version": 6
+  },
+  "KNOWN_LIMITS": [
+    "`not_common_stock_code` 在真實資料上**一次都沒觸發** —— `candidate_prices` 的內容已由取數層過濾。**該分支只有測試覆蓋，沒有生產資料覆蓋**，但它是第二道防線，存在的意義正是「第一道失效時」。",
+    "分市場的逐月對號未納入管線驗證（見 §6 第 3 項的 LIMIT）。",
+    "V2 不成立，停牌成因無法判定（見上）。",
+    "代號本身變更的追蹤未實作（提案 §8 第 1 項）。",
+    "RISK-022（權值未還原）未解；`best_bid_volume`／`best_ask_volume` 仍不得使用。"
+  ]
+}

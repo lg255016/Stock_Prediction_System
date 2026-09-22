@@ -1,0 +1,99 @@
+{
+  "purpose": "UG-G2-SB7 受控執行的**結果**，逐項對照 `G2_SB7_controlled_run_expectations.json`（commit `1e12068`，執行之前寫死）。",
+  "date": "2026-09-05",
+  "run": "`python main_etl_pipeline.py` 一次，容器 `stock_prediction_system2_devcontainer-app-1`，Python 3.14.6，`EXIT=0`",
+  "binding_confirmation": "`current_database=postgres`／`inet_server_port=5432`／`current_user=postgres`／`inet_server_addr=::1`／PostgreSQL 18.6",
+  "pre_backup": {
+    "file": "`/tmp/pre_sb7_controlled_run_20260905.dump`（容器 db-1），host 副本於 scratchpad",
+    "bytes": 70610889,
+    "md5": "63ce0b267cc132575aa7b80c4abcbe24",
+    "integrity_check": "`pg_restore -l` 可讀，11 個 TABLE DATA 條目（對應 11 張表）"
+  },
+
+  "RESULTS": [
+    {"id": "E1", "expected": "每市場 1 個邏輯請求", "actual": "`etl_run_log` 新增 `twse_mi_index` 1 列、`tpex_daily_quotes` 1 列，`batch_key=2026-09-04`；HTTP 嘗試 1 與 2", "verdict": "PASS"},
+    {"id": "E2", "expected": "TWSE 950~1,130／TPEx 780~930", "actual": "TWSE **1,085**、TPEx **887**", "verdict": "PASS —— **兩者皆在取數前寫死的區間內，第二次命中**"},
+    {"id": "E3", "expected": "1~25 頁，預期遠低於上界", "actual": "**1 頁**", "verdict": "⚠ **形式上 PASS，實質不成立 —— 見 `E3_IS_A_FALSE_PASS`**"},
+    {"id": "E4", "expected": "新文章 `source = ptt_board_pages`，既有 331 列不回填", "actual": "`ptt_board_pages` **1 列**、`ptt_stock` **331 列**（未動）", "verdict": "PASS"},
+    {"id": "E5", "expected": "既有 117 列指紋維持 `0d80953debe24ba477a985080f56358f`", "actual": "扣掉新增的 `(NVDA, 2026-08-21)` 後，指紋 **`0d80953debe24ba477a985080f56358f`／117 列，逐位元相同**", "verdict": "PASS —— 但**第一次比對報 FAIL，見 `E5_MY_CHECK_WAS_WRONG`**"},
+    {"id": "E6", "expected": "`高端` 仍 `is_active=FALSE` 且 `category=core_stock`", "actual": "`('高端', False, 'core_stock')`；停用清單仍只有它", "verdict": "PASS —— **`CLAUDE.md` §7.3 的軟刪除不變量第一次被實際驗證**"},
+    {"id": "E7", "expected": "既有 331 篇 0 次 Gemini；新增僅來自新文章與趨勢探索", "actual": "NLP 管線 `撈取 1 筆待處理資料`、`本次總共處理了 1 筆`；趨勢探索 1 次分析", "verdict": "PASS"},
+    {"id": "E8", "expected": "6488 由 `candidate_prices` 供應不經 yfinance；`tracked_stocks_daily` 4 列", "actual": "日誌 `上櫃標的由 candidate_prices 供應 [6488 2026-09-04]`；`tracked_stocks_daily` OK 4 列；**NVDA 是唯一走 yfinance 的**（日誌 `正在透過 yfinance 抓取 NVDA`）", "verdict": "PASS —— **DoD 第 11 項的證據到位**"},
+    {"id": "E9", "expected": "逐來源 outcome 總數 = 項目數", "actual": "`twse_mi_index` 1／`tpex_daily_quotes` 1／`tracked_stocks_daily` 4／`ptt` 26（OK 1 + NO_DATA 25）", "verdict": "PASS"},
+    {"id": "E10", "expected": "新增列 `target_database` 全為 `postgres`，NULL 0 列", "actual": "相異值僅 `postgres`，NULL 0 列", "verdict": "PASS"}
+  ],
+
+  "E5_MY_CHECK_WAS_WRONG": {
+    "what_happened": "第一次比對得到指紋 `52a168761b96c3f7c55dd87739c1e85c`／**118 列**，判定 FAIL。",
+    "cause": "**我的檢查把「既有列的值不變」寫成了「該日期範圍內的列不變」。** 執行前 NVDA 最大 `trade_date` 是 **2026-08-20**（快照有記載），本次 yfinance 取回 `period=3mo` 補上了 **2026-08-21** 那一天 —— 那是一列**全新的資料**，不是既有列被改。",
+    "resolution": "扣掉 `(NVDA, 2026-08-21)` 後，117 列的指紋與執行前**逐位元相同**。",
+    "why_this_is_not_moving_the_goalposts": "預期文件寫的是「**既有 117 列的值不得變**」。**新增一列不是既有列的變動** —— 細判是回到那句話原本的意思，不是放寬它。**但第一次的 FAIL 判定與成因一併留在這裡，不刪。**",
+    "lesson": "**一個把兩件事綁在一起的檢查，會在其中一件發生時誤報另一件。** 日期範圍不是主鍵。"
+  },
+
+  "E3_IS_A_FALSE_PASS": {
+    "measurement": "看板頁面模式**只請求 1 頁**。日誌：`已回溯至 1768934799 <= 1788414806.2189674，停止翻頁`。",
+    "decoded": "`1768934799` = **2026-01-21 02:46:39 (UTC+8)**；`1788414806` = 2026-09-03 13:53:26 (UTC+8)，即 `now - BOARD_LOOKBACK_DAYS`。",
+    "the_problem": "**那一頁是看板最新的一頁，而它上面最舊的一篇是七個半月前的。** 停止條件因此在第 1 頁就成立。",
+    "inferred_cause": "`INFERENCE`（未對線上頁面查證）：PTT 的**置底公告**（pinned posts）附在最新一頁的末端，它們的時間戳很舊。`scrape_ptt_board_pages` 用 `min(全頁時間戳)` 判斷「這一頁最舊的是什麼時候」，**於是被置底文一次擊沉**。",
+    "WHY_THIS_IS_THE_WORST_KIND_OF_BUG": "⚠⚠ **它讓被截斷的抓取看起來像成功的回溯。** outcome 回報 `OK` 而不是 `SOURCE_DEGRADED` —— 因為程式相信自己已經回溯到目標時間。**那正是本 SB 從頭到尾在防的形狀：失敗偽裝成成功。** 而 25 個關鍵字因此拿到 `NO_DATA`，在 run log 裡宣稱「那天沒有討論」，實際上是**我們只看了一頁**。",
+    "impact_on_RISK_015": "本次 `ptt` 的 OK 1／NO_DATA 25 **不得**被當成社群覆蓋率的量測值。",
+    "proposed_fix_needs_ruling": "PTT 索引頁內的文章是**由舊到新排列**，置底文附加在末端。故「這一頁最舊的一篇」應取**第一個 `r-ent`**，而非 `min()`。⚠ **該排序是推論，需以一次頁面抓取查證，並先寫紅測試。** 不在本輪自行實作。",
+    "verdict_wording": "E3 的界寫的是 1~25 頁，實測 1 頁**落在界內** —— **但落在界內不等於對。** 本項記為 `NOT VERIFIED`，不記為 PASS。"
+  },
+
+  "POST_TIME_COUNT_CORRECTED": {
+    "correction": "先前回報的「96 列 `post_time` 錯誤、26 列落在特徵窗內」**是用錯誤時區算的**。",
+    "cause": "量測腳本用 `datetime.fromtimestamp(ts)`（容器本地時區 = UTC）還原網址時間戳，而正確的解讀是 **UTC+8**。**與 `e67d3d6` 修掉的是同一個錯誤，只是我先犯在量測端。**",
+    "corrected_numbers": {
+      "wrong_post_time_rows": 76,
+      "previously_reported": 96,
+      "in_feature_window": 15,
+      "previously_reported_in_window": 26,
+      "year_diff_distribution": {"+1": 43, "+2": 10, "+3": 4, "+4": 8, "+5": 6, "+6": 1, "+7": 4}
+    },
+    "IMPORTANT": "⚠ 更正後的分佈**沒有「同年不同日」那一格**了 —— 先前的 20 列「同年不同日」**全部是時區造成的假象**。真實的圖像更乾淨：**76 列全部是整年數的偏移，`MM/DD` 本身是對的，錯的只有年份。**",
+    "where_the_wrong_numbers_appear": "commit `76a79ca`／`e67d3d6` 的 message、`G2_SB7_controlled_run_expectations.json` 的 `KNOWN_CONTAMINATION`。**那些檔案不改**（歷史紀錄），更正記在本檔。"
+  },
+
+  "PRODUCTION_VERIFICATION_OF_STEP_1": {
+    "claim": "`e67d3d6`（`post_time` 取自網址時間戳，UTC+8）在生產寫入路徑上生效。",
+    "evidence": "本次新增的 `ptt_board_pages` 文章：DB `post_time = 2026-09-05 10:07:38`，由網址時間戳還原 = `2026-09-05 10:07:38` —— **MATCH**。",
+    "label": "`VERIFIED THIS SESSION`"
+  },
+
+  "MIXED_STATE": {
+    "statement": "⚠ **本次執行的產出是「舊的部分不變且已知污染、新的部分乾淨」。**",
+    "old": "`ptt_stock` 331 列，其中 **76 列 `post_time` 錯誤（15 列落在特徵窗內）**，未修。",
+    "new": "`ptt_board_pages` 1 列，`post_time` 由網址時間戳決定並已驗證正確。",
+    "prohibition": "兩者在任何報表或量測中**不得被當成同一批資料**。"
+  },
+
+  "CONDITION_1_STILL_NOT_SATISFIED": {
+    "statement": "「切換後 `source_status` 分佈」**仍不成立**，且本次多了第二個成因。",
+    "cause_1": "特徵層仍讀進 15 列錯置到窗內的文章（預期文件已寫死）。",
+    "cause_2": "**E3 的截斷** —— 本次只抓了 1 頁，25 個關鍵字的 `NO_DATA` 不是有效觀測。",
+    "label": "`NOT VERIFIED`",
+    "prohibition": "**不得以本次的 `SUCCESS 38 / SUCCESS_EMPTY 99` 充當條件 1 的「後」。**"
+  },
+
+  "STATE_AFTER_RUN": {
+    "daily_ml_features": {"rows": 137, "range": "2026-05-20 ~ 2026-09-04", "source_status": {"SUCCESS": 38, "SUCCESS_EMPTY": 99}, "new_rows": 20},
+    "stock_prices": {"2330": "18 至 2026-09-04", "2382": "18 至 2026-09-04", "6488": "26 至 2026-09-04", "NVDA": "75 至 2026-09-04"},
+    "candidate_prices_new": {"twse_mi_index": 1085, "tpex_daily_quotes": 887, "trade_date": "2026-09-04"},
+    "market_articles": {"ptt_stock": 331, "ptt_board_pages": 1},
+    "tracking_keywords": {"active": 26, "inactive": ["高端"], "added_by_trend_discovery": ["生技醫療"]},
+    "etl_run_log_new_rows": 32
+  },
+
+  "FOR_THE_LATER_DISPOSITION_DECISION": {
+    "note": "只計算，未執行任何處置。",
+    "old_batch_rows": 331,
+    "old_batch_wrong_post_time": 76,
+    "wrong_and_inside_feature_window": 15,
+    "affected_post_time_dates": ["2026-05-24", "2026-05-28", "2026-06-08", "2026-06-18", "2026-06-19", "2026-06-23", "2026-06-25", "2026-07-17", "2026-07-21", "2026-08-06", "2026-08-08", "2026-08-11"],
+    "exclusion_option_feasible": "是 —— `market_articles.source` 已能分辨新舊兩批（第 5 項條件 2 的產物），而 `db_writer` 的取數 SQL 已 SELECT 了 `source`。"
+  },
+
+  "NOT_A_LICENCE_FOR_ROUTINE_RUNS": "⚠ 本次為**單次受控執行**。複查方 2026-09-05：一次受控執行與開放例行執行是兩件事，**不得用一次成功的執行去換一個常態授權**。"
+}

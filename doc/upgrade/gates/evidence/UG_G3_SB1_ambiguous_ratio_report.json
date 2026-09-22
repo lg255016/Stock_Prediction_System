@@ -1,0 +1,82 @@
+{
+  "purpose": "UG-G3-SB1 Gate A §11 DoD 第 3 項——Ambiguous 比例與三分類分布報告（四檔逐檔，唯讀試算，PURGED_WALK_FORWARD_SPEC.md §6 範本）。",
+  "date": "2026-09-09",
+  "method": {
+    "connection_check": "docker exec -u vscode -w /workspaces/Stock_Prediction_System2 stock_prediction_system2_devcontainer-app-1 python3 -c \"...\"；連線確認 current_database()='postgres', inet_server_port()=5432（真實開發庫，非隔離臨時庫）",
+    "operation": "唯讀 SELECT stock_id, trade_date, open_price, high_price, low_price FROM stock_prices ORDER BY stock_id, trade_date；於記憶體呼叫 generate_triple_barrier_labels()，零寫入、零暫存表",
+    "row_count_verified": "3713（與 daily_ml_features、PRE-G3-04 R1 記載的逐檔列數完全相符：2330=987、2382=987、6488=985、NVDA=754）",
+    "evidence_label": "VERIFIED THIS SESSION"
+  },
+  "input_data_quality_note": "【2026-09-09 審查方訂正】stock_prices 逐欄 SQL `IS NULL` 計數為 0（`SELECT count(*) FROM stock_prices WHERE open_price IS NULL OR high_price IS NULL OR low_price IS NULL` → 0 列）；但 NUMERIC 型別另有獨立於 SQL NULL 的 `NaN` 值，`WHERE open_price = 'NaN'::numeric` 查得 1 列（NVDA @ 2026-06-04，四個價格欄皆 NaN，`volume=0`，`source` 為 NULL）——`IS NULL` 查不到 NUMERIC NaN，須改用 `= 'NaN'::numeric`。原稿誤寫「NULL 計數=1」，實為 pandas `astype(float)` 把 `Decimal('NaN')` 轉為 `np.nan` 後 `isna()` 计到，並非 SQL 層級的 NULL——兩種描述指向同一列資料，但只有 NaN 版本可用 SQL 重跑驗證。本次真實資料恰好命中 `874b3bf` 修復的 anchor-NaN 案例路徑，非人為構造。已登記 RISK-024（`REMAINING_RISKS.md`）：`stock_prices` 允許 NaN 價格列入庫，已致 `daily_ml_features` NVDA 2026-06-03／06-04 兩列 `target_up_down` 為 NULL（SB1 之前即存在，非本次引入）；本 SB 行為正確（該列經 anchor-NaN 路徑得到 `no_entry`），處置另開獨立小案，不擴 SB1 範圍。",
+  "reports": {
+    "2330": {
+      "total_samples": 987,
+      "labeled_samples": 975,
+      "labeled_pct": "98.8%",
+      "label_1_profit_target": {"count": 411, "pct_of_labeled": "42.2%"},
+      "label_neg1_stop_loss": {"count": 490, "pct_of_labeled": "50.3%"},
+      "label_0_timeout": {"count": 74, "pct_of_labeled": "7.6%"},
+      "null_total": 12,
+      "null_total_pct": "1.2%",
+      "ambiguous_dual_barrier": {"count": 7, "pct_of_total": "0.7%"},
+      "insufficient_data": {"count": 4, "pct_of_total": "0.4%"},
+      "no_entry": {"count": 1, "pct_of_total": "0.1%"},
+      "ambiguous_ratio": "0.7%",
+      "threshold": "10%",
+      "status": "PASS"
+    },
+    "2382": {
+      "total_samples": 987,
+      "labeled_samples": 941,
+      "labeled_pct": "95.3%",
+      "label_1_profit_target": {"count": 404, "pct_of_labeled": "42.9%"},
+      "label_neg1_stop_loss": {"count": 513, "pct_of_labeled": "54.5%"},
+      "label_0_timeout": {"count": 24, "pct_of_labeled": "2.6%"},
+      "null_total": 46,
+      "null_total_pct": "4.7%",
+      "ambiguous_dual_barrier": {"count": 41, "pct_of_total": "4.2%"},
+      "insufficient_data": {"count": 4, "pct_of_total": "0.4%"},
+      "no_entry": {"count": 1, "pct_of_total": "0.1%"},
+      "ambiguous_ratio": "4.2%",
+      "threshold": "10%",
+      "status": "PASS"
+    },
+    "6488": {
+      "total_samples": 985,
+      "labeled_samples": 920,
+      "labeled_pct": "93.4%",
+      "label_1_profit_target": {"count": 361, "pct_of_labeled": "39.2%"},
+      "label_neg1_stop_loss": {"count": 532, "pct_of_labeled": "57.8%"},
+      "label_0_timeout": {"count": 27, "pct_of_labeled": "2.9%"},
+      "null_total": 65,
+      "null_total_pct": "6.6%",
+      "ambiguous_dual_barrier": {"count": 60, "pct_of_total": "6.1%"},
+      "insufficient_data": {"count": 4, "pct_of_total": "0.4%"},
+      "no_entry": {"count": 1, "pct_of_total": "0.1%"},
+      "ambiguous_ratio": "6.1%",
+      "threshold": "10%",
+      "status": "PASS"
+    },
+    "NVDA": {
+      "total_samples": 754,
+      "labeled_samples": 693,
+      "labeled_pct": "91.9%",
+      "label_1_profit_target": {"count": 296, "pct_of_labeled": "42.7%"},
+      "label_neg1_stop_loss": {"count": 391, "pct_of_labeled": "56.4%"},
+      "label_0_timeout": {"count": 6, "pct_of_labeled": "0.9%"},
+      "null_total": 61,
+      "null_total_pct": "8.1%",
+      "ambiguous_dual_barrier": {"count": 55, "pct_of_total": "7.3%"},
+      "insufficient_data": {"count": 4, "pct_of_total": "0.5%"},
+      "no_entry": {"count": 2, "pct_of_total": "0.3%"},
+      "ambiguous_ratio": "7.3%",
+      "threshold": "10%",
+      "status": "PASS",
+      "no_entry_breakdown_note": "2 筆而非其餘三檔的 1 筆——1 筆為序列末列既有機制（Open[T+1] 不存在），另 1 筆為 2026-06-04 該列本身 open/high/low 皆為 NUMERIC NaN（非 SQL NULL，見 input_data_quality_note）、恰為某前一列的 T+1 anchor，觸發 874b3bf 修復的 anchor-NaN 路徑（VERIFIED THIS SESSION，非人為構造案例）"
+    }
+  },
+  "observations_not_conclusions": {
+    "class_imbalance": "四檔皆 Label -1（止損）明顯多於 Label 1（止盈）、Label 0（Timeout）佔比甚低（2330 最高僅 7.6%）。ENGINEERING JUDGMENT（非嚴謹統計檢定）：與 Static barrier 寬度不對稱一致的方向——lower_width(1.5%) 窄於 upper_width(2.0%)，下界理論上更容易先觸及；本次僅記錄現象，不在 SB1 範圍內判斷是否需調整寬度或改採 Dynamic 模式（該決策已於 Gate A 裁決維持 Out of Scope，Ambiguous ratio 本身四檔皆遠低於 10% 升級門檵，不觸發 §4.4 升級條件）。此觀察留供 UG-G3-SB3 D3 實驗設計參考。"
+  },
+  "rerun_instructions": "docker exec -u vscode -w /workspaces/Stock_Prediction_System2 stock_prediction_system2_devcontainer-app-1 python3 -c \"import os,psycopg2,pandas as pd; from src.ml.triple_barrier import generate_triple_barrier_labels; conn=psycopg2.connect(host='localhost',port=5432,dbname=os.environ['POSTGRES_DB'],user=os.environ['POSTGRES_USER'],password=os.environ['POSTGRES_PASSWORD']); df=pd.read_sql('SELECT stock_id,trade_date,open_price,high_price,low_price FROM stock_prices ORDER BY stock_id,trade_date',conn); print(generate_triple_barrier_labels(df).groupby('stock_id')['target_triple_barrier'].value_counts(dropna=False))\"　—— 連線參數依容器 `.env`（`POSTGRES_DB`/`POSTGRES_USER`/`POSTGRES_PASSWORD`），本檔不重複記錄字面值；NULL vs NaN 對照重跑：`SELECT count(*) FROM stock_prices WHERE open_price IS NULL OR high_price IS NULL OR low_price IS NULL;` 對照 `SELECT stock_id, trade_date FROM stock_prices WHERE open_price = 'NaN'::numeric OR high_price = 'NaN'::numeric OR low_price = 'NaN'::numeric;`"
+}

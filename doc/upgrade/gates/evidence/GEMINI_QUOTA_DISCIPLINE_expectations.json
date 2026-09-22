@@ -1,0 +1,70 @@
+{
+  "_meta": {
+    "purpose": "§0.5 #31+#33 段C（第三次真實每日ETL）執行前基準值，postgres@localhost:5432 唯讀查證",
+    "captured_at_taipei": "2026-09-18T23:01:47",
+    "note": "本檔為執行前基準，非固定預測——若執行時已跨過新交易日，n_lag／批次請求數／每股新增列數需在綁定確認當下重新查證，不得沿用本檔舊值。fetch_failed_source_keys()、theme_stock_mapping、探索判準三類數字則不受交易日推進影響，應維持不變。",
+    "verified_this_session": true
+  },
+  "binding_check_sql": "SELECT current_database(), inet_server_port();",
+  "binding_check_result_at_capture": {"current_database": "postgres", "inet_server_port": 5432},
+  "clock": {
+    "today_taipei()": "2026-09-18",
+    "previous_business_day()": "2026-09-17"
+  },
+  "gemini_call_count_expectation": {
+    "discovery": "1（last_probed=None，依設計會真實呼叫一次；若撞每日配額，記 REFUSED 並繼續，不算失敗）",
+    "nlp": "1～2（依撈到的待評分文章批次數，見 run_nlp_sentiment_pipeline 的 Batch Checkpointing）",
+    "total_upper_bound": 3,
+    "source": "GEMINI_QUOTA_DISCIPLINE_GATE_A_PROPOSAL.md §7（v3 段B複核後訂正）"
+  },
+  "discovery_gate": {
+    "fetch_last_discovery_probed_date()": null,
+    "should_run_discovery_expectation": true,
+    "note": "真實庫從未寫過 source='ai_discovery' 的列（本SB於09-18第二次每日ETL執行當時尚未接線），None 觸發「從未問過」分支，依設計執行一次探索——這是判準正確運作的結果，不是缺陷，PO已裁決不得預先合成一列來讓舊預期（探索0次）成立。"
+  },
+  "feature_lag": {
+    "feature_max_date": "2026-09-17",
+    "price_max_date": "2026-09-17",
+    "n_lag": 0,
+    "note": "n_lag 於執行當下若股價表已推進至新交易日會改變，需在綁定確認時重新查證 fetch_feature_lag()。"
+  },
+  "candidate_prices_max_date_by_market": {"twse": "2026-09-17", "tpex": "2026-09-17"},
+  "active_stock_targets": [
+    {"stock_id": "2454", "market": "TWSE"},
+    {"stock_id": "2059", "market": "TWSE"},
+    {"stock_id": "2330", "market": "TWSE"},
+    {"stock_id": "3008", "market": "TWSE"},
+    {"stock_id": "6488", "market": "TPEX"},
+    {"stock_id": "2382", "market": "TWSE"},
+    {"stock_id": "NVDA", "market": "US"},
+    {"stock_id": "8069", "market": "TPEX"}
+  ],
+  "active_keywords_count": 31,
+  "batch_request_count_expectation": {
+    "formula": "全市場批次取價：每市場（TWSE／TPEX）1 個邏輯請求／有缺口的交易日（UG-G2-SB7）；逐股：US 標的每次執行固定 1 次（yfinance），TWSE／TPEX 標的僅在 candidate_prices 落後 previous_business_day() 時才逐日各 1 次；PTT：1 次看板批次請求（不隨關鍵字數增加，UG-G2-SB7 第 5 項）",
+    "at_capture_time": "candidate_prices 的 twse/tpex 最新日期皆已等於 previous_business_day()（2026-09-17），若執行時仍是同一天，缺口序列為空——批次取價 0 次邏輯請求、TWSE/TPEX 逐股 0 次、US 逐股 1 次（NVDA）、PTT 看板 1 次批次請求。若執行時已跨過新交易日，上述次數需依當下缺口序列重新計算，不得沿用本檔。"
+  },
+  "fetch_failed_source_keys": {
+    "count_at_capture": 47,
+    "keys": [
+      ["2059", "2026-09-07"], ["2059", "2026-09-08"], ["2059", "2026-09-09"], ["2059", "2026-09-10"], ["2059", "2026-09-11"], ["2059", "2026-09-14"],
+      ["2330", "2026-09-07"], ["2330", "2026-09-08"], ["2330", "2026-09-09"], ["2330", "2026-09-10"], ["2330", "2026-09-11"], ["2330", "2026-09-14"],
+      ["2382", "2026-09-07"], ["2382", "2026-09-08"], ["2382", "2026-09-09"], ["2382", "2026-09-10"], ["2382", "2026-09-11"], ["2382", "2026-09-14"],
+      ["2454", "2026-09-07"], ["2454", "2026-09-08"], ["2454", "2026-09-09"], ["2454", "2026-09-10"], ["2454", "2026-09-11"], ["2454", "2026-09-14"],
+      ["3008", "2026-09-07"], ["3008", "2026-09-08"], ["3008", "2026-09-09"], ["3008", "2026-09-10"], ["3008", "2026-09-11"], ["3008", "2026-09-14"],
+      ["6488", "2026-09-07"], ["6488", "2026-09-08"], ["6488", "2026-09-09"], ["6488", "2026-09-10"], ["6488", "2026-09-11"], ["6488", "2026-09-14"],
+      ["8069", "2026-09-07"], ["8069", "2026-09-08"], ["8069", "2026-09-09"], ["8069", "2026-09-10"], ["8069", "2026-09-11"], ["8069", "2026-09-14"],
+      ["NVDA", "2026-09-08"], ["NVDA", "2026-09-09"], ["NVDA", "2026-09-10"], ["NVDA", "2026-09-11"], ["NVDA", "2026-09-14"]
+    ],
+    "note": "09-07～09-14 缺口，§0.5 #32 結案報告已記錄為永久不會自癒（歷史缺口，起算點裁決後不回溯）。段C後應維持這 47 列不變（新增才允許，不得減少或改動既有列）；驗收查詢見下方 per_stock_new_row_check_sql。"
+  },
+  "per_stock_new_row_check_sql": "SELECT stock_id, COUNT(*) FROM daily_ml_features WHERE updated_at > '<段C開始時間戳>' GROUP BY stock_id ORDER BY stock_id;",
+  "theme_stock_mapping": {
+    "row_count_at_capture": 66,
+    "max_updated_at_at_capture": "2026-09-18T06:46:49.046513",
+    "post_execution_requirement": "執行後既有 66 列（依 (theme_keyword, stock_id) 主鍵識別）的 updated_at 最大值必須仍是 2026-09-18T06:46:49.046513 或更早（不得晚於此）——DO NOTHING 生效的直接證據；若探索發現新配對，允許列數增加，但既有列的 updated_at 不得被更新。"
+  },
+  "market_articles_unscored_count_at_capture": 0,
+  "etl_run_log_ai_discovery_count_at_capture": 0,
+  "etl_run_log_latest_run_id_at_capture": 236
+}

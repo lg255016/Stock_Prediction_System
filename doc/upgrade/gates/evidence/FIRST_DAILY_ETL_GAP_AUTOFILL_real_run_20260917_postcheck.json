@@ -1,0 +1,274 @@
+{
+  "row_counts_after_partial_run": {
+    "stock_prices": 449326,
+    "candidate_prices": 1857371,
+    "market_articles": 1340,
+    "article_comments": 137093,
+    "daily_ml_features": 449263,
+    "etl_run_log": 158,
+    "sentiment_cache": 36,
+    "theme_stock_mapping": 53,
+    "tracking_keywords": 29
+  },
+  "row_counts_diff_vs_baseline": {
+    "stock_prices": 63,
+    "candidate_prices": 15777,
+    "market_articles": 10,
+    "article_comments": 908,
+    "daily_ml_features": 0,
+    "etl_run_log": 101,
+    "sentiment_cache": 0
+  },
+  "most_recent_articles": [
+    {
+      "article_id": "2754",
+      "title": "[新聞] 美債殖利率破5%還創19年新高 五股力量恐",
+      "sentiment_score": NaN,
+      "post_time": "2026-09-15 08:07:45"
+    },
+    {
+      "article_id": "2753",
+      "title": "[新聞] 大立光萬金神話崩了？外資降評殺到5字頭",
+      "sentiment_score": NaN,
+      "post_time": "2026-09-15 14:11:07"
+    },
+    {
+      "article_id": "2752",
+      "title": "[標的] 2454聯發科 2nm天璣",
+      "sentiment_score": NaN,
+      "post_time": "2026-09-15 11:14:38"
+    },
+    {
+      "article_id": "2751",
+      "title": "[新聞] 三星記憶體明年Q1漲幅30％起跳！傳蘋果點",
+      "sentiment_score": NaN,
+      "post_time": "2026-09-15 19:55:09"
+    },
+    {
+      "article_id": "2750",
+      "title": "Re: [新聞] 仙人指路再顯神威！台積電鉅額交易價",
+      "sentiment_score": NaN,
+      "post_time": "2026-09-15 19:26:54"
+    },
+    {
+      "article_id": "2749",
+      "title": "[新聞] 輝達及Palantir等據報限制使用最先進AI模",
+      "sentiment_score": NaN,
+      "post_time": "2026-09-15 18:03:17"
+    },
+    {
+      "article_id": "2748",
+      "title": "Re: [新聞] 三星記憶體明年Q1漲幅30％起跳！傳蘋果點",
+      "sentiment_score": NaN,
+      "post_time": "2026-09-16 01:58:30"
+    },
+    {
+      "article_id": "2747",
+      "title": "Re: [新聞] Fed決策倒數！美債空頭大軍集結至「極端",
+      "sentiment_score": NaN,
+      "post_time": "2026-09-16 15:15:29"
+    },
+    {
+      "article_id": "2746",
+      "title": "[新聞] Fed決策倒數！美債空頭大軍集結至「極端",
+      "sentiment_score": NaN,
+      "post_time": "2026-09-16 13:37:24"
+    },
+    {
+      "article_id": "2745",
+      "title": "[新聞] 赴美生產記憶體？路透稱SK海力士擬聯手英",
+      "sentiment_score": NaN,
+      "post_time": "2026-09-16 19:59:56"
+    },
+    {
+      "article_id": "2744",
+      "title": "[新聞] 台積電攻上1750新天價仍被唱衰？謝金河反",
+      "sentiment_score": "0.8920",
+      "post_time": "2026-01-17 23:49:38"
+    },
+    {
+      "article_id": "2743",
+      "title": "[新聞] 台積電衝新天價 國發基金過去一年賺逾",
+      "sentiment_score": "0.7066",
+      "post_time": "2026-01-17 23:19:17"
+    }
+  ],
+  "market_articles_sentiment_null_count": 10,
+  "daily_ml_features_max_trade_date": "2026-09-04",
+  "stock_prices_max_trade_date": "2026-09-16",
+  "etl_run_log_new_summary": [
+    {
+      "source": "ptt",
+      "outcome": "NO_DATA",
+      "n": 22
+    },
+    {
+      "source": "ptt",
+      "outcome": "OK",
+      "n": 6
+    },
+    {
+      "source": "tpex_daily_quotes",
+      "outcome": "OK",
+      "n": 8
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "outcome": "OK",
+      "n": 57
+    },
+    {
+      "source": "twse_mi_index",
+      "outcome": "OK",
+      "n": 8
+    }
+  ],
+  "etl_run_log_new_count": 101,
+  "tracking_keywords_all": [
+    {
+      "keyword": "AI伺服器",
+      "is_active": true,
+      "category": "theme"
+    },
+    {
+      "keyword": "AI伺服器與運算",
+      "is_active": true,
+      "category": "ai_discovered"
+    },
+    {
+      "keyword": "AI晶片與ASIC",
+      "is_active": true,
+      "category": "ai_discovered"
+    },
+    {
+      "keyword": "ASIC/AI晶片",
+      "is_active": true,
+      "category": "ai_discovered"
+    },
+    {
+      "keyword": "ASIC/IC設計",
+      "is_active": true,
+      "category": "ai_discovered"
+    },
+    {
+      "keyword": "CoWoS",
+      "is_active": true,
+      "category": "theme"
+    },
+    {
+      "keyword": "元太",
+      "is_active": true,
+      "category": "ai_discovered"
+    },
+    {
+      "keyword": "光學鏡頭",
+      "is_active": true,
+      "category": "ai_discovered"
+    },
+    {
+      "keyword": "凌巨",
+      "is_active": true,
+      "category": "ai_discovered"
+    },
+    {
+      "keyword": "加密貨幣概念",
+      "is_active": true,
+      "category": "ai_discovered"
+    },
+    {
+      "keyword": "台積電",
+      "is_active": true,
+      "category": "core_stock"
+    },
+    {
+      "keyword": "大立光",
+      "is_active": true,
+      "category": "ai_discovered"
+    },
+    {
+      "keyword": "川湖",
+      "is_active": true,
+      "category": "ai_discovered"
+    },
+    {
+      "keyword": "廣達",
+      "is_active": true,
+      "category": "core_stock"
+    },
+    {
+      "keyword": "散熱模組",
+      "is_active": true,
+      "category": "theme"
+    },
+    {
+      "keyword": "環球晶",
+      "is_active": true,
+      "category": "core_stock"
+    },
+    {
+      "keyword": "生技醫療",
+      "is_active": true,
+      "category": "ai_discovered"
+    },
+    {
+      "keyword": "矽光子",
+      "is_active": true,
+      "category": "theme"
+    },
+    {
+      "keyword": "美債",
+      "is_active": true,
+      "category": "ai_discovered"
+    },
+    {
+      "keyword": "聯發科",
+      "is_active": true,
+      "category": "ai_discovered"
+    },
+    {
+      "keyword": "蘋果供應鏈",
+      "is_active": true,
+      "category": "ai_discovered"
+    },
+    {
+      "keyword": "記憶體",
+      "is_active": true,
+      "category": "ai_discovered"
+    },
+    {
+      "keyword": "輝達",
+      "is_active": true,
+      "category": "core_stock"
+    },
+    {
+      "keyword": "降息",
+      "is_active": true,
+      "category": "macro"
+    },
+    {
+      "keyword": "電子紙",
+      "is_active": true,
+      "category": "ai_discovered"
+    },
+    {
+      "keyword": "電子紙應用",
+      "is_active": true,
+      "category": "ai_discovered"
+    },
+    {
+      "keyword": "電子紙與電子標籤",
+      "is_active": true,
+      "category": "ai_discovered"
+    },
+    {
+      "keyword": "非農",
+      "is_active": true,
+      "category": "macro"
+    },
+    {
+      "keyword": "高端",
+      "is_active": false,
+      "category": "core_stock"
+    }
+  ]
+}

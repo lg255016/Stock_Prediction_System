@@ -1,0 +1,102 @@
+{
+  "purpose": "價格回補前的碰撞報告（`PRE-G3-03` 執行要求 1，PO 2026-09-07）。既有 `stock_prices` 137 列 vs `candidate_prices`，**全欄比對**。",
+  "date": "2026-09-07",
+  "mode": "**唯讀。本次未寫入任何資料。**",
+  "binding": {"current_database": "postgres", "port": 5432},
+
+  "VERDICT": "⚠⚠ **碰撞 25 列，不是預期的 1 列 —— 依執行要求 1，停止並回報，不進行寫入。**",
+
+  "WHY_THE_EXPECTATION_WAS_1": {
+    "cause": "⚠ **先前的比對只看了 `close_price`。** 本次依要求做**全欄比對**（`open`／`high`／`low`／`close`／`volume`），碰撞由 1 列變成 25 列。",
+    "affected_prior_claims": [
+      "`PRE_G3_03_BACKFILL_PROPOSAL.md` §3.1 的「6488 25/26 相符」",
+      "`database/migrations/009_stock_prices_source.sql` 檔頭的同一組數字",
+      "`REMAINING_RISKS.md` RISK-022 面向（一）2026-09-07 追加段的同一組數字"
+    ],
+    "correction": "**那三處的數字對 `close_price` 成立，但會被讀成整列相符。** 全欄比對下，6488 的 26 列中**只有 1 列完全相符**（`2026-09-04`）。",
+    "LESSON": "**「比對過了」不等於「比對完了」** —— 一個只看一欄的比對，與一個看全欄的比對，在輸出格式上長得一樣。"
+  },
+
+  "PER_STOCK": [
+    {"stock_id": "2330", "rows": 18, "comparable": 16, "uncomparable": 2, "collisions": 0},
+    {"stock_id": "2382", "rows": 18, "comparable": 16, "uncomparable": 2, "collisions": 0},
+    {"stock_id": "6488", "rows": 26, "comparable": 26, "uncomparable": 0, "collisions": 25},
+    {"stock_id": "NVDA", "rows": 75, "comparable": 0, "uncomparable": 75, "collisions": null}
+  ],
+  "uncomparable_total": 79,
+  "uncomparable_note": "NVDA 全部 75 列在 `candidate_prices` 無對應（該表只涵蓋 TWSE／TPEx）；2330／2382 各 2 列的交易日不在 `candidate_prices` 的涵蓋範圍內。**137 列中 79 列（58%）無從比對。**",
+
+  "COLLISIONS_CLASSIFIED": {
+    "class_A_lot_granularity": {
+      "count": 24,
+      "stocks": ["6488"],
+      "fields": ["volume"],
+      "mechanism": "**上櫃報表的成交量以「張」為粒度，證交所報表與 yfinance 為實際股數。**",
+      "evidence": {
+        "candidate_prices_volume_is_multiple_of_1000": {
+          "tpex_daily_quotes": "985 / 985 列",
+          "twse_mi_index": "1 / 1970 列"
+        },
+        "stock_prices_volume_is_multiple_of_1000": {
+          "2330": "0 / 18", "2382": "0 / 18",
+          "6488": "1 / 26（**該 1 列即 2026-09-04**，唯一由 `candidate_prices` 寫入者）",
+          "NVDA": "12 / 75（巧合，非制度）"
+        }
+      },
+      "magnitude": "相對差幅 **平均 0.1323%，最大 0.3469%**",
+      "interpretation": "**單位相同（股），精度不同（上櫃為 1000 股一級）。** 差額為零股交易未計入張數。⚠ **這不是錯誤，是量化粒度** —— 但它是**同一欄內的不連續**。",
+      "why_only_6488": "6488 是唯一的上櫃標的；且其 26 列中 25 列在 `UG-G2-SB7 (iii)`（`5181269`，2026-09-04）之前由 **yfinance 備援**寫入，該日之後才改由 `candidate_prices` 供應。**碰撞集合與『yfinance 寫入的那批』完全重合。**",
+      "SIGNIFICANCE": "⚠⚠ **這正是 migration 009 的 `source` 欄要能回答的問題，而它今天還答不出來** —— 那 25 列的 `source` 是 NULL。**若當初就有 `source` 欄，這 24 列的成因是一次 `GROUP BY` 就看得到的事，不需要今天這番推理。**"
+    },
+    "class_B_unexplained": {
+      "count": 1,
+      "row": {"stock_id": "6488", "trade_date": "2026-08-21"},
+      "fields": {
+        "low_price": {"stock_prices": "933.00", "candidate_prices": "931.0000"},
+        "close_price": {"stock_prices": "935.00", "candidate_prices": "941.0000"},
+        "volume": {"stock_prices": "5732166", "candidate_prices": "7461000"}
+      },
+      "volume_magnitude": "**23.17%** —— 與 A 類的 0.13% 差兩個數量級",
+      "verdict": "⚠ **與 A 類性質完全不同**：A 類只差 `volume` 且為量化粒度；本列**價格欄也不同**，且 `volume` 差 23%。**成因仍無從判定。**",
+      "disposition": "**登記為未解差異，刻意不解決**（`PRE-G3-03` 執行要求 3）。"
+    }
+  },
+
+  "IMPACT_ON_BACKFILL": {
+    "what_changes": "回補會為 6488 補入約 960 個歷史交易日，**全部來自 `tpex_daily_quotes`，即張數粒度**；而既有 25 列（2026-07-20 ~ 2026-08-21 期間）是 yfinance 的股數粒度。",
+    "result": "**`stock_prices.volume` 會在 2026-09-04 出現一個粒度接縫** —— 之前 25 列為實際股數，之後為 1000 股一級。",
+    "magnitude_note": "接縫本身的量級小（0.13%），⚠ **但它是同一欄內兩種精度並存，且 `volume` 有活躍消費端**：`daily_ml_features.volume` 與 `volume_ratio_5d`。",
+    "relation_to_RISK_022": "⚠ **這是 RISK-022 面向（三）『欄內單位混合』的新一例，而且比既有那例嚴重**：既有那例（`best_bid_volume`／`best_ask_volume`）**無消費端**，故記為潛在風險；**`volume` 有消費端。**",
+    "mitigation_now_available": "`source` 欄使接縫**可被查詢定位**（`WHERE source = 'yfinance_auto_adjusted'`）—— **但僅對本次之後寫入的列有效；既有 137 列的 `source` 是 NULL。**"
+  },
+
+  "WHAT_I_DID_NOT_DO": [
+    "**未寫入任何資料** —— 執行要求 1 的停止條件已觸發",
+    "**未修正那 24 列** —— 它們是既有資料，處置需 PO 裁決",
+    "**未調整任何判準使碰撞數變成 1**",
+    "未修改 `PRE_G3_03_BACKFILL_PROPOSAL.md`／migration 009 檔頭／`REMAINING_RISKS.md` 的舊數字 —— **更正需 PO 授權，本檔先記錄哪三處受影響**"
+  ],
+
+  "DECISION_POINTS_FOR_PO": [
+    {
+      "id": "C1",
+      "question": "A 類 24 列（張數粒度）是否視為「碰撞」而阻擋回補？",
+      "context": "它們有**已查明的機制**，不是資料損壞。若視為可接受，回補可續行；若不可接受，需先決定既有 25 列的處置。"
+    },
+    {
+      "id": "C2",
+      "question": "回補後 `volume` 的粒度接縫如何處置？",
+      "options": [
+        "(a) 接受，並在契約記載接縫位置與 `source` 查詢方式",
+        "(b) 以 `candidate_prices` 覆寫既有 25 列使全序列同粒度 —— ⚠ **但那是覆寫既有資料，且會銷毀 B 類那列的證據**",
+        "(c) 既有 25 列補標 `source = 'yfinance_auto_adjusted'` —— ⚠ **那是用推理回推來源，與「不猜」的原則相衝突**（雖然本次推理有 985/985 vs 1/1970 的強證據）"
+      ],
+      "my_position": "**不代選。** ⚠ 但要指出 (c) 與 §3.3 的「相等只證明沒有分歧，不證明同源」是同一個問題的反面 —— **這次是「不等」提供了證據，而證據強度與『相等』那次完全不同。是否構成足以標註的來源證據，是 PO 的判斷。**"
+    },
+    {
+      "id": "C3",
+      "question": "三處已寫下的「25/26 相符」數字是否更正？",
+      "context": "見 `WHY_THE_EXPECTATION_WAS_1.affected_prior_claims`。**對 `close_price` 成立，但會被讀成整列相符。**"
+    }
+  ]
+}

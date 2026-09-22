@@ -1,0 +1,56 @@
+{
+  "purpose": "UG-G2-SB7 第一次觸網批次執行的**實測結果**。預期值另檔（`G2_SB7_first_batch_expectations.json`，commit `d01ed87`，**於觸網之前**）。",
+  "date": "2026-09-04",
+  "evidence_label": "`VERIFIED THIS SESSION`（PM 對真實庫 `postgres`@`localhost:5432` 執行）",
+  "WHY_TWO_FILES": "預期與結果**刻意分成兩檔、兩個 commit**。合在一起時，事後修改預期不會留下痕跡；分開後 git 歷史即帶順序（DEC-033 §Decision 第 6 條）。",
+  "STEP_1": {
+    "batch_key": "2026-08-21",
+    "attempt_1": {
+      "outcome": "**FAIL（E2）**",
+      "twse": {"outcome": "OK", "rows": 1085, "http_attempts": 1},
+      "tpex": {"outcome": "FETCH_FAILED", "detail": "回應中找不到可用的報表（診斷：{'top_level_keys': ['date','flagField','stat','tables'], 'table_titles': ['上櫃股票每日收盤行情(不含定價)'], 'shape': None, 'candidate_shapes': ['tables[0].fields/data']})"},
+      "root_cause": "`market_report_table.py` 建立時把 `FIELD_PATTERNS`（TWSE）搬了過來，**卻把 `TPEX_FIELD_PATTERNS` 留在 `scripts/verify/tpex_endpoint_check.py`**。生產路徑因此用 TWSE 的欄名樣式去對 TPEx 的表。**表是找到的**（`tables[0].fields/data`），**只是欄名對不上 `require=(\"code\",\"close\")`**。",
+      "WHY_THIS_MATTERS": "**這正是複查方裁決「第一次不要跑答案未知的日子」所要保護的情形。** PM 原本主張先跑 `previous_business_day()`；若照那個版本執行，這個缺陷會被讀成端點問題 —— 而 `FETCH_FAILED` 與「那天端點就是沒有資料」在沒有預期值可對的情況下**無法區分**。",
+      "ALSO_WORTH_RECORDING": "**失敗被正確記為 `FETCH_FAILED` 而非 `NO_DATA`**，且診斷完整保存於 `etl_run_log.run_id = 7`。**稽核紀錄保留了一次真實的失敗 —— 那正是這張表存在的目的。**",
+      "fix": "`TPEX_FIELD_PATTERNS` 搬入生產模組；`fetch_market_report` 依市場傳入樣式。三項回歸守衛（含 known-FAIL）見 `tests/test_batch_etl_boundary.py::FieldPatternsMustMatchTheMarket`。commit `d53b4d9`。"
+    },
+    "attempt_2": {
+      "outcome": "**PASS —— 七項全部相符**",
+      "E1_twse_rows": {"expected": 1085, "actual": 1085, "verdict": "PASS"},
+      "E2_tpex_rows": {"expected": 887, "actual": 887, "verdict": "PASS"},
+      "E3_assert_complete": {"expected": "總數 2，兩列皆 OK", "actual": {"OK": 2, "NO_DATA": 0, "FETCH_FAILED": 0, "REFUSED": 0, "total": 2}, "verdict": "PASS"},
+      "E4_new_rows": {"expected": 0, "actual": 0, "before": 1821870, "after": 1821870, "verdict": "PASS", "significance": "**這個 0 是事先寫死的預期，不是事後解釋。** 它同時證明 `upsert_to_candidate_prices` 回報的是**實際插入**而非「嘗試」—— `UG-G2-SB9` 的 `cur.rowcount` 就是栽在這裡（887 列全成功卻回報 87，據以宣稱「800 列被靜默丟棄」，**一個不存在的缺陷**）。"},
+      "E5_untouched": {"expected": "117 / 117", "actual": {"daily_ml_features": 117, "stock_prices": 117}, "verdict": "PASS"},
+      "E6_target_database": {"expected": "postgres", "actual": "postgres（兩列皆是）", "verdict": "PASS"},
+      "E7_logical_requests": {"expected": "每市場 1 個", "actual": "twse http_attempts=1、tpex http_attempts=1", "verdict": "PASS"}
+    }
+  },
+  "STEP_2": {
+    "batch_key": "2026-09-03（`previous_business_day()` 於執行當日決定）",
+    "outcome": "**PASS —— 四項全部相符**",
+    "F1_both_markets": {"expected": "同為 OK，或**同為 NO_DATA**；若只有一邊是 NO_DATA 則為缺陷", "actual": "twse OK、tpex OK", "verdict": "PASS（該日為交易日）"},
+    "F2_assert_complete": {"expected": 2, "actual": {"OK": 2, "NO_DATA": 0, "FETCH_FAILED": 0, "REFUSED": 0, "total": 2}, "verdict": "PASS"},
+    "F3_new_rows": {"expected": "OK 則 > 0", "actual": 1972, "detail": "1,821,870 → 1,823,842；**1972 = 1085 + 887，逐項相符**（TWSE 1085、TPEx 887）", "verdict": "PASS"},
+    "F4_untouched": {"expected": "117 / 117", "actual": {"daily_ml_features": 117, "stock_prices": 117, "universe_snapshots": 85641}, "verdict": "PASS"},
+    "NEW_MAX_TRADE_DATE": "`candidate_prices` 的 `max(trade_date)` 由 `2026-08-21` 前進到 `2026-09-03` —— **這是本 SB 第一次真的擴充了資料集。**",
+    "DUAL_TRACK_COUNTING_EARNED_ITS_KEEP": "TPEx 的 **`http_attempts = 3`，而 `logical_requests = 1`**（TWSE 為 1 / 1）。傳輸層有界重試在真實執行中觸發了兩次 —— 與 `UG-G2-SB9` 記錄的 TPEx SSL 不穩定同一形態（DEC-032 §Remaining Risks：成因未查明，有界重試是吸收症狀不是理解成因）。**少了第二軌，這次執行看起來會與 TWSE 完全一樣。**"
+  },
+  "NETWORK_COST": {
+    "logical_requests": 6,
+    "detail": "STEP 1 兩次執行各 2 個（TWSE 2 + TPEx 2）、STEP 2 一次 2 個。",
+    "http_attempts_total": 9,
+    "http_403_or_429": 0,
+    "note": "**403／429 零次** —— 與 `UG-G2-SB9` 在 983 個交易日上的觀測一致。"
+  },
+  "RUN_LOG_STATE": {
+    "rows": 4,
+    "run_ids": "6（twse OK）、7（tpex FETCH_FAILED，含診斷）、8（twse OK）、9（tpex OK）、10-11（STEP 2）",
+    "sequence_gap": "run_id 1~5 由 CHECK 的 known-FAIL 演示與 ROLLBACK 消耗。**無害，但那是 PM 造成的，不是資料遺失。**"
+  },
+  "KNOWN_LIMITS": [
+    "**本次只跑了兩個交易日**，不是一次「每日排程」的完整驗證 —— `run_all_daily_tasks` 尚未接上 `run_price_batch`。",
+    "PTT 的固定頁面 + 記憶體比對尚未實作。",
+    "`NO_DATA` 這一態**在真實執行中尚未被觀測到** —— 兩次執行都落在交易日。它的行為目前只有單元測試覆蓋。**標 `NOT VERIFIED`（生產路徑）。**",
+    "`REFUSED` 同樣未在真實執行中被觀測到（403／429 零次）——**那是好事，但它使該路徑的生產驗證缺席**。"
+  ]
+}

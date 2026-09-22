@@ -1,0 +1,94 @@
+{
+  "purpose": "UG-G2-SB6 延伸回補的**接縫連續性查證**：證明 `--prior-common` 傳入的 984／810 是**查來的真值**，不是本段自己首日的值。",
+  "date": "2026-09-03",
+  "requested_by": "複查方 2026-09-03（匯入真實庫之前必做，零網路）",
+  "evidence_label": "`VERIFIED THIS SESSION`（PM，拋棄式容器 `sb6_seam`，2026-09-03）",
+  "WHY_THIS_MATTERS": "延伸回補的接縫是**整條延伸唯一連接兩批不同時間取得的資料**的地方。而 `fetch_candidate_prices.py` 的報告只記下 `prior_common_supplied` 這個**數值**，**不記它的來源**。於是兩種情況在輸出上完全無法區分：\n  (a) 值取自 DB 裡既有的 2023-08-07 → **真的檢查了接縫**；\n  (b) 值來自腳本自己剛抓到的首日 → **拿自己比自己，0% 變動，必然通過**。\n**(b) 正是 §9A.1 說的「結構上不可能失敗的檢查」。** 『相鄰交易日家數幾乎不會變，所以應該是 (a)』是合理推測 —— **但合理不是證據**。",
+  "SEAM_GEOMETRY": {
+    "extension_direction": "往回取（`--end` 為起算日，逐日遞減）",
+    "extension_first_day": "2023-08-04（週五）",
+    "pre_existing_first_day": "2023-08-07（週一，`UG-G2-SB9` 的資料首日）",
+    "adjacency_check": {
+      "sql": "SELECT DISTINCT trade_date FROM candidate_prices\nWHERE trade_date > '2023-08-04' AND trade_date < '2023-08-07' ORDER BY 1;",
+      "result": "0 列",
+      "meaning": "兩者之間**沒有任何交易日**，故 2023-08-04 與 2023-08-07 確為相鄰交易日，接縫比對的對象正確。"
+    },
+    "note_2023_08_03": "⚠ `2023-08-03` 在兩個市場**皆不存在**（非缺漏）—— 兩來源一致地沒有該日，符合「全市場休市」而非「某一邊漏抓」的形狀。成因未查證（標籤 `NOT VERIFIED`），**但本項不依賴它**：接縫只需要 08-04 與 08-07 相鄰，而上面的 SQL 已直接證明。"
+  },
+  "TWO_INDEPENDENT_CONFIRMATIONS": {
+    "note": "兩條證據互相獨立：第一條**寫於延伸執行之前**（時間上不可能被延伸污染），第二條是**現在對還原庫的直接查詢**。兩條都指向同一組數字。",
+    "confirmation_1_prior_written_records": {
+      "kind": "`UG-G2-SB9` 回補當時寫下的逐日紀錄（延伸尚不存在）",
+      "twse": {
+        "file": "G2_SB9_phase2_ingest_report.json",
+        "date": "20230807",
+        "rows_common_stock": 984
+      },
+      "tpex": {
+        "file": "G2_SB9_tpex_backfill_seg10.json",
+        "date": "20230807",
+        "rows_common_stock": 810
+      }
+    },
+    "confirmation_2_db_query": {
+      "kind": "對還原後的四年資料直接查詢（拋棄式容器 `sb6_seam`）",
+      "sql": "SELECT trade_date, source, count(*) AS rows_in_db\nFROM candidate_prices\nWHERE trade_date IN ('2023-08-03','2023-08-04','2023-08-07','2023-08-08')\nGROUP BY 1,2 ORDER BY 1,2;",
+      "rows": [
+        {
+          "trade_date": "2023-08-04",
+          "source": "tpex_daily_quotes",
+          "rows_in_db": 810
+        },
+        {
+          "trade_date": "2023-08-04",
+          "source": "twse_mi_index",
+          "rows_in_db": 984
+        },
+        {
+          "trade_date": "2023-08-07",
+          "source": "tpex_daily_quotes",
+          "rows_in_db": 810
+        },
+        {
+          "trade_date": "2023-08-07",
+          "source": "twse_mi_index",
+          "rows_in_db": 984
+        },
+        {
+          "trade_date": "2023-08-08",
+          "source": "tpex_daily_quotes",
+          "rows_in_db": 810
+        },
+        {
+          "trade_date": "2023-08-08",
+          "source": "twse_mi_index",
+          "rows_in_db": 984
+        }
+      ],
+      "note_2023_08_03": "無列（該日兩來源皆不存在）"
+    }
+  },
+  "VERDICT": {
+    "twse": {
+      "prior_common_supplied": 984,
+      "true_value_on_2023_08_07": 984,
+      "prior_common_source": "query on 2023-08-07（`UG-G2-SB9` 既有資料）",
+      "case": "(a)",
+      "result": "PASS —— 真值比對"
+    },
+    "tpex": {
+      "prior_common_supplied": 810,
+      "true_value_on_2023_08_07": 810,
+      "prior_common_source": "query on 2023-08-07（`UG-G2-SB9` 既有資料）",
+      "case": "(a)",
+      "result": "PASS —— 真值比對"
+    },
+    "summary": "**兩個市場皆為情況 (a)：接縫確實走了真值比對，且通過。** 延伸首日與前一交易日的普通股家數**完全相同**（變動 0%），遠低於 2% 的連續性判準。"
+  },
+  "HONEST_LIMIT": "⚠ **本檔證明的是「傳入值等於真值」，不是「當時的取值動作查了 DB」。** 兩者的差別在實務上不影響這次的結論 —— **檢查比對的對象確實是真的前一交易日**，那正是該檢查要做的事。**但值得說清楚**：如果當初傳錯而碰巧相等，本檔一樣會是 PASS。**真正的修法是讓來源被記下來，而不是事後論證。**",
+  "SYSTEMATIC_FIX": {
+    "change": "`scripts/verify/fetch_candidate_prices.py` 新增 `--prior-common-source`，值寫入報告的 `segment.prior_common_source`；若給了 `--prior-common` 卻沒給來源，報告會寫入 `PROVENANCE_WARNING`。",
+    "why": "複查方 2026-09-03：「否則下一次同樣讀不出來」。**這次靠兩條旁證補回來了，但那是因為 SB9 剛好留下了逐日紀錄** —— 不能指望下一次也剛好有。",
+    "known_fail_case": "不帶 `--prior-common-source` 執行任何一段 → 報告的 `PROVENANCE_WARNING` 為非 None（本次未重跑取數以觸發，屬 `IMPLEMENTATION EVIDENCE`；下一次實際取數時即為第一個真實案例）。"
+  }
+}

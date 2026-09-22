@@ -1,0 +1,42 @@
+{
+  "purpose": "舊批 `ptt_stock` 排除出特徵之後的**預期**。本檔於改動之前 commit（PO 2026-09-05 要求）。",
+  "date": "2026-09-05",
+  "ruling": "PO 2026-09-05：舊 331 篇採**排除**（特徵層過濾），**不修正、不刪除**。",
+
+  "WHY_EXCLUSION_NOT_CORRECTION": {
+    "decisive_reason": "**就算日期修對了，那 331 篇仍然是另一種取樣。** 舊批是**逐關鍵字搜尋橫跨七年**，新批是**看板固定頁面**。**修正日期只解決「哪一天」，不解決「怎麼取到的」。**",
+    "consequence": "一批日期正確、但取樣方式不同的資料混進特徵，**仍然會讓 RISK-015 的覆蓋率量測失真** —— 而那正是條件 1 一開始要量的東西。",
+    "two_separate_things": {
+      "correction": "**資料完整性** —— 一個把 2019 記成 2026 的欄位是缺陷，修它永遠是對的。**押到「決定要用那批資料」的時候；若那一天不會來，那次對真實庫的授權寫入就永遠不必發生。**",
+      "exclusion": "**特徵組成的決定** —— 要不要讓另一種取樣 regime 進訓練資料。**零 DB 操作、可逆。現在做。**"
+    }
+  },
+
+  "WHY_ALLOWLIST_NOT_DENYLIST": {
+    "failure_directions": {
+      "denylist `source <> 'ptt_stock'`": "日後新增來源而忘了登錄 → **自動進入特徵**，未經檢視的資料靜默混入",
+      "allowlist `source IN (...)`": "日後新增來源而忘了登錄 → **不會進入**，資料誠實地少"
+    },
+    "precedent": "`source_capabilities.py` docstring 逐字：**漏登錄的後果 → NULL（誠實地少）；反過來 → 偽造訊號（安靜地錯）。** 同一條判準在這裡適用。",
+    "bonus": "允許清單**自我說明** —— 它直接寫出哪些 regime 在特徵集裡。"
+  },
+
+  "PRE_REGISTERED_EXPECTATION": {
+    "label": "`VERIFIED THIS SESSION`（唯讀模擬，**未寫入**）",
+    "sql_verbatim": "SELECT count(*) FROM market_articles WHERE sentiment_score IS NOT NULL AND source IN ('ptt_keyword_search','ptt_board_pages') AND post_time::date BETWEEN '2026-05-20' AND '2026-09-04'",
+    "result": 0,
+    "current_state": {"SUCCESS": 38, "SUCCESS_EMPTY": 99, "total": 137},
+    "expected_after_next_feature_run": {"SUCCESS": 0, "SUCCESS_EMPTY": 137, "total": 137},
+    "NOT_ONE_BUT_ZERO": "⚠ 複查方估計 `SUCCESS` 會掉到「約 1」，**實際會是 0**。唯一一篇 `ptt_board_pages` 文章的 `post_time` 是 `2026-09-05 10:07:38`，而特徵窗最大到 **2026-09-04** —— **它落在窗外**。",
+    "THIS_IS_NOT_A_REGRESSION": "⚠⚠ **那不是回歸，是現況的真實樣貌** —— **我們的情緒特徵覆蓋率實質為零**，而先前的 38 是由**日期錯置的舊文**撐起來的。**不事先寫死，執行後看到「情緒全空」會被當成故障。**",
+    "when_it_takes_effect": "**下一次 `run_feature_engineering_pipeline` 執行時**。本次不重跑（單次受控執行的授權已用掉），故 DB 現值維持 38／99 直到下次執行。"
+  },
+
+  "WHAT_WOULD_RESTORE_COVERAGE": [
+    "PTT 歷史回補（另案，Gate 3 之前）—— **它才是覆蓋率的解，不是每日累積**",
+    "E3 修正後的每日執行持續累積（`bccffa9`）",
+    "⚠ 兩者都需要 `push-ipdatetime` 的處置先決定（回補的昂貴部分是每篇一次內頁請求，**先補完再決定要時間戳，整批要重抓**）"
+  ],
+
+  "RECORDED_WHERE": "排除規則本身寫入 `MULTI_SOURCE_DATA_CONTRACT.md` §3.5B —— **不只寫在提案或 Gate B**，那兩份都會移入 `closed/`，而這是一條長期生效的規則（理由與第 5 項 V7 完全相同）。"
+}

@@ -1,0 +1,80 @@
+{
+  "purpose": "UG-G2-SB6 §0.1 決策點 2 的前置：**四年候選池 dump 的實測還原驗證**。在真實庫匯入之前，先在拋棄式容器證明這份 dump 真的還原得出來、且還原結果與產生它的資料庫逐項相符。",
+  "date": "2026-09-03",
+  "WHY_THIS_FILE_EXISTS": "提案 §0.1 原本已寫下「已實測還原」。**寫的當下那件事還沒做。** 一個尚未執行的驗證被寫成完成式，就是 §9 禁止的東西 —— `VERIFIED THIS SESSION` 必須是**已執行**，不是**打算執行**。本檔是把那句話補成真的；若還原失敗，正確處置是改那句話，不是改資料。",
+  "evidence_label": "`VERIFIED THIS SESSION`（PM 於拋棄式容器 `sb6_restore_check` 執行，2026-09-03）",
+  "environment": {
+    "container": "sb6_restore_check（`--rm`，無 volume 掛載，不進 compose 網路，驗證後拆除）",
+    "image": "postgres:18",
+    "server_version": "PostgreSQL 18.6 (Debian 18.6-1.pgdg13+2) on x86_64-pc-linux-gnu",
+    "binding_confirmation": "current_database()=rc / current_setting('port')=5432",
+    "ISOLATION_NOTE": "**刻意不掛 `.devcontainer/postgres-data/`、不進 compose 網路** —— 容器的 `network_mode: service:db` 會使 `localhost:5432` 直達真實開發庫（CLAUDE.md §13.4）。獨立容器讓還原測試在原理上碰不到它。"
+  },
+  "dump_under_test": {
+    "path": "D:\\Python\\Database_Backups\\Stock_Prediction_System2\\stock_prediction_system2_candidate_prices_twse_tpex_4y_20260903_015900.dump",
+    "bytes_on_host": 69742758,
+    "bytes_inside_container": 69742758,
+    "byte_count_check": "**兩者相符。** 這一項不是形式 —— `docker cp` 在本專案曾**靜默失敗**（檔案根本沒進容器，而後續指令照跑、結果被誤讀）。拷貝後逐檔核對大小是那次事故的直接產物。"
+  },
+  "procedure": [
+    "1. docker run --rm -d --name sb6_restore_check -e POSTGRES_DB=rc -e POSTGRES_USER=rc -e POSTGRES_PASSWORD=rc postgres:18",
+    "2. docker cp database/schema.sql + migrations 001~005 + dump 進容器，**核對 dump 位元組數**",
+    "3. psql -v ON_ERROR_STOP=1 -f schema.sql，再依序套用 001~005",
+    "4. **還原前先量**：candidate_prices 0 列 / 2 個 CHECK 已存在",
+    "5. pg_restore -U rc -d rc --data-only -t candidate_prices /tmp/cp4y.dump",
+    "6. 逐項驗證（下方 checks）",
+    "7. 拆除容器"
+  ],
+  "PRE_RESTORE_BASELINE": {
+    "candidate_prices_rows": 0,
+    "check_constraints": 2,
+    "why": "**還原前先量 0 列，還原後才能宣稱那 1,821,870 列來自 dump。** 少了這一步，「還原後有資料」也可能是別的來源留下的。同理先確認 2 個 CHECK 已由 migration 建立 —— `--data-only` 的 dump **不帶 constraint**，所以 CHECK 是 migration 的功勞，不是 dump 的；**這代表 CHECK 在還原時是真的在把關，不是事後補上的裝飾。**"
+  },
+  "checks": {
+    "row_totals": {
+      "total": 1821870,
+      "by_source": [
+        {
+          "source": "tpex_daily_quotes",
+          "rows": 818800,
+          "stocks": 919,
+          "days": 983,
+          "first": "2022-08-03",
+          "last": "2026-08-21"
+        },
+        {
+          "source": "twse_mi_index",
+          "rows": 1003070,
+          "stocks": 1104,
+          "days": 983,
+          "first": "2022-08-03",
+          "last": "2026-08-21"
+        }
+      ],
+      "verdict": "PASS —— 與產生 dump 的 `sb6_ext` 逐項相同"
+    },
+    "tpex_write_guards": {
+      "pe_ratio_not_null": 0,
+      "best_bid_volume_not_null": 0,
+      "best_ask_volume_not_null": 0,
+      "verdict": "PASS —— PO 2026-09-01「**明確禁止**填 0」與買賣量單位守衛（RISK-022 facet 3）在還原後的資料上仍成立。**守衛必須在 dump 的另一端也成立，否則它守的只是寫入路徑，不是資料。**"
+    },
+    "check_constraints": {
+      "names": [
+        "chk_candidate_prices_nonneg",
+        "chk_candidate_prices_ohlc_consistency"
+      ],
+      "verdict": "PASS —— 2 個，且 1,821,870 列全數通過（違反則 pg_restore 會失敗）"
+    },
+    "schema_version": {
+      "max": 5,
+      "verdict": "PASS —— 符合 §0.1 步驟 3 的預期值 5"
+    }
+  },
+  "KNOWN_LIMITS": [
+    "本檔證明的是**這份 dump 可還原且內容相符**，**不等於**真實庫匯入已驗證 —— 真實庫有既有資料、既有連線、既有備份義務，那是決策點 2 的範圍，需另行貼綁定確認後執行。",
+    "`--data-only` 還原不驗證 index 與 FK 的重建，因為它們來自 migration 而非 dump。",
+    "PostgreSQL 18.6 對 18.6：**未驗證跨大版本還原**。"
+  ],
+  "rerun": "上方 procedure 七步可逐字重跑；dump 在 repo 外，路徑見 `dump_under_test.path`。**dump 本身無版控、無校驗碼**（§0.5 #15 已記為風險），重跑者應先核對位元組數 69,742,758。"
+}

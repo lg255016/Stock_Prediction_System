@@ -1,0 +1,123 @@
+# requirements.lock.txt — 依賴鎖版檔（GOV-03）
+#
+# 用途：使 GOV-02 建立的 dev container 測試基線可被重現。
+#
+# 產出來源：GOV-02 已驗證的 dev container
+#   容器      : stock_prediction_system2_devcontainer-app-1
+#   身分      : vscode（**必須**；以 root 執行 pip freeze 只會看到 6 個套件）
+#   指令      : docker exec -u vscode <container> python -m pip freeze
+#   產出日期  : 2026-08-23
+#
+# 環境指紋（重現時應一致）：
+#   Python        : 3.14.6 (main, Jul 14 2026, 04:42:00) [GCC 14.2.0]
+#   基底映像      : mcr.microsoft.com/devcontainers/python:3-3.14-trixie
+#   基底 digest   : sha256:f04a1e9c29e371436d6086908eed22ac0ba087bae0f8edb826838283cf3d1726
+#
+# 對應基線（GOV-02，commit 2e0a8a5）：
+#   全套測試      : 154 tests / OK
+#   模型型別對照  : logistic_regression -> sklearn.LogisticRegression
+#                   random_forest       -> sklearn.RandomForestClassifier
+#                   lightgbm            -> lightgbm.LGBMClassifier
+#                   xgboost             -> xgboost.XGBClassifier
+#                   robust scaler       -> sklearn.RobustScaler
+#                   standard scaler     -> sklearn.StandardScaler
+#
+# 與 requirements.txt 的關係：
+#   requirements.txt  = 意圖檔（宣告需要哪些套件），本檔案不取代它
+#   requirements.lock = 事實檔（宣告當時裝出了哪些精確版本）
+#   兩者並存。requirements.txt 的版本約束補強屬另案，GOV-03 未處理。
+#
+# 何時該重新產生：見 CLAUDE.md §13.6
+#
+# 套件總數：87（直接依賴 15 + 傳遞依賴 72）
+
+# ===== 直接依賴（對應 requirements.txt 的 15 項）=====
+beautifulsoup4==4.15.0
+google-generativeai==0.8.6
+jieba==0.42.1
+lightgbm==4.7.0
+pandas==3.0.5
+plotly==6.9.0
+psycopg2-binary==2.9.12
+python-dotenv==1.2.3
+requests==2.34.2
+scikit-learn==1.9.0
+snownlp==0.12.3
+streamlit==1.62.0
+tenacity==9.1.4
+xgboost==3.4.1
+yfinance==1.6.0
+
+# ===== 傳遞依賴 =====
+GitPython==3.1.50
+Jinja2==3.1.6
+MarkupSafe==3.0.3
+altair==6.2.2
+annotated-types==0.8.0
+anyio==4.14.2
+attrs==26.1.0
+blinker==1.9.0
+certifi==2026.7.22
+cffi==2.1.1
+charset-normalizer==3.5.1
+click==8.4.2
+cryptography==50.0.0
+curl_cffi==0.16.0
+gitdb==4.0.12
+google-ai-generativelanguage==0.6.15
+google-api-core==2.25.2
+google-api-python-client==2.198.0
+google-auth-httplib2==0.4.1
+google-auth==2.56.3
+googleapis-common-protos==1.75.0
+grpcio-status==1.71.2
+grpcio==1.83.0
+h11==0.16.0
+httplib2==0.32.0
+httptools==0.8.0
+idna==3.19
+itsdangerous==2.2.0
+joblib==1.5.3
+jsonschema-specifications==2025.9.1
+jsonschema==4.26.0
+lxml==6.1.2
+multitasking==0.0.13
+narwhals==2.24.0
+numpy==2.5.2
+nvidia-nccl-cu13==2.31.2
+packaging==26.2
+peewee==4.3.0
+pillow==12.3.0
+platformdirs==4.11.3
+proto-plus==1.28.2
+protobuf==5.29.6
+pyarrow==25.0.1
+pyasn1==0.6.4
+pyasn1_modules==0.4.2
+pycparser==3.0
+pydantic==2.13.4
+pydantic_core==2.46.4
+pydeck==0.9.3
+pyparsing==3.3.2
+python-dateutil==2.9.0.post0
+python-multipart==0.0.32
+pytz==2026.3.post1
+referencing==0.37.0
+rpds-py==2026.6.3
+scipy==1.18.0
+setuptools==82.0.1
+six==1.17.0
+smmap==5.0.3
+soupsieve==2.9.2
+starlette==1.6.0
+threadpoolctl==3.6.0
+toml==0.10.2
+tqdm==4.70.0
+typing-inspection==0.4.4
+typing_extensions==4.16.0
+uritemplate==4.2.0
+urllib3==2.7.0
+uvicorn==0.52.4
+watchdog==6.0.0
+websockets==16.1.1
+wheel==0.46.3

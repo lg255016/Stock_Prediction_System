@@ -1,0 +1,86 @@
+{
+  "purpose": "測試 Stub 稽核 —— Gate B 執行結果，依 STUB_AUDIT_criteria.json（commit 481e7f0）方法執行。",
+  "date": "2026-09-08",
+  "execution_environment": {
+    "isolation": "git worktree（獨立於主工作目錄）建立於拋棄式 scratchpad 路徑，複製進 stock_prediction_system2_devcontainer-app-1 容器 /tmp/stub_audit_wt 執行，容器內 Python 3.14.6 15 套件齊備（CLAUDE.md §13.0 正式環境）",
+    "disposable_db": "postgres:18 容器 stub_audit_tmpdb，以 --network container:stock_prediction_system2_devcontainer-app-1 加入 app 容器網路命名空間，監聽 port 5433（與真實庫 5432 不同埠，避免衝突），綁定確認 current_database()='postgres' inet_server_port()=5433",
+    "real_db_zero_touch": {
+      "before": {"article_comments":136185,"candidate_prices":1825814,"daily_ml_features":3713,"entity_mapping":5,"etl_run_log":38,"market_articles":1330,"schema_version":9,"sentiment_cache":36,"stock_prices":3713,"theme_stock_mapping":43,"tracking_keywords":27,"universe_snapshots":85641},
+      "after": {"article_comments":136185,"candidate_prices":1825814,"daily_ml_features":3713,"entity_mapping":5,"etl_run_log":38,"market_articles":1330,"schema_version":9,"sentiment_cache":36,"stock_prices":3713,"theme_stock_mapping":43,"tracking_keywords":27,"universe_snapshots":85641},
+      "identical": true,
+      "verdict": "真實開發資料庫全程零連線，前後列數逐表相同"
+    },
+    "teardown": "worktree（git worktree remove）、容器內 /tmp/stub_audit_wt、拋棄式臨時 DB 容器（docker rm -f -v stub_audit_tmpdb）皆已拆除並確認"
+  },
+
+  "guard_module_note": "⚠ 重要且與 Gate A 提案原始設計不同之處（實測發現）：Python socket 層攔截（socket.getaddrinfo／socket.create_connection）**不會**攔到 psycopg2（libpq C 擴充）的連線——libpq 在 C 層直接做 socket syscall，繞過 Python 的 socket 模組。已用一個構造實驗直接驗證：武裝 socket 攔截後呼叫 psycopg2.connect() 仍成功連線，未被攔截層擋下。因此本次對 DB 的『零觸網』保障**不是**靠 socket 攔截，而是靠：(1) DB_HOST/DB_PORT 環境變數導向拋棄式臨時 DB；(2) 額外對 psycopg2.connect 本身加一層 Python 級別的呼叫計數 + 強制導向包裝（不論呼叫端要求什麼 host/port，一律覆寫為 localhost:5433）。socket 層攔截經驗證對 requests（HTTP，PO 關切的 TWSE/PTT/yfinance 型呼叫）確實有效——已用 requests.get() 對外部網域的呼叫實測，攔截在 getaddrinfo 階段即生效，與 PO 指出『DNS 先於 TCP』完全吻合。",
+
+  "step_0_result": "已由 STUB_AUDIT_criteria.json 記錄：全部 11 檔在 G2_SB7 結案 commit（4c6e3f6）當下即已存在且符合 stub 條件式形態，「九個」為當時計算誤植，非後續新增。本次執行未重新查證（criteria 已鎖定，不重複）。",
+
+  "per_file_as_is_run": [
+    {"file":"tests/test_db_read_semantics.py","tests_run":14,"result":"PASS","getaddrinfo_calls":0,"create_connection_calls":0,"psycopg2_connect_calls":0,"note":"module-level try/except psycopg2 stub 在容器內不觸發（真實套件存在）；per-test @patch(\"src.loaders.db_writer.psycopg2.connect\") 攔在 I/O 邊界，其上 SQL 組裝/資料轉換邏輯為真實程式碼"},
+    {"file":"tests/test_canonical_stock_id.py","tests_run":17,"result":"PASS","getaddrinfo_calls":0,"create_connection_calls":0,"psycopg2_connect_calls":0,"note":"部分測試類別（ETLPipelineManagerCanonicalDispatchTests）對 DBWriter/TwseScraper/YFinanceAPI 整個類別替身——見下方 shape_b_removal_experiment"},
+    {"file":"tests/test_stationarity_features.py","tests_run":9,"result":"PASS","getaddrinfo_calls":0,"create_connection_calls":0,"psycopg2_connect_calls":0,"note":"純特徵計算測試，未見任何 DB/網路呼叫路徑，psycopg2 stub header 為 import chain 副作用，非本檔測試邏輯所需"},
+    {"file":"tests/test_time_alignment.py","tests_run":13,"result":"PASS","getaddrinfo_calls":0,"create_connection_calls":0,"psycopg2_connect_calls":0,"note":"時間對齊純函式測試，無 DB/網路呼叫路徑"},
+    {"file":"tests/test_feature_aggregator_alignment.py","tests_run":8,"result":"PASS","getaddrinfo_calls":0,"create_connection_calls":0,"psycopg2_connect_calls":0,"note":"特徵聚合純函式測試，無 DB/網路呼叫路徑"},
+    {"file":"tests/test_research_features.py","tests_run":6,"result":"PASS","getaddrinfo_calls":0,"create_connection_calls":0,"psycopg2_connect_calls":0,"note":"純數學指標測試，無 DB/網路呼叫路徑"},
+    {"file":"tests/test_comment_features.py","tests_run":19,"result":"PASS","getaddrinfo_calls":0,"create_connection_calls":0,"psycopg2_connect_calls":0,"note":"特徵計算測試，無 DB/網路呼叫路徑（雖 stub 了 psycopg2，該套件未被任一測試實際用到）"},
+    {"file":"tests/test_market_articles_contract.py","tests_run":11,"result":"PASS","getaddrinfo_calls":0,"create_connection_calls":0,"psycopg2_connect_calls":0,"note":"實測發現：DBWriter.__new__(DBWriter) 繞過建構子 + writer._execute_batch = MagicMock() —— 這是比 @patch 更細粒度的 I/O 邊界攔截（攔在 DBWriter 內部的單一 I/O 收斂點 _execute_batch，其上 SQL 組裝與契約驗證邏輯仍為真實程式碼），Gate A 提案原始 grep 條件（僅比對 @patch(）未偵測到此模式，屬本次稽核發現的分類盲點"},
+    {"file":"tests/test_ptt_comments.py","tests_run":0,"result":"IMPORT ERROR（獨立執行時）","getaddrinfo_calls":0,"create_connection_calls":0,"psycopg2_connect_calls":0,"note":"⚠⚠ 重大發現，見下方 independent_import_defect_found"},
+    {"file":"tests/test_ml_feature_store_contract.py","tests_run":8,"result":"PASS","getaddrinfo_calls":0,"create_connection_calls":0,"psycopg2_connect_calls":0,"note":"同 test_market_articles_contract.py 型態，DBWriter 內部方法級別攔截"},
+    {"file":"tests/test_tracking_keyword_integrity.py","tests_run":15,"result":"PASS","getaddrinfo_calls":0,"create_connection_calls":0,"psycopg2_connect_calls":0,"note":"寫入契約測試，方法級別攔截；一測試呼叫真實 Gemini stub 路徑但不觸網（google.generativeai 本身在此測試被另行 stub，未在本次稽核套件清單內，僅為旁觀察）"}
+  ],
+
+  "classification_correction": {
+    "finding": "Gate A 提案 §3.3 的初步靜態分類（僅以 grep '@patch(' 判定有無第二層攔截）低估了攔截覆蓋率——test_market_articles_contract.py／test_ml_feature_store_contract.py 等『形狀 C 候選』實際上使用 DBWriter.__new__(DBWriter) + 方法級 MagicMock 賦值（非裝飾器語法）達到與 @patch 相同效果的 I/O 邊界攔截，Gate A 提案的 grep 條件對此無感。",
+    "corrected_statement": "AS-IS 執行結果顯示：11 個候選檔案中，10 個成功匯入者，全部 0 次真實 psycopg2.connect／socket 層呼叫——即『目前沒有任何一個候選檔案的測試套件會在容器內意外碰到真實 I/O』，攔截機制（無論是 @patch 裝飾器、方法級 MagicMock 賦值、或該欄位根本不在測試路徑上）普遍生效。這是好消息，但也代表 Gate A 提案原先鎖定的『形狀 B（類別整體替身）＝需要逐測試裁決比對』的候選集合需要擴大——凡是『攔截存在』的檔案，理論上都適用同一個『移除攔截層看裁決是否改變』的問題，不只 test_canonical_stock_id.py 一檔。"
+  },
+
+  "independent_import_defect_found": {
+    "file": "tests/test_ptt_comments.py",
+    "description": "獨立執行（python -m unittest tests.test_ptt_comments，非透過 python -m unittest discover）會直接 ImportError，且與本次稽核的攔截機制無關——純粹是該檔自己的 stub guard 邏輯缺陷。",
+    "root_cause": "該檔第 15 行 `if \"tenacity\" not in sys.modules:` **從未先嘗試真正 import tenacity**（不像其他檔案採 `try: import X except ModuleNotFoundError:` 形態），純粹以 sys.modules 目前是否已有登錄來決定要不要安裝假 stub。在乾淨行程（尚無任何模組匯入過 tenacity）下獨立執行本檔，這個條件必為真，導致無論真實 tenacity 套件是否存在、是否可用，都會**無條件**裝上一個只有三個假屬性（retry／stop_after_attempt／wait_exponential）的假模組——**該假模組沒有定義 `retry_if_exception`**，而 src/extractors/ptt_scraper.py:7 需要 `from tenacity import retry, retry_if_exception, stop_after_attempt, wait_exponential`，因此撞上 ImportError。",
+    "reproduction": "已於容器內直接執行 `python -m unittest tests.test_ptt_comments -v`（未經本次稽核任何攔截機制介入）重現，原始輸出：`ImportError: cannot import name 'retry_if_exception' from 'tenacity' (unknown location)`",
+    "why_full_suite_passes": "`python -m unittest discover` 會依模組匯入順序，讓某個字母序更早載入、且會真正 `import tenacity` 的測試檔先把真實套件登錄進 sys.modules，使本檔的 `if \"tenacity\" not in sys.modules` 條件為假，正確跳過假 stub、改用真實套件——**但這是執行順序的偶然結果，不是設計保證**。",
+    "same_family_as": "PROJECT_STATUS.md §0.5 #17 已記載同型現象於 host 環境（tests/test_ptt_board_pages.py 單獨執行 ModuleNotFoundError: tenacity，全套 discover 會過，因為別的測試檔先塞了 tenacity stub）——本次在**容器內**（非 host）針對**不同檔案**（test_ptt_comments.py，非 test_ptt_board_pages.py）獨立重現同一根因，證實這不是 host 降級環境獨有的問題，而是 stub guard 寫法本身（『檢查 sys.modules 是否已有，不檢查真的能不能 import』）在任何環境、只要匯入順序不巧就會發作的結構性缺陷。",
+    "severity_direction": "此為『測試基礎設施本身在特定執行方式下會炸開』，不是『裁決被錯誤掩蓋』——不落入 §6.2 表格的『假 PASS/假 FAIL』分級，是第三種情況：不穩定（執行方式敏感），已標記供後續處理，本案依判準不修復。"
+  },
+
+  "shape_b_removal_experiment": {
+    "target": "tests/test_canonical_stock_id.py :: ETLPipelineManagerCanonicalDispatchTests.test_twse_primary_success_does_not_call_yfinance",
+    "method": "於拋棄式 worktree 內複製該測試邏輯，移除三個 @patch（DBWriter／TwseScraper／YFinanceAPI），網路攔截（getaddrinfo + create_connection，阻擋模式）已於移除 @patch 之前武裝就位，DB_HOST/DB_PORT 已導向拋棄式臨時 DB",
+    "before_removal_decision": "PASS（14 個相關測試中之一，AS-IS 執行全部通過）",
+    "after_removal_decision": "ERROR（非 FAIL）：`AttributeError: 'method' object has no attribute 'return_value' and no __dict__ for setting new attributes`，發生於 `manager.twse_scraper.fetch_twse_stock_data.return_value = raw_twse_df` 這一行——移除 @patch 後 `fetch_twse_stock_data` 是真實綁定方法，不是 Mock，無法賦值 `.return_value`",
+    "decision_changed": true,
+    "network_touched": false,
+    "network_touch_note": "此測試在觸及任何真實網路/DB 呼叫**之前**就已經因為程式本身的 mock-only API（.return_value）撞上 AttributeError 而終止，getaddrinfo/create_connection/psycopg2_connect 呼叫次數皆為 0",
+    "severity_direction": "非『假 PASS→FAIL 缺陷候選』——這是**必要隔離設計**的最強形式：該測試的斷言與資料佈置手法（`.return_value`、`.assert_called_once_with`、`.call_args`）本身就是 Mock 專屬 API，移除 @patch 不是『讓測試改測真實邏輯』，而是讓測試的程式碼本身無法執行。此類測試存在的目的是驗證『調度邏輯呼叫了正確的下游方法與參數』（Canonical ID 是否正確傳遞），不是驗證『下游套件真的能連上』——兩者是不同層次的正確性，該測試對前者仍有真實檢測力（見下方 known-FAIL 構造），對後者從未宣稱覆蓋。",
+    "scope_disclosure": "⚠ 本次僅對 test_canonical_stock_id.py 的 1 個代表性測試（ETLPipelineManagerCanonicalDispatchTests 類別的其中一個方法）實際執行移除實驗，未窮盡該類別全部測試、亦未對其餘 10 個候選檔案的每一個測試逐一執行移除實驗（該類別另有數個結構相同的測試方法，如 test_twse_fallback_to_yfinance_twse_market 等，基於相同的 mock-only API 依賴，預期會有相同的 ERROR 結果，但這是**推論，非逐一實測**，如實揭露）。窮盡式逐測試比對（criteria.json 的 step_2_shape_b_diff 原始設計）在 Gate B 這一輪的時間預算內未能對全部 ~120 個候選測試逐一執行，屬本次執行的範圍限制，非判準設計缺陷。"
+  },
+
+  "known_fail_construction": {
+    "target": "同上測試的資料流正確性斷言",
+    "method": "在 shape_b_removal_experiment 的**原始（含 @patch）**版本上，故意把最終斷言改成比對一個錯誤的 stock_id（\"9999\"，而非真實應算出的 \"2330\"），確認斷言本身會抓到這個構造出來的錯誤",
+    "result": "FAIL（非 ERROR）：`AssertionError: '2330' != '9999'`——已實際執行並取得原始輸出（見 §0 STEP_4 產物）",
+    "conclusion": "此構造證明：即使 test_canonical_stock_id.py 的相關測試類別對 DBWriter/TwseScraper/YFinanceAPI 做了整個類別替身（Mock），其斷言（檢查 DataCleaner 真實 canonical 轉換邏輯算出的 stock_id 是否正確傳遞到 db_writer.upsert_to_stock_prices 的呼叫參數）仍在檢查**真實計算邏輯**（canonical ID 轉換）的產出，不是空洞的『反正都會 PASS』——本稽核方法本身（能夠偵測『移除/竄改後裁決真的會變』）在此案例上被證實有偵測能力，滿足 CLAUDE.md §9A.2 要求"
+  },
+
+  "definition_of_done_status": {
+    "step_0_落差查明": "已完成（承接 criteria.json，本次未重複）",
+    "逐檔分類_11個候選檔案": "已完成 AS-IS runtime 驗證（見 per_file_as_is_run），並發現一個 grep 條件的分類盲點（見 classification_correction）與一個獨立於本稽核設計之外的既有缺陷（見 independent_import_defect_found）",
+    "形狀B逐測試裁決比對": "⚠ 部分完成——對 1 個代表性測試完整執行並記錄；未窮盡該類別及其餘候選檔案的全部 ~120 個測試，已在 shape_b_removal_experiment.scope_disclosure 誠實揭露範圍限制",
+    "網路觸碰分類": "已完成本次實際執行的測試點；socket 層攔截對 requests/HTTP 型呼叫有效已獨立驗證，對 psycopg2 無效已獨立驗證並記錄於 guard_module_note",
+    "known_FAIL": "已完成並實際執行（見 known_fail_construction）",
+    "不修改任何程式碼測試檔": "已確認——git status --short 顯示主工作目錄僅有稽核前既有的 5 個未追蹤執行腳本（與本次稽核無關），無任何測試檔或程式碼變更",
+    "real_db_zero_touch": "已確認，見 execution_environment.real_db_zero_touch"
+  },
+
+  "recommendation_for_po": "本次 Gate B 執行已完整交付 criteria.json 要求的核心產出（分類、known-FAIL、網路觸碰驗證方法、DB 零觸碰），但『形狀 B 逐測試裁決比對』因時間預算未窮盡全部候選測試，僅以 1 個代表性案例證明方法可行且已產出真實結論。建議：(1) 若此範圍限制可接受，本案可依此結果收尾，將『擴大到全部候選測試』列為未驗證清單項、有名字有去處；(2) 若需要窮盡覆蓋，需另排一輪執行時間，方法已驗證可行，可直接套用同一套 worktree/guard 機制逐檔案批次執行。",
+
+  "PO_DECISION_2026_09_08": {
+    "verdict": "選項 (1) 收尾。窮盡覆蓋不排『另一輪』，改綁事件——不重演 §0.5『綁事件的規則零漏，綁個案的漏了兩次』的教訓。",
+    "reasoning": "AS-IS 驗證已排除本案立案時最擔心的情境（container 裡也在測假貨）：11 檔全部 0 次真實 psycopg2/socket 呼叫，stub 作為隔離有效；條件式 stub 在容器內本來就不啟動，危害集中在 host 降級環境與匯入順序脆弱性（#17 家族），承重程度已經變了。剩下的 ~120 個測試的『有多少在測假貨』確實未回答，但這個問題不需要一次窮盡才有意義。",
+    "new_rule": "日後任何 SB 修改這 11 檔（見 CANDIDATE_FILES_TODAY）中任一檔、或其受測模組時，該檔的逐測試裁決比對隨該 SB 一併執行，沿用本次驗證過的 worktree + 雙層網路攔截 + DB_HOST/DB_PORT 導向機制（方法見 STUB_AUDIT_criteria.json 與 shape_b_removal_experiment）。債務隨接觸清償，不積成一輪大考。",
+    "unverified_item_named": "120 個候選測試（11 檔扣除已執行的 1 個代表案例）的逐測試裁決比對——有名字（本欄）、有去處（上述 new_rule，綁事件觸發，不綁排程輪次）"
+  }
+}

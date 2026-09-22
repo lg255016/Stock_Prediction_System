@@ -1,0 +1,149 @@
+{
+  "purpose": "UG-G3-SB2 Gate A §10 DoD 第 4 項——entity_mapping 路由補齊 457 筆（455 檔）於真實開發庫 postgres@localhost:5432 的實際寫入證據，含 RISK-013 三項協議與惰性驗證（步驟 5）發現、PO 裁決。",
+  "date": "2026-09-09",
+  "authorization": "PO 2026-09-09 binding confirmation：a2d7641 版本的 scripts/verify/ug_g3_sb2_backfill_entity_mapping.py --write，範圍 457 列，腳本不得再改。",
+  "script_version": "a2d7641",
+  "steps": {
+    "step1_backup": {
+      "label": "VERIFIED THIS SESSION",
+      "command": "docker exec -e PGPASSWORD=<依 .env> stock_prediction_system2_devcontainer-db-1 pg_dump -Fc -h localhost -U postgres -d postgres > <path>",
+      "path": "D:\\Python\\Database_Backups\\Stock_Prediction_System2\\stock_prediction_system2_PRE_g3_sb2_routing_20260909_232124.dump",
+      "size_bytes": 71828551,
+      "exit_code": 0,
+      "sanity_check": "與同期基準備份 stock_prediction_system2_PRE_g3_sb1_tb_labels_20260909_151621.dump（71,826,690 bytes）量級相符，非異常偏小"
+    },
+    "step2_laziness_baseline_before_write": {
+      "label": "VERIFIED THIS SESSION",
+      "method": "DBWriter().fetch_active_stock_targets()（entity_mapping ⋈ tracking_keywords(is_active=TRUE)）",
+      "result": [
+        {"stock_id": "2330", "market": "TWSE"},
+        {"stock_id": "2382", "market": "TWSE"},
+        {"stock_id": "6488", "market": "TPEX"},
+        {"stock_id": "NVDA", "market": "US"}
+      ],
+      "count": 4
+    },
+    "step3_write": {
+      "label": "VERIFIED THIS SESSION",
+      "command": "docker exec -i -u vscode -w /workspaces/Stock_Prediction_System2 stock_prediction_system2_devcontainer-app-1 python scripts/verify/ug_g3_sb2_backfill_entity_mapping.py --write --backup /workspaces/Database_Backups/Stock_Prediction_System2/stock_prediction_system2_PRE_g3_sb2_routing_20260909_232124.dump",
+      "stdin_confirmation": "postgres（資料庫名稱確認，與 CONN CHECK 回傳值相符）",
+      "raw_output": "備份檔檢查通過：.../stock_prediction_system2_PRE_g3_sb2_routing_20260909_232124.dump（71,828,551 bytes，3.0 分鐘前）\nCONN CHECK: ('postgres', 'postgres', 5432)\n既有 entity_mapping：5 列\n宇宙股票 candidate_prices 有名稱列：444877 列（458 檔）\n待新增路由列：457 筆（455 檔）\n撞名檢查通過（新增列彼此、對既有、對宇宙外，三者皆無撞名）。\nINSERT 影響列數核對通過：457 == 457\n既有 5 列核對通過：未被本次寫入動到。\n新增 457 列逐列讀回核對通過：與記憶體預期完全相符。\n總列數核對通過：462 == 462（既有 + 新增）。\nCOMMIT 完成。\n=== 寫入後真實庫 entity_mapping 總列數 === (462,)",
+      "exit_code": 0
+    },
+    "step4_post_write_readonly_verification": {
+      "label": "VERIFIED THIS SESSION",
+      "queries_and_results": {
+        "total_count": {"sql": "SELECT count(*) FROM entity_mapping;", "result": 462},
+        "auto_prefix_count": {"sql": "SELECT count(*) FROM entity_mapping WHERE description LIKE '[auto:UG-G3-SB2]%';", "result": 457},
+        "old_name_count": {"sql": "SELECT count(*) FROM entity_mapping WHERE description LIKE '%舊簡稱%';", "result": 2},
+        "market_distribution": {"sql": "SELECT market, count(*) FROM entity_mapping WHERE description LIKE '[auto:%' GROUP BY 1 ORDER BY 1;", "result": [["TPEX", 130], ["TWSE", 327]]},
+        "existing_4_stocks_unchanged": {
+          "sql": "SELECT keyword, stock_id, market, description FROM entity_mapping WHERE stock_id IN ('2330','2382','6488','NVDA') ORDER BY 1;",
+          "result": [
+            ["NVDA", "NVDA", "US", "Ticker 原名"],
+            ["台積電", "2330", "TWSE", "中文全稱"],
+            ["廣達", "2382", "TWSE", "中文全稱"],
+            ["環球晶", "6488", "TPEX", "中文全稱"],
+            ["輝達", "NVDA", "US", "中文譯名"]
+          ],
+          "conclusion": "與寫入前既有 5 列逐字相同，未被本次寫入動到"
+        },
+        "no_asterisk_keywords": {"sql": "SELECT count(*) FROM entity_mapping WHERE keyword LIKE '%*%';", "result": 0},
+        "genuine_rename_stocks": {
+          "sql": "SELECT keyword FROM entity_mapping WHERE stock_id IN ('6111','8932') ORDER BY 1;",
+          "result": ["光聚晶電", "大宇資", "宏大", "智通"]
+        }
+      }
+    },
+    "step5_laziness_verification_after_write": {
+      "label": "VERIFIED THIS SESSION",
+      "method": "DBWriter().fetch_active_stock_targets()，與 step2 基線比對",
+      "result": [
+        {"stock_id": "2059", "market": "TWSE"},
+        {"stock_id": "2330", "market": "TWSE"},
+        {"stock_id": "2382", "market": "TWSE"},
+        {"stock_id": "2454", "market": "TWSE"},
+        {"stock_id": "3008", "market": "TWSE"},
+        {"stock_id": "6488", "market": "TPEX"},
+        {"stock_id": "8069", "market": "TPEX"},
+        {"stock_id": "NVDA", "market": "US"}
+      ],
+      "count": 8,
+      "comparison_to_baseline": "MISMATCH：4 筆 → 8 筆，新增 2059／2454／3008／8069。原提案 §5「路由列補齊當下完全惰性」宣稱在此不成立",
+      "status": "依 RISK-013 協議「任一步不符即停、回報、不進下一步」，於此處停手並回報，未繼續拋棄式容器還原驗證與後續步驟，等待 PO/reviewer 裁決"
+    },
+    "root_cause_investigation": {
+      "label": "VERIFIED THIS SESSION",
+      "query_1": {
+        "purpose": "這 4 檔在 entity_mapping ⋈ tracking_keywords 的完整列",
+        "result": [
+          ["川湖", "2059", "TWSE", "[auto:UG-G3-SB2] 交易所簡稱（candidate_prices.security_name）", true, "ai_discovered"],
+          ["聯發科", "2454", "TWSE", "[auto:UG-G3-SB2] 交易所簡稱（candidate_prices.security_name）", true, "ai_discovered"],
+          ["大立光", "3008", "TWSE", "[auto:UG-G3-SB2] 交易所簡稱（candidate_prices.security_name）", true, "ai_discovered"],
+          ["元太", "8069", "TPEX", "[auto:UG-G3-SB2] 交易所簡稱（candidate_prices.security_name）", true, "ai_discovered"]
+        ]
+      },
+      "query_2": {
+        "purpose": "對應 tracking_keywords 列（含建立時間）",
+        "result": [
+          ["元太", true, "ai_discovered", "2026-08-21T02:30:32.637591"],
+          ["大立光", true, "ai_discovered", "2026-08-21T02:30:32.637591"],
+          ["川湖", true, "ai_discovered", "2026-08-17T08:20:57.112638"],
+          ["聯發科", true, "ai_discovered", "2026-08-20T15:49:32.626067"]
+        ],
+        "conclusion": "四個關鍵字均早於本 SB（2026-08-17～21）已由 AI 熱門詞探索機制加入 tracking_keywords 並設為 active，寫入前沒有對應路由，是「抓了但接不到任何股票」的孤兒狀態"
+      },
+      "po_reverse_check_sql_and_result": {
+        "sql": "SELECT count(*) FROM candidate_prices cp JOIN universe_snapshots u ON u.stock_id = cp.stock_id AND u.included JOIN tracking_keywords tk ON tk.keyword = replace(cp.security_name, '*', '') WHERE tk.is_active = TRUE AND cp.stock_id NOT IN (SELECT stock_id FROM entity_mapping);",
+        "active_count": 4,
+        "inactive_count": 0,
+        "conclusion": "4 筆即為完整曝險範圍——457 筆新路由中沒有其他隱藏案例"
+      },
+      "orphan_articles": {
+        "label": "REPORTED BY REVIEWER",
+        "counts": {"川湖": 19, "聯發科": 100, "大立光": 22, "元太": 20},
+        "total": 161
+      },
+      "side_effect_not_yet_occurred": {
+        "label": "REPORTED BY REVIEWER",
+        "stock_prices_still_4_stocks": true,
+        "stock_prices_last_date": "2026-09-04",
+        "scheduler_running": false,
+        "conclusion": "每日 ETL 只有手動觸發才會執行，本次寫入尚未實際造成 stock_prices 擴大"
+      }
+    },
+    "po_ruling_2026_09_09": {
+      "decision": "接受寫入，不回滾",
+      "rationale": "457 筆資料本身正確；回滾不會讓 4 個 active AI 詞與 161 篇孤兒文章消失，下次任何形式的路由補齊都會再撞到同一件事；「AI 探索詞 → 追蹤宇宙 → 抓價格」正是 Gate 3 §4.2 三層分離設計的本意，不是缺陷。錯的是提案 §5 的宣稱——未經反向查核就寫「完全惰性」。",
+      "corrective_actions": [
+        "訂正 UG_G3_SB2_GATE_A_PROPOSAL.md §5 惰性宣稱，改為區分「尚未進入 active tracking_keywords」（惰性）與「已在 active tracking_keywords」（立即生效），附反向查核 SQL 與結果",
+        "doc/evidence/CHALLENGES.md 新增 CHAL-009",
+        "doc/upgrade/contracts/REMAINING_RISKS.md RISK-022 追加面向（四）",
+        "doc/governance/PROJECT_STATUS.md §0.5 新增 #20：每日 ETL 執行閘門，綁 UG-G3-SB2a Gate B 通過解除",
+        "doc/upgrade/SYSTEM_UPGRADE_MASTER_PLAN.md UG-G3-SB2a Brief 追加 Gate A 必答項：日常路徑（run_twse_pipeline）與回補路徑（candidate_prices）的基準一致性",
+        "market_articles 未來日期問題（川湖 max(post_time)=2026-11-12）另登記 RISK-026，不在本 SB 處理"
+      ]
+    },
+    "step6_disposable_container_restore_verification": {
+      "label": "VERIFIED THIS SESSION",
+      "container": "sb2_routing_restore_check（postgres:18，獨立 docker run，非 postgres-data 掛載，不接 app network）",
+      "steps": [
+        "docker run -d --name sb2_routing_restore_check -e POSTGRES_PASSWORD=<臨時值，容器已拆> postgres:18",
+        "pg_isready 確認就緒（1 秒內）",
+        "docker cp 備份檔進容器 /tmp/backup.dump，容器內 ls 確認 71,828,551 bytes，與備份檔案系統大小一致",
+        "pg_restore -U postgres -d postgres -j 2 /tmp/backup.dump，exit 0，無錯誤輸出",
+        "SELECT current_database(), inet_server_port() 確認連線目標為還原後的拋棄式容器",
+        "SELECT count(*) FROM entity_mapping → 5",
+        "SELECT keyword, stock_id, market, description FROM entity_mapping ORDER BY keyword → 與寫入前既有 5 列逐字相同",
+        "docker rm -f -v sb2_routing_restore_check，exit 0；docker ps -a 二次確認無殘留"
+      ],
+      "conclusion": "備份檔案可完整還原至寫入前狀態（entity_mapping 5 列），還原驗證通過"
+    }
+  },
+  "dod_status": {
+    "item": "UG_G3_SB2_GATE_A_PROPOSAL.md §10 DoD 第 4 項——entity_mapping 路由補齊 455 筆完成",
+    "status": "已完成（2026-09-09）",
+    "caveat": "惰性驗證發現的追蹤宇宙擴張已登記為獨立閘門（PROJECT_STATUS.md §0.5 #20），不影響本項 DoD 判定，但影響每日 ETL 是否可執行"
+  },
+  "not_in_scope_this_write": ["tracking_keywords", "stock_prices", "schema", "掛點啟用（run_all_daily_tasks 呼叫 run_triple_barrier_tail_recompute）"]
+}

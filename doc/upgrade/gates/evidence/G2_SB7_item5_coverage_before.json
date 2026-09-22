@@ -1,0 +1,37 @@
+{
+  "purpose": "UG-G2-SB7 第 5 項【條件 1】：**取數模式切換之前**的 `source_status` 分佈。",
+  "date": "2026-09-05",
+  "evidence_label": "`VERIFIED THIS SESSION`（PM 對真實庫 `postgres`@`localhost:5432` 唯讀查詢）",
+  "WHY_THIS_FILE_EXISTS": "第 5 項把 PTT 取數由**逐關鍵字搜尋**改為**看板固定頁面 + 記憶體比對**。兩種模式找到的東西不一樣 —— 對冷門標的，涵蓋範圍**很可能下降**。而 `REMAINING_RISKS.md` RISK-015 的量測依據**逐字就是 `source_status` 的逐股票、逐交易日覆蓋率計算**。\n\n> **改變取數模式會改變 `SUCCESS`／`SUCCESS_EMPTY` 的分佈 —— 也就是改變 RISK-015 要量的那個東西本身。**\n\n**RISK-015 屆時看到的資料會橫跨兩個取數模式。有這份，它知道斷點在哪；沒有，它會把模式差異讀成覆蓋率變化。**",
+  "TIMING": "**本檔於切換之前產生，且單獨 commit。** 切換後的對應量測見 `G2_SB7_item5_coverage_after.json`（若本 SB 內取不到，見下方 `KNOWN_LIMIT`）。",
+  "sql_verbatim": [
+    "SELECT source_status, count(*) AS rows, count(DISTINCT stock_id) AS stocks, count(DISTINCT trade_date) AS days\nFROM daily_ml_features GROUP BY source_status ORDER BY source_status;",
+    "SELECT source, count(*) AS rows, count(DISTINCT fetch_keyword) AS keywords,\n       count(*) FILTER (WHERE total_comments IS NOT NULL) AS backfilled\nFROM market_articles GROUP BY source;"
+  ],
+  "daily_ml_features_source_status": [
+    {"source_status": "SUCCESS", "rows": 37, "stocks": 4, "days": 23},
+    {"source_status": "SUCCESS_EMPTY", "rows": 80, "stocks": 4, "days": 58},
+    {"source_status": "SOURCE_DEGRADED", "rows": 0, "stocks": 0, "days": 0},
+    {"source_status": "SOURCE_FAILED", "rows": 0, "stocks": 0, "days": 0}
+  ],
+  "coverage_ratio": {
+    "value": 0.3162,
+    "definition": "`SUCCESS / (SUCCESS + SUCCESS_EMPTY)` = 37 / 117",
+    "CAVEAT": "⚠ **這個比例量的是「有無可用訊號」，不是「原生直接討論量」** —— 題材溢出視為合法訊號、計入 `SUCCESS`（`feature_aggregator.py` 的 `source_status` 註解與 DEC-017 的 PO 裁決）。**兩者不可混為一談**（RISK-015 本身即記載此區別）。"
+  },
+  "market_articles": [
+    {"source": "ptt_stock", "rows": 331, "distinct_fetch_keywords": 20,
+     "rows_with_total_comments": 0}
+  ],
+  "TOTAL_COMMENTS_IS_ZERO": {
+    "finding": "**331 篇文章的 `total_comments` 全部為 NULL** —— `backfill_ptt_comment_counts` 的回填**一列都沒有成功過**。",
+    "status": "**已登記，不新開案**。`closed/G2_SB4_GATE_B_SUBMISSION.md` 已誠實揭露「真實 Universe 的留言特徵覆蓋率 = `NOT VERIFIED`，需系統實際運作累積資料後才可量」，並歸入 RISK-015 於 Gate 3 前的檢視範圍。",
+    "what_is_new": "**SB4 只能說「未量測」；本次量出來了，而答案是零。** **從『未知』到『零』是新資訊。** 已併入 RISK-015 的現況欄並指回 SB4 Gate B 的那一列（複查方 2026-09-05 裁決：一個已被登記的缺口，補上實測值仍是同一個缺口）。",
+    "IMPACT_ON_ITEM_5": "⚠ **第 5 項的請求量比較，其基準是一條沒有產生資料的路徑。** 現行的內頁回填請求**實際上沒有寫入任何 `total_comments`**，故「新舊模式請求量相當」**不得被讀成兩者做的是同一件事**。"
+  },
+  "SOURCE_MODE_ATTRIBUTION": {
+    "note": "本檔量測時，`market_articles` 的 331 列**全部來自逐關鍵字搜尋**（該模式是本專案唯一存在過的 PTT 取數方式），`source` 值為 `ptt_stock`。",
+    "after_switch": "切換後新增列的 `source` 為 `ptt_board_pages`；**既有 331 列不回填**（`ptt_stock` 在切換後不再被寫入，故與 `ptt_keyword_search` 在資訊量上等價，而回填要改寫既有歷史資料）。三值的對應關係寫入 `MULTI_SOURCE_DATA_CONTRACT.md`，**不只寫在提案裡** —— 提案通過 Gate B 後會移入 `closed/`（§16.3）。"
+  },
+  "KNOWN_LIMIT": "⚠ **「切換後」的量測要等新模式實際執行過**，而 `run_all_daily_tasks` 的真實執行**仍暫緩**（理由：呼叫 Gemini API + 重算特徵）。**若本 SB 內取不到，Gate B 必須寫成「切換前已量測；切換後待首次生產執行」，不得只放這一份就宣稱「已量測分佈變化」。**"
+}

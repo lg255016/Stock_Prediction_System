@@ -1,0 +1,205 @@
+{
+  "target": "target_up_down",
+  "panel_path": "/workspaces/Database_Backups/Stock_Prediction_System2/ml_panels/panel_target_up_down_20260912.parquet",
+  "panel_sha256": "39dc6b8e6160add20f39a7265bad04de50c76199fa7ab81b979a7aabeabbd014",
+  "holdout_start_date": "2025-10-23T00:00:00",
+  "meta_eval_start_date": "2025-05-02T00:00:00",
+  "splitter_config": {
+    "train_window_size": 60,
+    "test_window_size": 20,
+    "embargo_days": 0,
+    "label_horizon": 1,
+    "label_end_date_col": "label_end_date",
+    "require_label_end_date": true
+  },
+  "n_folds_processed": 33,
+  "max_folds": null,
+  "fold_timings": [
+    {
+      "fold": 0,
+      "elapsed_seconds": 0.6878038229770027,
+      "n_test": 3000
+    },
+    {
+      "fold": 1,
+      "elapsed_seconds": 0.4828374680073466,
+      "n_test": 3000
+    },
+    {
+      "fold": 2,
+      "elapsed_seconds": 0.4708481960115023,
+      "n_test": 3000
+    },
+    {
+      "fold": 3,
+      "elapsed_seconds": 0.47808982100104913,
+      "n_test": 3000
+    },
+    {
+      "fold": 4,
+      "elapsed_seconds": 0.5420486039947718,
+      "n_test": 2998
+    },
+    {
+      "fold": 5,
+      "elapsed_seconds": 0.546148531982908,
+      "n_test": 3000
+    },
+    {
+      "fold": 6,
+      "elapsed_seconds": 0.49877316199126653,
+      "n_test": 2993
+    },
+    {
+      "fold": 7,
+      "elapsed_seconds": 0.5311022649984807,
+      "n_test": 3000
+    },
+    {
+      "fold": 8,
+      "elapsed_seconds": 0.5359785159816965,
+      "n_test": 3000
+    },
+    {
+      "fold": 9,
+      "elapsed_seconds": 0.47923065698705614,
+      "n_test": 3000
+    },
+    {
+      "fold": 10,
+      "elapsed_seconds": 0.49810264201369137,
+      "n_test": 3000
+    },
+    {
+      "fold": 11,
+      "elapsed_seconds": 0.5151842720224522,
+      "n_test": 2998
+    },
+    {
+      "fold": 12,
+      "elapsed_seconds": 0.4806536010000855,
+      "n_test": 3000
+    },
+    {
+      "fold": 13,
+      "elapsed_seconds": 0.5715728479844984,
+      "n_test": 3000
+    },
+    {
+      "fold": 14,
+      "elapsed_seconds": 0.4807232259772718,
+      "n_test": 2998
+    },
+    {
+      "fold": 15,
+      "elapsed_seconds": 0.5423157629847992,
+      "n_test": 3000
+    },
+    {
+      "fold": 16,
+      "elapsed_seconds": 0.4785416919912677,
+      "n_test": 2998
+    },
+    {
+      "fold": 17,
+      "elapsed_seconds": 0.5285701790126041,
+      "n_test": 2996
+    },
+    {
+      "fold": 18,
+      "elapsed_seconds": 0.49236697901505977,
+      "n_test": 2987
+    },
+    {
+      "fold": 19,
+      "elapsed_seconds": 0.5383143630169798,
+      "n_test": 3000
+    },
+    {
+      "fold": 20,
+      "elapsed_seconds": 0.4611920290044509,
+      "n_test": 3000
+    },
+    {
+      "fold": 21,
+      "elapsed_seconds": 0.49008746599429287,
+      "n_test": 3000
+    },
+    {
+      "fold": 22,
+      "elapsed_seconds": 0.5376653310086112,
+      "n_test": 3000
+    },
+    {
+      "fold": 23,
+      "elapsed_seconds": 0.47768334901775233,
+      "n_test": 3000
+    },
+    {
+      "fold": 24,
+      "elapsed_seconds": 0.5463244610000402,
+      "n_test": 3000
+    },
+    {
+      "fold": 25,
+      "elapsed_seconds": 0.4808957090135664,
+      "n_test": 3000
+    },
+    {
+      "fold": 26,
+      "elapsed_seconds": 0.5121247619972564,
+      "n_test": 3000
+    },
+    {
+      "fold": 27,
+      "elapsed_seconds": 0.5077710449986625,
+      "n_test": 3000
+    },
+    {
+      "fold": 28,
+      "elapsed_seconds": 0.4782079750148114,
+      "n_test": 2986
+    },
+    {
+      "fold": 29,
+      "elapsed_seconds": 0.542230285005644,
+      "n_test": 2982
+    },
+    {
+      "fold": 30,
+      "elapsed_seconds": 0.5070754429907538,
+      "n_test": 2985
+    },
+    {
+      "fold": 31,
+      "elapsed_seconds": 0.5172132499865256,
+      "n_test": 3000
+    },
+    {
+      "fold": 32,
+      "elapsed_seconds": 0.4793515580240637,
+      "n_test": 2996
+    }
+  ],
+  "row_counts": {
+    "total": 98917,
+    "meta_train": 80818,
+    "meta_eval": 17949,
+    "purged": 150
+  },
+  "test_window_exclusions": {
+    "rule_a_target_null": 25,
+    "rule_b_feature_null": 0
+  },
+  "oof_parquet_path": "/workspaces/Database_Backups/Stock_Prediction_System2/ml_panels/oof_target_up_down_20260915_024419.parquet",
+  "oof_parquet_sha256": "de1998519aca799eba5df179f2909070d43162c1add1a33599b79669f0a8c1ba",
+  "oof_row_count": 98917,
+  "total_elapsed_seconds": 22.10484275102499,
+  "script_commit": "c328805f59c5055c9a0268d245c4aef3870e16e9",
+  "script_dirty": false,
+  "script_dirty_paths": [],
+  "script_untracked_paths": [
+    ".claude/settings.local.json"
+  ],
+  "run_timestamp": "2026-09-15T02:44:21.913452+00:00"
+}

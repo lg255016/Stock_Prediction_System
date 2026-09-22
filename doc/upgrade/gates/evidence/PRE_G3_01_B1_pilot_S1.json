@@ -1,0 +1,1158 @@
+{
+  "segment": 1,
+  "pages": {
+    "from": 10315,
+    "to": 10364,
+    "count": 50
+  },
+  "binding": {
+    "current_database": "b1_pilot_tmpdb",
+    "inet_server_addr": "172.19.0.3",
+    "NOTE": "⚠ 隔離臨時 DB，**不是**真實庫 postgres@localhost:5432"
+  },
+  "started_at": "2026-09-06 20:41:09.615362",
+  "keywords_count": 26,
+  "http_requests": 148,
+  "page_status": [
+    {
+      "N": 10364,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10363,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10362,
+      "status": 200,
+      "articles": 20,
+      "matching": 5
+    },
+    {
+      "N": 10361,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10360,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10359,
+      "status": 200,
+      "articles": 20,
+      "matching": 0
+    },
+    {
+      "N": 10358,
+      "status": 200,
+      "articles": 20,
+      "matching": 2
+    },
+    {
+      "N": 10357,
+      "status": 200,
+      "articles": 20,
+      "matching": 3
+    },
+    {
+      "N": 10356,
+      "status": 200,
+      "articles": 20,
+      "matching": 2
+    },
+    {
+      "N": 10355,
+      "status": 200,
+      "articles": 20,
+      "matching": 2
+    },
+    {
+      "N": 10354,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10353,
+      "status": 200,
+      "articles": 20,
+      "matching": 4
+    },
+    {
+      "N": 10352,
+      "status": 200,
+      "articles": 20,
+      "matching": 2
+    },
+    {
+      "N": 10351,
+      "status": 200,
+      "articles": 20,
+      "matching": 4
+    },
+    {
+      "N": 10350,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10349,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10348,
+      "status": 200,
+      "articles": 20,
+      "matching": 6
+    },
+    {
+      "N": 10347,
+      "status": 200,
+      "articles": 20,
+      "matching": 3
+    },
+    {
+      "N": 10346,
+      "status": 200,
+      "articles": 20,
+      "matching": 0
+    },
+    {
+      "N": 10345,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10344,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10343,
+      "status": 200,
+      "articles": 20,
+      "matching": 5
+    },
+    {
+      "N": 10342,
+      "status": 200,
+      "articles": 20,
+      "matching": 3
+    },
+    {
+      "N": 10341,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10340,
+      "status": 200,
+      "articles": 20,
+      "matching": 2
+    },
+    {
+      "N": 10339,
+      "status": 200,
+      "articles": 20,
+      "matching": 2
+    },
+    {
+      "N": 10338,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10337,
+      "status": 200,
+      "articles": 20,
+      "matching": 3
+    },
+    {
+      "N": 10336,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10335,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10334,
+      "status": 200,
+      "articles": 20,
+      "matching": 3
+    },
+    {
+      "N": 10333,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10332,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10331,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10330,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10329,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10328,
+      "status": 200,
+      "articles": 20,
+      "matching": 3
+    },
+    {
+      "N": 10327,
+      "status": 200,
+      "articles": 20,
+      "matching": 5
+    },
+    {
+      "N": 10326,
+      "status": 200,
+      "articles": 20,
+      "matching": 2
+    },
+    {
+      "N": 10325,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10324,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10323,
+      "status": 200,
+      "articles": 20,
+      "matching": 3
+    },
+    {
+      "N": 10322,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10321,
+      "status": 200,
+      "articles": 20,
+      "matching": 2
+    },
+    {
+      "N": 10320,
+      "status": 200,
+      "articles": 20,
+      "matching": 2
+    },
+    {
+      "N": 10319,
+      "status": 200,
+      "articles": 20,
+      "matching": 5
+    },
+    {
+      "N": 10318,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10317,
+      "status": 200,
+      "articles": 20,
+      "matching": 0
+    },
+    {
+      "N": 10316,
+      "status": 200,
+      "articles": 20,
+      "matching": 1
+    },
+    {
+      "N": 10315,
+      "status": 200,
+      "articles": 20,
+      "matching": 2
+    }
+  ],
+  "matching_articles": [
+    {
+      "N": 10364,
+      "title": "[新聞] 聯發科包場六福村水陸雙樂園 近2.5萬名",
+      "matched": [
+        "聯發科"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788652189.A.BF3.html"
+    },
+    {
+      "N": 10363,
+      "title": "[新聞] 今年以來6度購地 大立光：9月拉貨動能比8",
+      "matched": [
+        "大立光"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788574058.A.A94.html"
+    },
+    {
+      "N": 10362,
+      "title": "Re: [情報] 非農就業人數",
+      "matched": [
+        "非農"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788527157.A.BA4.html"
+    },
+    {
+      "N": 10362,
+      "title": "[情報] 宏洲、宜進、宜新實業皆出清廣達",
+      "matched": [
+        "廣達"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788531120.A.3A9.html"
+    },
+    {
+      "N": 10362,
+      "title": "Re: [情報] 非農就業人數",
+      "matched": [
+        "非農"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788533715.A.842.html"
+    },
+    {
+      "N": 10362,
+      "title": "[情報] 3008 大立光 8月營收 M:2.76% Y:-16.23%",
+      "matched": [
+        "大立光"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788567446.A.97D.html"
+    },
+    {
+      "N": 10362,
+      "title": "[新聞] 出新招施壓？川普揚言若Fed不降息 將與貿",
+      "matched": [
+        "降息"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788571013.A.106.html"
+    },
+    {
+      "N": 10361,
+      "title": "[情報] 非農就業人數",
+      "matched": [
+        "非農"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788525358.A.4D3.html"
+    },
+    {
+      "N": 10360,
+      "title": "[標的] 買進00679B 元大美債225張~巴逆逆多",
+      "matched": [
+        "美債"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788500623.A.AFF.html"
+    },
+    {
+      "N": 10358,
+      "title": "[新聞] AI需求增速30年未見！台積電設備需求半年",
+      "matched": [
+        "台積電"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788398370.A.046.html"
+    },
+    {
+      "N": 10358,
+      "title": "[新聞] 「你不懂力旺就買台積電」董事陳莉菁超直",
+      "matched": [
+        "台積電"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788424847.A.8AC.html"
+    },
+    {
+      "N": 10357,
+      "title": "[新聞] AI熱潮不只輝達受益！資料中心衍生大量電",
+      "matched": [
+        "輝達"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788354274.A.455.html"
+    },
+    {
+      "N": 10357,
+      "title": "Re: [標的] 3008 大立光，光學鏡頭龍頭公司",
+      "matched": [
+        "光學鏡頭",
+        "大立光"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788356012.A.588.html"
+    },
+    {
+      "N": 10357,
+      "title": "[新聞] 〈美股早盤〉油價回落抵消美債殖利率壓力",
+      "matched": [
+        "美債"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788356848.A.500.html"
+    },
+    {
+      "N": 10356,
+      "title": "[新聞] 結構性改變 環球晶徐秀蘭:未來2年產業雙",
+      "matched": [
+        "環球晶"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788334724.A.4AD.html"
+    },
+    {
+      "N": 10356,
+      "title": "[情報] 2545 皇翔 買台積電135張 均價:2,418.89",
+      "matched": [
+        "台積電"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788345424.A.D11.html"
+    },
+    {
+      "N": 10355,
+      "title": "[新聞]陳嘉偉點名國巨、記憶體危險了！靈魂提問",
+      "matched": [
+        "記憶體"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788325810.A.D5B.html"
+    },
+    {
+      "N": 10355,
+      "title": "[新聞] 台股收盤／台積電跌55元拖垮！台股重挫78",
+      "matched": [
+        "台積電"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788331082.A.717.html"
+    },
+    {
+      "N": 10354,
+      "title": "[新聞] 記憶體缺貨難解 三星70%產能鎖定到2031年",
+      "matched": [
+        "記憶體"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788267522.A.4B7.html"
+    },
+    {
+      "N": 10353,
+      "title": "[新聞] 台股收盤／聯發科漲停點火！台股噴820點",
+      "matched": [
+        "聯發科"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788243120.A.645.html"
+    },
+    {
+      "N": 10353,
+      "title": "[新聞]台股矽光子持續噴出！全新、立碁連兩根漲",
+      "matched": [
+        "矽光子"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788248243.A.0D5.html"
+    },
+    {
+      "N": 10353,
+      "title": "[新聞] 三星衝刺3D 記憶體 zHBM 效能上看增八倍",
+      "matched": [
+        "記憶體"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788249217.A.7C7.html"
+    },
+    {
+      "N": 10353,
+      "title": "[情報] 2545 皇翔 賣聯發科175張賠14,751仟元",
+      "matched": [
+        "聯發科"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788259680.A.083.html"
+    },
+    {
+      "N": 10352,
+      "title": "[新聞] 不是輝達！外媒：台積電才是AI硬體競賽「",
+      "matched": [
+        "台積電",
+        "輝達"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788216975.A.A5B.html"
+    },
+    {
+      "N": 10352,
+      "title": "[請益] 記憶體昨天是不是單純砸盤？",
+      "matched": [
+        "記憶體"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788226181.A.068.html"
+    },
+    {
+      "N": 10351,
+      "title": "[新聞] 輝達豪砸35億美元投資聯發科！黃仁勳押注",
+      "matched": [
+        "聯發科",
+        "輝達"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788182080.A.B76.html"
+    },
+    {
+      "N": 10351,
+      "title": "[新聞] 聯發科完成39億美元海外可轉債訂價 輝達",
+      "matched": [
+        "聯發科",
+        "輝達"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788182656.A.370.html"
+    },
+    {
+      "N": 10351,
+      "title": "[新聞] 聯發科完成39億美元ECB！輝達認35億美元",
+      "matched": [
+        "聯發科",
+        "輝達"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788182754.A.D6A.html"
+    },
+    {
+      "N": 10351,
+      "title": "[新聞] 輝達豪砸1100億「投資聯發科」　3大領域",
+      "matched": [
+        "聯發科",
+        "輝達"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788184543.A.B76.html"
+    },
+    {
+      "N": 10350,
+      "title": "[新聞] 輝達調整AI記憶體路線，降堆疊、提速率，",
+      "matched": [
+        "記憶體",
+        "輝達"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788159058.A.B0A.html"
+    },
+    {
+      "N": 10349,
+      "title": "[新聞] 〈SEMICON〉徐國晉：矽光子2027年滲透率",
+      "matched": [
+        "矽光子"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788153006.A.044.html"
+    },
+    {
+      "N": 10348,
+      "title": "Re: [新聞] 三星高層揭AI瓶頸：轉向記憶體運算與先進",
+      "matched": [
+        "記憶體"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788066441.A.42A.html"
+    },
+    {
+      "N": 10348,
+      "title": "Re: [新聞] 三星高層揭AI瓶頸：轉向記憶體運算與先進",
+      "matched": [
+        "記憶體"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788067731.A.044.html"
+    },
+    {
+      "N": 10348,
+      "title": "Re: [新聞] 三星高層揭AI瓶頸：轉向記憶體運算與",
+      "matched": [
+        "記憶體"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788068616.A.FE9.html"
+    },
+    {
+      "N": 10348,
+      "title": "[新聞] 台積電撒360億分紅！外媒驚：獎金暴增50%",
+      "matched": [
+        "台積電"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788071355.A.342.html"
+    },
+    {
+      "N": 10348,
+      "title": "[新聞] 長庚醫院擁1.46萬張台積電 3年大賺4.5倍",
+      "matched": [
+        "台積電"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788078677.A.593.html"
+    },
+    {
+      "N": 10348,
+      "title": "[新聞] 台積電要小心？英特爾14A傳出捷報了",
+      "matched": [
+        "台積電"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788086390.A.CB7.html"
+    },
+    {
+      "N": 10347,
+      "title": "[新聞] PCB缺貨潮一路燒到2027！AI伺服器「這3種",
+      "matched": [
+        "AI伺服器"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788049736.A.3DE.html"
+    },
+    {
+      "N": 10347,
+      "title": "[新聞] 聯發科殺進Google TPU！博通不願做...它",
+      "matched": [
+        "聯發科"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788060754.A.22F.html"
+    },
+    {
+      "N": 10347,
+      "title": "[新聞] 三星高層揭AI瓶頸：轉向記憶體運算與先進",
+      "matched": [
+        "記憶體"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1788065629.A.040.html"
+    },
+    {
+      "N": 10345,
+      "title": "[標的] 欣興  洗產地若坐實輝達會採取甚麼行動",
+      "matched": [
+        "輝達"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787925932.A.AAC.html"
+    },
+    {
+      "N": 10344,
+      "title": "[情報] 2323 中環買7610,上詮,賣國巨,聯發科皆賺",
+      "matched": [
+        "聯發科"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787912716.A.D0A.html"
+    },
+    {
+      "N": 10343,
+      "title": "[新聞] 台積電員工去年均薪福利433萬元　全球逾8",
+      "matched": [
+        "台積電"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787843878.A.316.html"
+    },
+    {
+      "N": 10343,
+      "title": "[新聞] 宜鼎看記憶體價漲至明年底；Edge AI亦加",
+      "matched": [
+        "記憶體"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787847503.A.97B.html"
+    },
+    {
+      "N": 10343,
+      "title": "Re: [新聞] 力特光電賣廠房給台積電 董座被控內線交",
+      "matched": [
+        "台積電"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787877110.A.1EF.html"
+    },
+    {
+      "N": 10343,
+      "title": "[新聞] 凌巨財報危機解除！今恢復交易跳空大漲",
+      "matched": [
+        "凌巨"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787879636.A.25E.html"
+    },
+    {
+      "N": 10343,
+      "title": "[新聞] 預言台積電飆8320元天價！專家拆解：台",
+      "matched": [
+        "台積電"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787892734.A.D01.html"
+    },
+    {
+      "N": 10342,
+      "title": "[新聞] 台股漲勢收斂收45975點　台積電下跌5元",
+      "matched": [
+        "台積電"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787828723.A.0EF.html"
+    },
+    {
+      "N": 10342,
+      "title": "[新聞] 力特光電賣廠房給台積電 董座被控內線交",
+      "matched": [
+        "台積電"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787828814.A.809.html"
+    },
+    {
+      "N": 10342,
+      "title": "[新聞] 輝達循環融資藏隱憂！陳嘉偉「別好了傷疤忘了疼」：",
+      "matched": [
+        "輝達"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787830625.A.C94.html"
+    },
+    {
+      "N": 10341,
+      "title": "[新聞] 三星全球首創LPDDRPIM記憶體：手機AI效",
+      "matched": [
+        "記憶體"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787815488.A.997.html"
+    },
+    {
+      "N": 10340,
+      "title": "[新聞] 〈財報〉輝達業績超預期 估2028財年營收",
+      "matched": [
+        "輝達"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787782977.A.64F.html"
+    },
+    {
+      "N": 10340,
+      "title": "[新聞] 輝達財報報喜 預告AI熱潮一路旺到2028",
+      "matched": [
+        "輝達"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787790839.A.8D8.html"
+    },
+    {
+      "N": 10339,
+      "title": "[新聞] 要一次賺回上次賠的！韓國散戶於輝達財報",
+      "matched": [
+        "輝達"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787729229.A.146.html"
+    },
+    {
+      "N": 10339,
+      "title": "[新聞]輝達財報恐成火燒連環船！陳嘉偉示警C波",
+      "matched": [
+        "輝達"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787748008.A.5A1.html"
+    },
+    {
+      "N": 10338,
+      "title": "[新聞] 快訊／大立光漲停刷天價　超車鴻勁居上",
+      "matched": [
+        "大立光"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787710068.A.3A3.html"
+    },
+    {
+      "N": 10337,
+      "title": "[情報] 證交所：8105凌巨8/27恢復交易",
+      "matched": [
+        "凌巨"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787660639.A.B73.html"
+    },
+    {
+      "N": 10337,
+      "title": "[新聞] AI狂燒錢竟推高美債殖利率？克雷默警告：",
+      "matched": [
+        "美債"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787660820.A.EE7.html"
+    },
+    {
+      "N": 10337,
+      "title": "[新聞] 確定免淪壁紙！凌巨財報補交也過關 證交",
+      "matched": [
+        "凌巨"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787708252.A.090.html"
+    },
+    {
+      "N": 10336,
+      "title": "[新聞] 台股收盤／翻紅漲逾400點收復45K　台積電",
+      "matched": [
+        "台積電"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787643158.A.FE2.html"
+    },
+    {
+      "N": 10335,
+      "title": "[請益] 只有記憶體是景氣循環?",
+      "matched": [
+        "記憶體"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787581197.A.F42.html"
+    },
+    {
+      "N": 10334,
+      "title": "[新聞] 台積電單日成交量創2年多來最低紀錄　台",
+      "matched": [
+        "台積電"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787559581.A.A21.html"
+    },
+    {
+      "N": 10334,
+      "title": "[情報] 8105凌巨 第二季財報",
+      "matched": [
+        "凌巨"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787564521.A.CC6.html"
+    },
+    {
+      "N": 10334,
+      "title": "[情報] 2545 皇翔 買聯發科75張 均價:4,022.26元",
+      "matched": [
+        "聯發科"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787566454.A.F0B.html"
+    },
+    {
+      "N": 10333,
+      "title": "[請益] 聯發科借券賣出歷史新高 該空嗎？",
+      "matched": [
+        "聯發科"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787493284.A.B36.html"
+    },
+    {
+      "N": 10332,
+      "title": "[新聞]彭博：輝達客戶獲通知，AI相關產品價格漲",
+      "matched": [
+        "輝達"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787453931.A.BC4.html"
+    },
+    {
+      "N": 10331,
+      "title": "[新聞] AI讓記憶體大變身！美光執行長：從大宗",
+      "matched": [
+        "記憶體"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787306448.A.1BC.html"
+    },
+    {
+      "N": 10330,
+      "title": "[新聞]記憶體國際市場利多連發、帶旺台股記憶體",
+      "matched": [
+        "記憶體"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787302553.A.B47.html"
+    },
+    {
+      "N": 10329,
+      "title": "[新聞] 台積電小跌、航運股續攻　台股開盤跌近3",
+      "matched": [
+        "台積電"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787275093.A.3C7.html"
+    },
+    {
+      "N": 10328,
+      "title": "[情報] 2323 中環 買聯發科，賣南亞科、聯亞皆賺",
+      "matched": [
+        "聯發科"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787223769.A.DBA.html"
+    },
+    {
+      "N": 10328,
+      "title": "[新聞] 貝森特救債市只撐一天！美債殖利率幾乎",
+      "matched": [
+        "美債"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787231360.A.D7F.html"
+    },
+    {
+      "N": 10328,
+      "title": "[新聞] 元太攜手明典光明燈 電子紙拓展宗教場域",
+      "matched": [
+        "元太",
+        "電子紙"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787238589.A.DE2.html"
+    },
+    {
+      "N": 10327,
+      "title": "[新聞] 記憶體產能已談到2030年！DRAM漲勢熱 華",
+      "matched": [
+        "記憶體"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787196123.A.2BB.html"
+    },
+    {
+      "N": 10327,
+      "title": "[新聞] 漲勢比台積電更猛！謝金河點名這台廠搭",
+      "matched": [
+        "台積電"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787197013.A.4FD.html"
+    },
+    {
+      "N": 10327,
+      "title": "[新聞] 不追HBM！木頭姐不看空AI卻避開記憶體股",
+      "matched": [
+        "記憶體"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787197384.A.C83.html"
+    },
+    {
+      "N": 10327,
+      "title": "[新聞] 自嘲「美債是垃圾」！郭哲榮嘆抱00687B",
+      "matched": [
+        "美債"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787200630.A.EB6.html"
+    },
+    {
+      "N": 10327,
+      "title": "[情報] 3008 大立光 7月自結:13.94 年增:8.99%",
+      "matched": [
+        "大立光"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787214031.A.21D.html"
+    },
+    {
+      "N": 10326,
+      "title": "[新聞] 台積電入列！外媒點「3大科技巨頭」2028",
+      "matched": [
+        "台積電"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787181998.A.208.html"
+    },
+    {
+      "N": 10326,
+      "title": "[新聞] 川普不滿Fed還不降息 稱美國本應支付更低",
+      "matched": [
+        "降息"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787185225.A.45F.html"
+    },
+    {
+      "N": 10325,
+      "title": "[新聞] 台積電目標價 里昂證券喊到3,700元",
+      "matched": [
+        "台積電"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787142802.A.B85.html"
+    },
+    {
+      "N": 10324,
+      "title": "[新聞] 輝達點名16台廠 大秀物理AI 研華、台達",
+      "matched": [
+        "輝達"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787104682.A.860.html"
+    },
+    {
+      "N": 10323,
+      "title": "[新聞] 美債殖利率飆升 預示2008年危機的警報再",
+      "matched": [
+        "美債"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787055725.A.46C.html"
+    },
+    {
+      "N": 10323,
+      "title": "[情報] 2323 中環 買南亞科、國巨，賣台積電 賺",
+      "matched": [
+        "台積電"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787057105.A.875.html"
+    },
+    {
+      "N": 10323,
+      "title": "[新聞] 輝達自動化工業展親助陣！研華台達逾14家",
+      "matched": [
+        "輝達"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787059111.A.16E.html"
+    },
+    {
+      "N": 10322,
+      "title": "[新聞] 川湖衝破15000元！高含「湖」量ETF表現",
+      "matched": [
+        "川湖"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787028629.A.5A6.html"
+    },
+    {
+      "N": 10321,
+      "title": "[新聞] 市場拋售美債　殖利率近金融海嘯前水準",
+      "matched": [
+        "美債"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787013904.A.93D.html"
+    },
+    {
+      "N": 10321,
+      "title": "[新聞] 第二季財報難產 凌巨19日起停止交易",
+      "matched": [
+        "凌巨"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1787016160.A.C26.html"
+    },
+    {
+      "N": 10320,
+      "title": "[新聞] 川湖開盤飆1.37萬元漲停！網驚呼：股王要",
+      "matched": [
+        "川湖"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1786934369.A.FBB.html"
+    },
+    {
+      "N": 10320,
+      "title": "[新聞] 財報難產陷下市危機！凌巨開盤跳空跌停",
+      "matched": [
+        "凌巨"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1786936308.A.2E1.html"
+    },
+    {
+      "N": 10319,
+      "title": "[新聞] 凌巨Q2財報難產！上市櫃唯一未如期申報",
+      "matched": [
+        "凌巨"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1786858942.A.DDC.html"
+    },
+    {
+      "N": 10319,
+      "title": "[新聞] 重返記憶體市場?陳立武豪言:英特爾不錯過",
+      "matched": [
+        "記憶體"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1786873408.A.873.html"
+    },
+    {
+      "N": 10319,
+      "title": "[新聞] 台積電股價1年飆逾8成！外媒：需求沒放緩",
+      "matched": [
+        "台積電"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1786886438.A.00F.html"
+    },
+    {
+      "N": 10319,
+      "title": "[新聞] 輝達對OpenAI融資擔保砍半！額度降至1,20",
+      "matched": [
+        "輝達"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1786907376.A.E8C.html"
+    },
+    {
+      "N": 10319,
+      "title": "[新聞] 白宮科技顧問：輝達AI融資計畫 潛藏「暗",
+      "matched": [
+        "輝達"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1786924219.A.EB0.html"
+    },
+    {
+      "N": 10318,
+      "title": "[新聞] 台積電、矽品、鴻海等供應鏈加持，輝達",
+      "matched": [
+        "台積電",
+        "輝達"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1786794215.A.EE3.html"
+    },
+    {
+      "N": 10316,
+      "title": "[情報] 2323 中環 買南亞科,賣聯發科:賺,華通:賠",
+      "matched": [
+        "聯發科"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1786703842.A.82A.html"
+    },
+    {
+      "N": 10315,
+      "title": "[新聞] 男重押輝達狂賺6.4億退休！　點名下一個",
+      "matched": [
+        "輝達"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1786686697.A.EF2.html"
+    },
+    {
+      "N": 10315,
+      "title": "[情報] 2059 川湖 115年7月自結 50.24",
+      "matched": [
+        "川湖"
+      ],
+      "url": "https://www.ptt.cc/bbs/Stock/M.1786693489.A.911.html"
+    }
+  ],
+  "refused_articles": [],
+  "before": {
+    "market_articles": 0,
+    "article_comments": 0
+  },
+  "articles_total": 999,
+  "hits": 98,
+  "after": {
+    "market_articles": 98,
+    "article_comments": 9225,
+    "sum_total_comments": 9225
+  },
+  "CRITERIA": {
+    "P1_requests_le_300": {
+      "value": 148,
+      "verdict": "PASS"
+    },
+    "P2_per_page_status_recorded": {
+      "pages_recorded": 50,
+      "verdict": "PASS"
+    },
+    "P3_404_pages": {
+      "count": 0,
+      "page_numbers": [],
+      "note": "⚠ **列出頁碼，不只總數** —— 零星散佈與連續區間的意涵完全不同"
+    },
+    "P4_refused": {
+      "count": 0,
+      "by_reason": {},
+      "note": "**未放寬任何邊界**"
+    },
+    "P5_market_articles_added": 98,
+    "P6_article_comments_vs_sum": {
+      "article_comments": 9225,
+      "sum_total_comments": 9225,
+      "verdict": "PASS"
+    }
+  },
+  "hit_rate": {
+    "hits": 98,
+    "articles": 999,
+    "rate": 0.0981
+  },
+  "outcome": "OK",
+  "finished_at": "2026-09-06 20:49:57.150510"
+}

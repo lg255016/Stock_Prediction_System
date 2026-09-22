@@ -1,0 +1,49 @@
+{
+  "purpose": "UG-G2-SB7 第一次觸網批次執行的預期值。**本檔在觸網之前產生並單獨 commit。**",
+  "date": "2026-09-04",
+  "evidence_label": "`VERIFIED THIS SESSION`（預期值來源）／`NOT VERIFIED`（執行結果——尚未執行）",
+  "WHY_THIS_FILE_IS_COMMITTED_BEFORE_THE_RUN": "依 DEC-033 §Decision 第 6 條：判準在實作期被決定時，**單獨 commit 一次，然後才跑** —— git 歷史即帶順序，與任何人的說法無關。UG-G2-SB6 的順序宣稱因為判準與實作同在一個 commit 而只能標 `REPORTED, NOT INDEPENDENTLY VERIFIED`；**本檔就是為了不重複那件事**。",
+  "WHY_NOT_previous_business_day_FIRST": "PM 原本建議第一次就跑 `previous_business_day()`，並說「若那天是國定假日，正確結果會是 NO_DATA，剛好也是驗證三態語意的好機會」。**複查方 2026-09-04 指出後半句反了**：若第一次執行回 `NO_DATA`，無法分辨 (a) 那天真的是假日、管線正確運作，與 (b) 抓取管線壞了、回空表而三態把它讀成 `NO_DATA` —— **兩者輸出一模一樣**。**用一個答案未知的日子當第一次驗證，等於讓執行結果自己當預期值。**",
+  "STEP_1": {
+    "batch_key": "2026-08-21",
+    "why_this_date": "該日**完整存在於 `candidate_prices`**，且 `UG-G2-SB9` 的段報告在取數當時就寫下了逐日列數。**答案已知，故執行結果可以被對答案，而不是被解釋。**",
+    "expected_source_of_truth": {
+      "sb9_seg_reports": {
+        "twse": {"file": "G2_SB9_phase1_ingest_report.json / phase2_ingest_report.json", "date": "20260821", "rows_common_stock": 1085, "rows_total": 32751},
+        "tpex": {"file": "G2_SB9_tpex_backfill_report.json", "date": "20260821", "rows_common_stock": 887, "rows_total": 1011, "inserted": 887}
+      },
+      "database_cross_check": {
+        "sql": "SELECT source, count(*) FROM candidate_prices WHERE trade_date = '2026-08-21' GROUP BY source;",
+        "twse_mi_index": 1085,
+        "tpex_daily_quotes": 887,
+        "note": "**兩個獨立來源一致**：一個寫於取數當時，一個是現在的資料庫狀態。"
+      }
+    },
+    "expectations_written_before_touching_the_network": [
+      {"id": "E1", "item": "TWSE 當日普通股列數", "expected": 1085, "fail_means": "報表被截斷、過濾規則改變，或端點回的不是那一天"},
+      {"id": "E2", "item": "TPEx 當日普通股列數", "expected": 887, "fail_means": "同上"},
+      {"id": "E3", "item": "`assert_complete` 總數", "expected": 2, "detail": "run log 兩列，**皆為 `OK`**", "fail_means": "有項目被靜默略過，或 outcome 判定錯"},
+      {"id": "E4", "item": "`candidate_prices` **新增** 列數", "expected": 0, "detail": "全部 PK 碰撞（`ON CONFLICT DO NOTHING`）", "fail_means": "見下方 E4_WHY"},
+      {"id": "E5", "item": "`daily_ml_features` / `stock_prices`", "expected": "117 / 117 不變", "fail_means": "寫錯表"},
+      {"id": "E6", "item": "`etl_run_log.target_database`", "expected": "兩列皆為 `postgres`", "fail_means": "寫到了非預期的資料庫"},
+      {"id": "E7", "item": "邏輯請求數", "expected": "每市場 1 個（合計 2）", "fail_means": "沒有真的改成批次"}
+    ],
+    "E4_WHY": "**E4 必須事先寫下來並被觀察到，不能事後解釋。** 它順帶回答一件事：**寫入端回報的是「嘗試」還是「實際插入」。** `UG-G2-SB9` 的 `cur.rowcount` 就是栽在這裡 —— 887 列全部成功卻回報 87，並據以宣稱「800 列被靜默丟棄」，**一個不存在的缺陷**。`DBWriter.upsert_to_candidate_prices` 改用 `RETURNING` 計數，**若那個 0 沒有被正確回報出來，這一步就抓到了** —— 而且是在對真實庫寫入任何新資料之前抓到。",
+    "network_cost": "TWSE 1 個 + TPEx 1 個邏輯請求（HTTP 嘗試可能更多，雙軌計數會分開記）。"
+  },
+  "STEP_2": {
+    "batch_key": "previous_business_day()（執行當日決定）",
+    "precondition": "**STEP_1 逐項相符之後才執行。**",
+    "expectations_written_before_touching_the_network": [
+      {"id": "F1", "item": "兩個市場的 outcome", "expected": "同為 `OK`，或**同為 `NO_DATA`**", "fail_means": "**若只有一邊是 `NO_DATA`，那不是假日，是缺陷**（台股休市時兩個市場一起休）"},
+      {"id": "F2", "item": "`assert_complete` 總數", "expected": 2},
+      {"id": "F3", "item": "`candidate_prices` 新增列數", "expected": "若 `OK` 則 > 0（該日為新資料）；若 `NO_DATA` 則為 0"},
+      {"id": "F4", "item": "`daily_ml_features` / `stock_prices`", "expected": "117 / 117 不變"}
+    ],
+    "F1_WHY": "**假日的判別法**：台股休市時，兩個市場應該都沒有資料。**若只有一邊是 `NO_DATA`，那不是假日，是缺陷。** 這條讓 STEP_2 即使落在假日也仍然是一次有效驗證 —— **它把「答案未知」變成「答案有結構」。**"
+  },
+  "KNOWN_LIMITS": [
+    "本檔只寫下預期，**不含任何執行結果** —— 執行後的實測值會另檔記錄，兩者刻意分開，以免事後修改預期。",
+    "E1／E2 的來源是 `UG-G2-SB9` 的紀錄與現在的資料庫。**若端點在 2026-08-21 之後修訂了歷史資料**，實測會與預期不符，而**那是必須被知道的資訊，不是應該被調整的判準**。"
+  ]
+}

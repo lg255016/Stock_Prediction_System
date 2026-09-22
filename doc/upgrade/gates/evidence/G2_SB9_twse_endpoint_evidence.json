@@ -1,0 +1,402 @@
+{
+  "purpose": "UG-G2-SB9 階段一端點驗證原始證據（提案 §5.3）（**節錄本**，見 observations.request.EXCERPT_NOTE）",
+  "environment": {
+    "python_version": "3.14.6",
+    "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.41",
+    "in_container": true,
+    "timestamp_utc": "2026-08-31T12:33:00.799987+00:00",
+    "timestamp_local": "2026-08-31T12:33:00.800000+00:00",
+    "local_timezone": "UTC"
+  },
+  "parameters": {
+    "endpoint_template": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date={date}&type=ALL",
+    "timeout_seconds": 15,
+    "max_retries": 3,
+    "delay_range": [
+      3.0,
+      5.0
+    ],
+    "max_logical_requests": 3,
+    "max_http_attempts": 9,
+    "min_rows": 500
+  },
+  "scope_disclosure": "階段一只驗證上市（證交所）端點。依 DEC-017，候選空間為上市 + 上櫃（排除興櫃）——**上櫃在本 SB 範圍內，延後至階段二**，不是被排除。",
+  "observations": {
+    "request": {
+      "attempted": true,
+      "url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20260821&type=ALL",
+      "date": "20260821",
+      "intended_headers": {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "application/json"
+      },
+      "sent_headers": {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept-Encoding": "gzip, deflate, zstd",
+        "Accept": "application/json",
+        "Connection": "keep-alive"
+      },
+      "attempts": 1,
+      "status_code": 200,
+      "elapsed_seconds": 2.053,
+      "json_parsed": true,
+      "error": null,
+      "final_url": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20260821&type=ALL",
+      "response_headers": {
+        "Server": "HiNetCDN",
+        "Date": "Mon, 31 Aug 2026 12:33:00 GMT",
+        "Content-Type": "application/json;charset=UTF-8",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "Vary": "Accept-Encoding, accept-encoding",
+        "X-Application-Context": "application:production",
+        "Content-Security-Policy": "frame-ancestors 'self' *.twse.com.tw *.tdcc.com.tw http://digitalprocesssyst-epassbook.cdn.hinet.net digitalprocesssys-epassbook.cdn.hinet.net;",
+        "X-Content-Type-Options": "nosniff",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "Permissions-Policy": "camera=(),microphone=(),geolocation=(),sync-xhr=*,gyroscope=()",
+        "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
+        "Access-Control-Allow-Origin": "*",
+        "X-Cache": "MISS, EXPIRED, EXPIRED",
+        "x-request-id": "7d29629b16c757cb08d3c0df8d620666",
+        "Content-Encoding": "gzip"
+      },
+      "top_level_keys": [
+        "date",
+        "params",
+        "stat",
+        "tables",
+        "type"
+      ],
+      "table_titles": [
+        "115年08月21日 價格指數(臺灣證券交易所)",
+        "價格指數(跨市場)",
+        "價格指數(臺灣指數公司)",
+        "報酬指數(臺灣證券交易所)",
+        "報酬指數(跨市場)",
+        "報酬指數(臺灣指數公司)",
+        "115年08月21日 大盤統計資訊",
+        "漲跌證券數合計",
+        "115年08月21日 每日收盤行情(全部)"
+      ],
+      "stat": "OK",
+      "field_names": [
+        "證券代號",
+        "證券名稱",
+        "成交股數",
+        "成交筆數",
+        "成交金額",
+        "開盤價",
+        "最高價",
+        "最低價",
+        "收盤價",
+        "漲跌(+/-)",
+        "漲跌價差",
+        "最後揭示買價",
+        "最後揭示買量",
+        "最後揭示賣價",
+        "最後揭示賣量",
+        "本益比"
+      ],
+      "row_count": 32751,
+      "EXCERPT_NOTE": "**本檔為節錄，非全量。** 原始回應含 32751 列，完整 payload 未入庫——理由：該端點為歷史報表、可重取，與 Dcard 那次「端點已打不開、證據是唯一紀錄」不同。保留的是無法重建或需逐字引用的部分（欄位清單、代號形態計數、零成交列原始形態、成交金額分佈統計）。",
+      "RETRIEVAL_COMMAND": "docker exec -u vscode -w /workspaces/Stock_Prediction_System2 <app-container> python scripts/verify/twse_market_endpoint_check.py --date 20260821 --out <path>   # 或直接 GET https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20260821&type=ALL",
+      "code_shape_counts": {
+        "6碼（權證等）": 31523,
+        "4碼_非0開頭（普通股候選）": 1085,
+        "5碼": 135,
+        "4碼_0開頭（ETF/ETN）": 8
+      },
+      "amount_stats_common_stocks": {
+        "n": 1085,
+        "median": 17657591.0,
+        "min": 0.0,
+        "max": 45275662448.0,
+        "unparseable_rows": 0,
+        "zero_amount_rows": 3
+      },
+      "ZERO_VOLUME_ROWS_VERBATIM": {
+        "note": "§9 第 4 項測試「停牌／零成交列不得被當成 0 元成交金額」的 fixture 來源。**用真實觀察到的形態，不用想像的形態。**注意：成交金額是可解析的 \"0\"，不會有解析錯誤；真正的訊號在開高低收全為 \"--\"。",
+        "field_names": [
+          "證券代號",
+          "證券名稱",
+          "成交股數",
+          "成交筆數",
+          "成交金額",
+          "開盤價",
+          "最高價",
+          "最低價",
+          "收盤價",
+          "漲跌(+/-)",
+          "漲跌價差",
+          "最後揭示買價",
+          "最後揭示買量",
+          "最後揭示賣價",
+          "最後揭示賣量",
+          "本益比"
+        ],
+        "rows": [
+          {
+            "證券代號": "1538",
+            "證券名稱": "正峰",
+            "成交股數": "0",
+            "成交筆數": "0",
+            "成交金額": "0",
+            "開盤價": "--",
+            "最高價": "--",
+            "最低價": "--",
+            "收盤價": "--",
+            "漲跌(+/-)": "<p> </p>",
+            "漲跌價差": "0.00",
+            "最後揭示買價": "8.26",
+            "最後揭示買量": "1",
+            "最後揭示賣價": "9.97",
+            "最後揭示賣量": "1",
+            "本益比": "0.00"
+          },
+          {
+            "證券代號": "5906",
+            "證券名稱": "台南-KY",
+            "成交股數": "0",
+            "成交筆數": "0",
+            "成交金額": "0",
+            "開盤價": "--",
+            "最高價": "--",
+            "最低價": "--",
+            "收盤價": "--",
+            "漲跌(+/-)": "<p> </p>",
+            "漲跌價差": "0.00",
+            "最後揭示買價": "36.45",
+            "最後揭示買量": "1",
+            "最後揭示賣價": "38.50",
+            "最後揭示賣量": "3",
+            "本益比": "760.00"
+          },
+          {
+            "證券代號": "9110",
+            "證券名稱": "越南控-DR",
+            "成交股數": "0",
+            "成交筆數": "0",
+            "成交金額": "0",
+            "開盤價": "--",
+            "最高價": "--",
+            "最低價": "--",
+            "收盤價": "--",
+            "漲跌(+/-)": "<p> </p>",
+            "漲跌價差": "0.00",
+            "最後揭示買價": "2.87",
+            "最後揭示買量": "1",
+            "最後揭示賣價": "3.05",
+            "最後揭示賣量": "10",
+            "本益比": "0.00"
+          }
+        ]
+      },
+      "HTML_IN_FIELD_EXAMPLE": {
+        "note": "`漲跌(+/-)` 欄含 HTML 片段——這份回應不是純資料。",
+        "raw": "<p style= color:green>-</p>"
+      }
+    },
+    "budget": {
+      "logical_requests_used": 1,
+      "logical_requests_max": 3,
+      "http_attempts_used": 1,
+      "http_attempts_max": 9
+    }
+  },
+  "result": {
+    "criteria": {
+      "B1": {
+        "verdict": "PASS",
+        "detail": "HTTP 200"
+      },
+      "B2": {
+        "verdict": "PASS",
+        "detail": "資料列數 32751"
+      },
+      "B3": {
+        "verdict": "PASS",
+        "detail": "證券代號／收盤價／成交股數／開高低價皆可對映",
+        "field_mapping": {
+          "code": 0,
+          "close": 8,
+          "volume": 2,
+          "open": 5,
+          "high": 6,
+          "low": 7,
+          "amount": 4
+        }
+      },
+      "B4": {
+        "verdict": "PASS",
+        "detail": "首列數值欄皆可解析，代號可轉 str",
+        "first_row_checks": {
+          "close": {
+            "raw": "14.46",
+            "parseable": true,
+            "normalized": "14.46"
+          },
+          "volume": {
+            "raw": "37,141,690",
+            "parseable": true,
+            "normalized": "37141690"
+          },
+          "open": {
+            "raw": "14.61",
+            "parseable": true,
+            "normalized": "14.61"
+          },
+          "high": {
+            "raw": "14.61",
+            "parseable": true,
+            "normalized": "14.61"
+          },
+          "low": {
+            "raw": "14.29",
+            "parseable": true,
+            "normalized": "14.29"
+          },
+          "amount": {
+            "raw": "536,788,644",
+            "parseable": true,
+            "normalized": "536788644"
+          }
+        },
+        "non_numeric_markers": {
+          "close": {
+            "--": 17501
+          },
+          "open": {
+            "--": 17501
+          },
+          "high": {
+            "--": 17501
+          },
+          "low": {
+            "--": 17501
+          }
+        }
+      },
+      "B5": {
+        "verdict": "PASS",
+        "detail": "成交金額欄存在且首列可解析（536788644）",
+        "field_name": "成交金額"
+      },
+      "B6": {
+        "verdict": "MEASURED",
+        "rows_examined": 32751,
+        "zero_volume_rows": 17496,
+        "non_numeric_volume_rows": 0,
+        "samples": [
+          {
+            "code": "00625K",
+            "raw_row": [
+              "00625K",
+              "富邦上証+R",
+              "0",
+              "0",
+              "0",
+              "--",
+              "--",
+              "--",
+              "--",
+              "<p> </p>",
+              "0.00",
+              "8.50",
+              "5",
+              "8.64",
+              "10",
+              "0.00"
+            ]
+          },
+          {
+            "code": "00707R",
+            "raw_row": [
+              "00707R",
+              "期元大S&P日圓反1",
+              "0",
+              "0",
+              "0",
+              "--",
+              "--",
+              "--",
+              "--",
+              "<p> </p>",
+              "0.00",
+              "32.12",
+              "24",
+              "32.23",
+              "24",
+              "0.00"
+            ]
+          },
+          {
+            "code": "020011",
+            "raw_row": [
+              "020011",
+              "統一微波高息20N",
+              "0",
+              "0",
+              "0",
+              "--",
+              "--",
+              "--",
+              "--",
+              "<p> </p>",
+              "0.00",
+              "16.66",
+              "165",
+              "16.68",
+              "133",
+              "0.00"
+            ]
+          },
+          {
+            "code": "020012",
+            "raw_row": [
+              "020012",
+              "富邦行動通訊N",
+              "0",
+              "0",
+              "0",
+              "--",
+              "--",
+              "--",
+              "--",
+              "<p> </p>",
+              "0.00",
+              "21.85",
+              "10",
+              "21.91",
+              "10",
+              "0.00"
+            ]
+          },
+          {
+            "code": "020029",
+            "raw_row": [
+              "020029",
+              "元大ESG高股息N",
+              "0",
+              "0",
+              "0",
+              "--",
+              "--",
+              "--",
+              "--",
+              "<p> </p>",
+              "0.00",
+              "18.27",
+              "150",
+              "18.29",
+              "150",
+              "0.00"
+            ]
+          }
+        ],
+        "note": "量測項，不參與判定。samples 為真實觀察到的形態，供 §9 第 4 項測試作為 fixture——不得改用想像的形態。"
+      }
+    },
+    "overall": "PASS",
+    "overall_note": "B6 為量測項，不參與整體判定"
+  }
+}

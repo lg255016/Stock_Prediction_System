@@ -1,0 +1,1888 @@
+{
+  "purpose": "UG-G2-SB9 三年回補（TWSE + TPEx）的跨市場與 NULL 語意證據。**每一項結論連同產生它的 SQL 逐字保存**——§9 要求每個標籤附可重跑指令；沒有 SQL，那份 dump 就只是位元組。",
+  "source_dump": "D:\\Python\\Database_Backups\\Stock_Prediction_System2\\stock_prediction_system2_candidate_prices_twse_tpex_3y_20260902_022011.dump（53,338,453 bytes）",
+  "how_to_rerun": [
+    "1. docker run --rm -d --name <tmp> -e POSTGRES_DB=<db> -e POSTGRES_USER=<u> -e POSTGRES_PASSWORD=<p> postgres:18",
+    "2. 套用 database/schema.sql 與 migrations 001~005",
+    "3. docker cp <dump> <tmp>:/tmp/cp.dump && docker exec <tmp> pg_restore -U <u> -d <db> --data-only -t candidate_prices /tmp/cp.dump",
+    "4. 逐項執行下方各 `sql_verbatim`"
+  ],
+  "generated_from_database": "sb9_tpex_tmpdb",
+  "evidence_label": "`VERIFIED THIS SESSION`（PM 執行）。⚠ **未經獨立複核**：產生當時資料位於拋棄式容器，複查方無法重跑。還原上方 dump 後可重跑。",
+  "CAVEAT_date_level_only": "**`trading_date_cross_check` 證明的是「天」，不是「股」。** 「某一天之後某檔就不在報表裡、但那些天本身都完整存在」這種形態，**日期層級的檢查結構上看不到**——每一天都在，只是每一天裡少了一檔。階段一 §11A.2 的「止於期中」四檔（6806、6176、8105、2867）正是這個形態，其中 `6176 瑞儀` 在末見日之前有 53 天連續資料、區間內缺口 0。**個股層級的出席檢查未做，屬 UG-G2-SB6。**",
+  "FINDING_transfer_ruled_out": "`phase1_14_stocks_tpex_lookup` 的價值不只是「原判讀不受影響」——**它縮小了解釋空間**。`6423 億而得-創` 證實了「上市轉上櫃」這個方向存在；若「止於期中」那四檔屬於同一形態，它們會出現在 TPEx 側。**實測零命中，故排除「轉市場」作為它們的解釋**——剩下的可能是下市、暫停交易、合併，或報表層面的脫落。**交給 UG-G2-SB6，不要重新推導一次。**",
+  "results": {
+    "cross_market_stocks": {
+      "note": "七檔在三年內同時出現於兩個來源的股票（C10 預測的跨時間代號重疊）。六檔為上櫃轉上市，第七檔 6423 方向相反（上市轉上櫃）。",
+      "sql_verbatim": "WITH x AS (\n  SELECT stock_id, max(security_name) AS security_name,\n    min(trade_date) FILTER (WHERE source='tpex_daily_quotes') AS tpex_first,\n    max(trade_date) FILTER (WHERE source='tpex_daily_quotes') AS tpex_last,\n    count(*)        FILTER (WHERE source='tpex_daily_quotes') AS tpex_days,\n    min(trade_date) FILTER (WHERE source='twse_mi_index')     AS twse_first,\n    max(trade_date) FILTER (WHERE source='twse_mi_index')     AS twse_last,\n    count(*)        FILTER (WHERE source='twse_mi_index')     AS twse_days\n  FROM candidate_prices GROUP BY stock_id)\nSELECT * FROM x WHERE tpex_days > 0 AND twse_days > 0 ORDER BY tpex_last;",
+      "columns": [
+        "stock_id",
+        "security_name",
+        "tpex_first",
+        "tpex_last",
+        "tpex_days",
+        "twse_first",
+        "twse_last",
+        "twse_days"
+      ],
+      "rows": [
+        {
+          "stock_id": "8476",
+          "security_name": "台境*",
+          "tpex_first": "2023-08-07",
+          "tpex_last": "2023-10-30",
+          "tpex_days": 58,
+          "twse_first": "2023-10-31",
+          "twse_last": "2026-08-21",
+          "twse_days": 676
+        },
+        {
+          "stock_id": "6472",
+          "security_name": "保瑞",
+          "tpex_first": "2023-08-07",
+          "tpex_last": "2023-12-18",
+          "tpex_days": 93,
+          "twse_first": "2023-12-19",
+          "twse_last": "2026-08-21",
+          "twse_days": 647
+        },
+        {
+          "stock_id": "4736",
+          "security_name": "泰博",
+          "tpex_first": "2023-08-07",
+          "tpex_last": "2023-12-21",
+          "tpex_days": 96,
+          "twse_first": "2023-12-22",
+          "twse_last": "2026-08-21",
+          "twse_days": 644
+        },
+        {
+          "stock_id": "6446",
+          "security_name": "藥華藥",
+          "tpex_first": "2023-08-07",
+          "tpex_last": "2024-01-24",
+          "tpex_days": 119,
+          "twse_first": "2024-01-25",
+          "twse_last": "2026-08-21",
+          "twse_days": 621
+        },
+        {
+          "stock_id": "6589",
+          "security_name": "台康生技",
+          "tpex_first": "2023-08-07",
+          "tpex_last": "2025-07-18",
+          "tpex_days": 474,
+          "twse_first": "2025-07-21",
+          "twse_last": "2026-08-21",
+          "twse_days": 266
+        },
+        {
+          "stock_id": "5236",
+          "security_name": "凌陽創新",
+          "tpex_first": "2023-08-07",
+          "tpex_last": "2026-07-15",
+          "tpex_days": 713,
+          "twse_first": "2026-07-16",
+          "twse_last": "2026-08-21",
+          "twse_days": 27
+        },
+        {
+          "stock_id": "6423",
+          "security_name": "億而得-創",
+          "tpex_first": "2026-01-22",
+          "tpex_last": "2026-08-21",
+          "tpex_days": 139,
+          "twse_first": "2024-05-15",
+          "twse_last": "2026-01-21",
+          "twse_days": 414
+        }
+      ]
+    },
+    "same_day_overlap_count": {
+      "note": "同一 (stock_id, trade_date) 出現在兩個來源的組數。**0 代表 pk_collisions=0 不是因為檢查沒有對象，而是真的沒有同日碰撞。**",
+      "sql_verbatim": "SELECT count(*) AS same_day_pairs FROM (\n  SELECT stock_id, trade_date FROM candidate_prices\n  GROUP BY 1,2 HAVING count(DISTINCT source) > 1) z;",
+      "columns": [
+        "same_day_pairs"
+      ],
+      "rows": [
+        {
+          "same_day_pairs": 0
+        }
+      ]
+    },
+    "null_semantics_by_source": {
+      "note": "兩來源的 NULL 語意差異。TWSE 為「零成交 ⊊ 無價格」（存在有量無價的列）；**TPEx 為嚴格雙條件：無價格 ⟺ 零成交**。此為來源語意差異，非資料錯誤；SB6 判斷「停止交易」時不得假設兩邊相同。",
+      "sql_verbatim": "SELECT source,\n  count(*) FILTER (WHERE close_price IS NULL  AND volume > 0) AS traded_without_prices,\n  count(*) FILTER (WHERE close_price IS NOT NULL AND volume = 0) AS priced_zero_volume,\n  count(*) FILTER (WHERE close_price IS NULL  AND volume = 0) AS both,\n  count(*) FILTER (WHERE close_price IS NULL) AS without_prices,\n  count(*) FILTER (WHERE volume = 0)          AS zero_volume\nFROM candidate_prices GROUP BY source ORDER BY source;",
+      "columns": [
+        "source",
+        "traded_without_prices",
+        "priced_zero_volume",
+        "both",
+        "without_prices",
+        "zero_volume"
+      ],
+      "rows": [
+        {
+          "source": "tpex_daily_quotes",
+          "traded_without_prices": 0,
+          "priced_zero_volume": 0,
+          "both": 9787,
+          "without_prices": 9787,
+          "zero_volume": 9787
+        },
+        {
+          "source": "twse_mi_index",
+          "traded_without_prices": 1132,
+          "priced_zero_volume": 0,
+          "both": 572,
+          "without_prices": 1704,
+          "zero_volume": 572
+        }
+      ]
+    },
+    "write_guards_by_source": {
+      "note": "PO 2026-09-01 條件三與買賣量單位守衛在全量資料上的驗證。TPEx 側 pe_ratio 與買賣量必須全為 NULL。",
+      "sql_verbatim": "SELECT source,\n  count(*)                                             AS rows_total,\n  count(*) FILTER (WHERE pe_ratio IS NOT NULL)         AS pe_not_null,\n  count(*) FILTER (WHERE pe_ratio = 0)                 AS pe_zero,\n  count(*) FILTER (WHERE best_bid_volume IS NOT NULL)  AS bid_vol_not_null,\n  count(*) FILTER (WHERE best_ask_volume IS NOT NULL)  AS ask_vol_not_null\nFROM candidate_prices GROUP BY source ORDER BY source;",
+      "columns": [
+        "source",
+        "rows_total",
+        "pe_not_null",
+        "pe_zero",
+        "bid_vol_not_null",
+        "ask_vol_not_null"
+      ],
+      "rows": [
+        {
+          "source": "tpex_daily_quotes",
+          "rows_total": 623384,
+          "pe_not_null": 0,
+          "pe_zero": 0,
+          "bid_vol_not_null": 0,
+          "ask_vol_not_null": 0
+        },
+        {
+          "source": "twse_mi_index",
+          "rows_total": 766506,
+          "pe_not_null": 598527,
+          "pe_zero": 0,
+          "bid_vol_not_null": 766432,
+          "ask_vol_not_null": 766432
+        }
+      ]
+    },
+    "trading_date_cross_check": {
+      "note": "日期層級交叉比對：兩來源的交易日集合是否一致。⚠ **此檢查只證明「天」，不證明「股」** —— 見 caveat。",
+      "sql_verbatim": "WITH t AS (SELECT DISTINCT trade_date d FROM candidate_prices WHERE source='tpex_daily_quotes'),\n     w AS (SELECT DISTINCT trade_date d FROM candidate_prices WHERE source='twse_mi_index')\nSELECT (SELECT count(*) FROM t) AS tpex_days,\n       (SELECT count(*) FROM w) AS twse_days,\n       (SELECT count(*) FROM w WHERE d NOT IN (SELECT d FROM t)) AS missing_in_tpex,\n       (SELECT count(*) FROM t WHERE d NOT IN (SELECT d FROM w)) AS missing_in_twse;",
+      "columns": [
+        "tpex_days",
+        "twse_days",
+        "missing_in_tpex",
+        "missing_in_twse"
+      ],
+      "rows": [
+        {
+          "tpex_days": 740,
+          "twse_days": 740,
+          "missing_in_tpex": 0,
+          "missing_in_twse": 0
+        }
+      ]
+    },
+    "phase1_14_stocks_tpex_lookup": {
+      "note": "階段一 §11A.2 那 14 檔「未滿 60 天」的 TWSE 股票，在 TPEx 側的命中情形。**只有 5236 命中** —— 它不是新上市，是上櫃轉上市。**其餘 13 檔零命中，這排除了「轉市場」作為它們的解釋**，特別是「止於期中」那四檔（6806、6176、8105、2867）。",
+      "sql_verbatim": "WITH f(id) AS (VALUES ('7855'),('2237'),('6806'),('7689'),('7835'),('6947'),('5236'),\n                      ('1435'),('6176'),('1459'),('2380'),('8105'),('2867'),('7827'))\nSELECT f.id,\n       max(c.security_name) AS security_name,\n       count(*) FILTER (WHERE c.source='tpex_daily_quotes') AS tpex_days,\n       min(c.trade_date) FILTER (WHERE c.source='tpex_daily_quotes') AS tpex_first,\n       max(c.trade_date) FILTER (WHERE c.source='tpex_daily_quotes') AS tpex_last\nFROM f LEFT JOIN candidate_prices c ON c.stock_id = f.id\nGROUP BY f.id ORDER BY f.id;",
+      "columns": [
+        "id",
+        "security_name",
+        "tpex_days",
+        "tpex_first",
+        "tpex_last"
+      ],
+      "rows": [
+        {
+          "id": "1435",
+          "security_name": "中福",
+          "tpex_days": 0,
+          "tpex_first": null,
+          "tpex_last": null
+        },
+        {
+          "id": "1459",
+          "security_name": "聯發",
+          "tpex_days": 0,
+          "tpex_first": null,
+          "tpex_last": null
+        },
+        {
+          "id": "2237",
+          "security_name": "華德動能-創",
+          "tpex_days": 0,
+          "tpex_first": null,
+          "tpex_last": null
+        },
+        {
+          "id": "2380",
+          "security_name": "虹光",
+          "tpex_days": 0,
+          "tpex_first": null,
+          "tpex_last": null
+        },
+        {
+          "id": "2867",
+          "security_name": "三商壽",
+          "tpex_days": 0,
+          "tpex_first": null,
+          "tpex_last": null
+        },
+        {
+          "id": "5236",
+          "security_name": "凌陽創新",
+          "tpex_days": 713,
+          "tpex_first": "2023-08-07",
+          "tpex_last": "2026-07-15"
+        },
+        {
+          "id": "6176",
+          "security_name": "瑞儀",
+          "tpex_days": 0,
+          "tpex_first": null,
+          "tpex_last": null
+        },
+        {
+          "id": "6806",
+          "security_name": "森崴能源",
+          "tpex_days": 0,
+          "tpex_first": null,
+          "tpex_last": null
+        },
+        {
+          "id": "6947",
+          "security_name": "台鎔科技",
+          "tpex_days": 0,
+          "tpex_first": null,
+          "tpex_last": null
+        },
+        {
+          "id": "7689",
+          "security_name": "大鵬科CLMX",
+          "tpex_days": 0,
+          "tpex_first": null,
+          "tpex_last": null
+        },
+        {
+          "id": "7827",
+          "security_name": "漢康-KY創",
+          "tpex_days": 0,
+          "tpex_first": null,
+          "tpex_last": null
+        },
+        {
+          "id": "7835",
+          "security_name": "永悅健康-創",
+          "tpex_days": 0,
+          "tpex_first": null,
+          "tpex_last": null
+        },
+        {
+          "id": "7855",
+          "security_name": "和運租車",
+          "tpex_days": 0,
+          "tpex_first": null,
+          "tpex_last": null
+        },
+        {
+          "id": "8105",
+          "security_name": "凌巨",
+          "tpex_days": 0,
+          "tpex_first": null,
+          "tpex_last": null
+        }
+      ]
+    },
+    "totals_by_source": {
+      "note": "全量總覽。",
+      "sql_verbatim": "SELECT source, count(*) AS rows, count(DISTINCT stock_id) AS stocks,\n       count(DISTINCT trade_date) AS days,\n       min(trade_date) AS first_date, max(trade_date) AS last_date\nFROM candidate_prices GROUP BY source ORDER BY source;",
+      "columns": [
+        "source",
+        "rows",
+        "stocks",
+        "days",
+        "first_date",
+        "last_date"
+      ],
+      "rows": [
+        {
+          "source": "tpex_daily_quotes",
+          "rows": 623384,
+          "stocks": 912,
+          "days": 740,
+          "first_date": "2023-08-07",
+          "last_date": "2026-08-21"
+        },
+        {
+          "source": "twse_mi_index",
+          "rows": 766506,
+          "stocks": 1099,
+          "days": 740,
+          "first_date": "2023-08-07",
+          "last_date": "2026-08-21"
+        }
+      ]
+    },
+    "attendance_pattern_summary": {
+      "note": "個股層級的出席形態總覽。**日期層級的交叉比對結構上看不到這個**——每一天都在，只是每一天裡少了一檔。",
+      "sql_verbatim": "WITH cal AS (SELECT DISTINCT trade_date d FROM candidate_prices),\n     lim AS (SELECT min(d) AS first_d, max(d) AS last_d FROM cal),\n     s   AS (SELECT stock_id, count(*) AS n_days,\n                    min(trade_date) AS first_seen, max(trade_date) AS last_seen\n             FROM candidate_prices GROUP BY stock_id),\n     x   AS (SELECT s.*,\n                    (SELECT count(*) FROM cal WHERE d BETWEEN s.first_seen AND s.last_seen) AS span_days\n             FROM s)\n\nSELECT CASE\n    WHEN n_days = (SELECT count(*) FROM cal) THEN 'A_present_all_740'\n    WHEN last_seen < (SELECT last_d FROM lim) AND span_days = n_days THEN 'B_exit_no_internal_gap'\n    WHEN last_seen < (SELECT last_d FROM lim) AND span_days > n_days THEN 'C_exit_with_prior_suspension'\n    WHEN first_seen > (SELECT first_d FROM lim) AND span_days = n_days THEN 'D_new_entry'\n    WHEN span_days > n_days THEN 'E_suspended_but_returned'\n    ELSE 'F_other' END AS pattern,\n  count(*) AS n_stocks\nFROM x GROUP BY 1 ORDER BY 2 DESC;",
+      "columns": [
+        "pattern",
+        "n_stocks"
+      ],
+      "rows": [
+        {
+          "pattern": "A_present_all_740",
+          "n_stocks": 1668
+        },
+        {
+          "pattern": "D_new_entry",
+          "n_stocks": 206
+        },
+        {
+          "pattern": "E_suspended_but_returned",
+          "n_stocks": 98
+        },
+        {
+          "pattern": "B_exit_no_internal_gap",
+          "n_stocks": 30
+        },
+        {
+          "pattern": "C_exit_with_prior_suspension",
+          "n_stocks": 2
+        }
+      ]
+    },
+    "exit_class_full_list": {
+      "note": "**退出類**（末見後不再出現，直到期末都沒回來）完整清單，含末見日當天的量價。**這一類對 Point-in-Time universe 的意義是「退出事件」**（下市／合併／轉市場／報表脫落）—— 但**本步驟刻意不判斷原因**，「從報表中消失 ≠ 下市」的邊界是 UG-G2-SB6 的題目。",
+      "sql_verbatim": "WITH cal AS (SELECT DISTINCT trade_date d FROM candidate_prices),\n     lim AS (SELECT min(d) AS first_d, max(d) AS last_d FROM cal),\n     s   AS (SELECT stock_id, count(*) AS n_days,\n                    min(trade_date) AS first_seen, max(trade_date) AS last_seen\n             FROM candidate_prices GROUP BY stock_id),\n     x   AS (SELECT s.*,\n                    (SELECT count(*) FROM cal WHERE d BETWEEN s.first_seen AND s.last_seen) AS span_days\n             FROM s)\n\nSELECT x.stock_id, c.security_name, c.source,\n       x.first_seen, x.last_seen, x.n_days, x.span_days,\n       (x.span_days - x.n_days) AS internal_gap_days,\n       c.close_price AS last_day_close, c.volume AS last_day_volume,\n       c.turnover_amount AS last_day_turnover\nFROM x JOIN candidate_prices c\n       ON c.stock_id = x.stock_id AND c.trade_date = x.last_seen\nWHERE x.last_seen < (SELECT last_d FROM lim)\nORDER BY x.last_seen DESC;",
+      "columns": [
+        "stock_id",
+        "security_name",
+        "source",
+        "first_seen",
+        "last_seen",
+        "n_days",
+        "span_days",
+        "internal_gap_days",
+        "last_day_close",
+        "last_day_volume",
+        "last_day_turnover"
+      ],
+      "rows": [
+        {
+          "stock_id": "2867",
+          "security_name": "三商壽",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-19",
+          "n_days": 738,
+          "span_days": 738,
+          "internal_gap_days": 0,
+          "last_day_close": "9.7000",
+          "last_day_volume": 76212030,
+          "last_day_turnover": "741474830"
+        },
+        {
+          "stock_id": "4747",
+          "security_name": "強生",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-19",
+          "n_days": 738,
+          "span_days": 738,
+          "internal_gap_days": 0,
+          "last_day_close": "56.5000",
+          "last_day_volume": 156000,
+          "last_day_turnover": "8967500"
+        },
+        {
+          "stock_id": "8105",
+          "security_name": "凌巨",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-18",
+          "n_days": 737,
+          "span_days": 737,
+          "internal_gap_days": 0,
+          "last_day_close": "13.8000",
+          "last_day_volume": 48154094,
+          "last_day_turnover": "663034161"
+        },
+        {
+          "stock_id": "6241",
+          "security_name": "鑫永洋",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-17",
+          "n_days": 736,
+          "span_days": 736,
+          "internal_gap_days": 0,
+          "last_day_close": "13.8500",
+          "last_day_volume": 344000,
+          "last_day_turnover": "4716550"
+        },
+        {
+          "stock_id": "6176",
+          "security_name": "瑞儀",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-12",
+          "n_days": 733,
+          "span_days": 733,
+          "internal_gap_days": 0,
+          "last_day_close": "81.3000",
+          "last_day_volume": 5502356,
+          "last_day_turnover": "448439079"
+        },
+        {
+          "stock_id": "4130",
+          "security_name": "健亞",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-07-21",
+          "n_days": 717,
+          "span_days": 717,
+          "internal_gap_days": 0,
+          "last_day_close": "26.7000",
+          "last_day_volume": 277000,
+          "last_day_turnover": "7391050"
+        },
+        {
+          "stock_id": "6806",
+          "security_name": "森崴能源",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-06-22",
+          "n_days": 697,
+          "span_days": 697,
+          "internal_gap_days": 0,
+          "last_day_close": "3.5100",
+          "last_day_volume": 6690040,
+          "last_day_turnover": "23068336"
+        },
+        {
+          "stock_id": "3426",
+          "security_name": "台興",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-06-01",
+          "n_days": 683,
+          "span_days": 683,
+          "internal_gap_days": 0,
+          "last_day_close": "47.8000",
+          "last_day_volume": 4000,
+          "last_day_turnover": "191100"
+        },
+        {
+          "stock_id": "4987",
+          "security_name": "科誠",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-05-20",
+          "n_days": 675,
+          "span_days": 675,
+          "internal_gap_days": 0,
+          "last_day_close": "81.6000",
+          "last_day_volume": 10000,
+          "last_day_turnover": "815500"
+        },
+        {
+          "stock_id": "4804",
+          "security_name": "大略-KY",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-04-13",
+          "n_days": 533,
+          "span_days": 649,
+          "internal_gap_days": 116,
+          "last_day_close": "3.2700",
+          "last_day_volume": 455000,
+          "last_day_turnover": "1487850"
+        },
+        {
+          "stock_id": "1589",
+          "security_name": "永冠-KY",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-04-02",
+          "n_days": 644,
+          "span_days": 644,
+          "internal_gap_days": 0,
+          "last_day_close": "5.5400",
+          "last_day_volume": 8432214,
+          "last_day_turnover": "46714700"
+        },
+        {
+          "stock_id": "3454",
+          "security_name": "晶睿",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-03-18",
+          "n_days": 633,
+          "span_days": 633,
+          "internal_gap_days": 0,
+          "last_day_close": "99.4000",
+          "last_day_volume": 184595,
+          "last_day_turnover": "18360030"
+        },
+        {
+          "stock_id": "6747",
+          "security_name": "亨泰光",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2025-11-26",
+          "n_days": 563,
+          "span_days": 563,
+          "internal_gap_days": 0,
+          "last_day_close": "199.0000",
+          "last_day_volume": 29000,
+          "last_day_turnover": "5769000"
+        },
+        {
+          "stock_id": "2809",
+          "security_name": "京城銀",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2025-09-17",
+          "n_days": 517,
+          "span_days": 517,
+          "internal_gap_days": 0,
+          "last_day_close": "56.6000",
+          "last_day_volume": 20309872,
+          "last_day_turnover": "1151213874"
+        },
+        {
+          "stock_id": "4945",
+          "security_name": "陞達科技",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2025-09-01",
+          "n_days": 505,
+          "span_days": 505,
+          "internal_gap_days": 0,
+          "last_day_close": "76.1000",
+          "last_day_volume": 42000,
+          "last_day_turnover": "3200800"
+        },
+        {
+          "stock_id": "6288",
+          "security_name": "聯嘉",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2025-08-04",
+          "n_days": 485,
+          "span_days": 485,
+          "internal_gap_days": 0,
+          "last_day_close": "20.9500",
+          "last_day_volume": 874364,
+          "last_day_turnover": "17785868"
+        },
+        {
+          "stock_id": "2888",
+          "security_name": "新光金",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2025-07-11",
+          "n_days": 469,
+          "span_days": 469,
+          "internal_gap_days": 0,
+          "last_day_close": "11.8000",
+          "last_day_volume": 1150009120,
+          "last_day_turnover": "13465212826"
+        },
+        {
+          "stock_id": "6287",
+          "security_name": "元隆",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2025-06-20",
+          "n_days": 454,
+          "span_days": 454,
+          "internal_gap_days": 0,
+          "last_day_close": "8.8900",
+          "last_day_volume": 48000,
+          "last_day_turnover": "426640"
+        },
+        {
+          "stock_id": "3202",
+          "security_name": "樺晟",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2025-04-02",
+          "n_days": 401,
+          "span_days": 401,
+          "internal_gap_days": 0,
+          "last_day_close": "3.9600",
+          "last_day_volume": 1333000,
+          "last_day_turnover": "5278680"
+        },
+        {
+          "stock_id": "6457",
+          "security_name": "紘康",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2024-12-25",
+          "n_days": 340,
+          "span_days": 340,
+          "internal_gap_days": 0,
+          "last_day_close": "62.1000",
+          "last_day_volume": 133000,
+          "last_day_turnover": "8239800"
+        },
+        {
+          "stock_id": "8420",
+          "security_name": "明揚",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2024-11-20",
+          "n_days": 315,
+          "span_days": 315,
+          "internal_gap_days": 0,
+          "last_day_close": "40.6000",
+          "last_day_volume": 23000,
+          "last_day_turnover": "935000"
+        },
+        {
+          "stock_id": "6514",
+          "security_name": "芮特-KY",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2024-10-08",
+          "n_days": 286,
+          "span_days": 286,
+          "internal_gap_days": 0,
+          "last_day_close": "50.8000",
+          "last_day_volume": 107000,
+          "last_day_turnover": "5421700"
+        },
+        {
+          "stock_id": "1701",
+          "security_name": "中化",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2024-08-20",
+          "n_days": 254,
+          "span_days": 254,
+          "internal_gap_days": 0,
+          "last_day_close": "21.1500",
+          "last_day_volume": 1165445,
+          "last_day_turnover": "24764485"
+        },
+        {
+          "stock_id": "5383",
+          "security_name": "金利",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2024-05-22",
+          "n_days": 193,
+          "span_days": 193,
+          "internal_gap_days": 0,
+          "last_day_close": "41.5000",
+          "last_day_volume": 114000,
+          "last_day_turnover": "4737150"
+        },
+        {
+          "stock_id": "2443",
+          "security_name": "昶虹",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2024-04-03",
+          "n_days": 149,
+          "span_days": 161,
+          "internal_gap_days": 12,
+          "last_day_close": "3.5700",
+          "last_day_volume": 1352398,
+          "last_day_turnover": "4828011"
+        },
+        {
+          "stock_id": "2358",
+          "security_name": "廷鑫",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2024-04-03",
+          "n_days": 161,
+          "span_days": 161,
+          "internal_gap_days": 0,
+          "last_day_close": "4.5600",
+          "last_day_volume": 1255533,
+          "last_day_turnover": "5725117"
+        },
+        {
+          "stock_id": "4712",
+          "security_name": "南璋",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2024-02-05",
+          "n_days": 127,
+          "span_days": 127,
+          "internal_gap_days": 0,
+          "last_day_close": "2.8500",
+          "last_day_volume": 1205000,
+          "last_day_turnover": "3346270"
+        },
+        {
+          "stock_id": "8418",
+          "security_name": "捷必勝-KY",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2024-01-24",
+          "n_days": 119,
+          "span_days": 119,
+          "internal_gap_days": 0,
+          "last_day_close": "8.9500",
+          "last_day_volume": 6000,
+          "last_day_turnover": "53710"
+        },
+        {
+          "stock_id": "3682",
+          "security_name": "亞太電",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2023-12-04",
+          "n_days": 83,
+          "span_days": 83,
+          "internal_gap_days": 0,
+          "last_day_close": "7.4700",
+          "last_day_volume": 19193670,
+          "last_day_turnover": "144211780"
+        },
+        {
+          "stock_id": "6404",
+          "security_name": "通訊-KY",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2023-11-21",
+          "n_days": 74,
+          "span_days": 74,
+          "internal_gap_days": 0,
+          "last_day_close": "4.6400",
+          "last_day_volume": 46000,
+          "last_day_turnover": "213440"
+        },
+        {
+          "stock_id": "4944",
+          "security_name": "兆遠",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2023-10-25",
+          "n_days": 55,
+          "span_days": 55,
+          "internal_gap_days": 0,
+          "last_day_close": "11.6000",
+          "last_day_volume": 2348000,
+          "last_day_turnover": "28059750"
+        },
+        {
+          "stock_id": "5281",
+          "security_name": "大峽谷-KY",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2023-10-24",
+          "n_days": 54,
+          "span_days": 54,
+          "internal_gap_days": 0,
+          "last_day_close": "15.8000",
+          "last_day_volume": 17000,
+          "last_day_turnover": "269150"
+        }
+      ]
+    },
+    "exit_class_last_day_normality": {
+      "note": "**退出前一天是否有異常訊號。** 階段一（60 天窗、4 檔）的發現是「消失前一天完全正常」；本查詢在三年、全市場資料上重新確認。",
+      "sql_verbatim": "WITH cal AS (SELECT DISTINCT trade_date d FROM candidate_prices),\n     lim AS (SELECT min(d) AS first_d, max(d) AS last_d FROM cal),\n     s   AS (SELECT stock_id, count(*) AS n_days,\n                    min(trade_date) AS first_seen, max(trade_date) AS last_seen\n             FROM candidate_prices GROUP BY stock_id),\n     x   AS (SELECT s.*,\n                    (SELECT count(*) FROM cal WHERE d BETWEEN s.first_seen AND s.last_seen) AS span_days\n             FROM s)\n\nSELECT count(*) AS exit_stocks,\n       count(*) FILTER (WHERE c.close_price IS NOT NULL) AS last_day_has_close,\n       count(*) FILTER (WHERE c.volume > 0)              AS last_day_has_volume,\n       count(*) FILTER (WHERE c.close_price IS NOT NULL AND c.volume > 0)\n                                                          AS last_day_fully_normal\nFROM x JOIN candidate_prices c\n       ON c.stock_id = x.stock_id AND c.trade_date = x.last_seen\nWHERE x.last_seen < (SELECT last_d FROM lim);",
+      "columns": [
+        "exit_stocks",
+        "last_day_has_close",
+        "last_day_has_volume",
+        "last_day_fully_normal"
+      ],
+      "rows": [
+        {
+          "exit_stocks": 32,
+          "last_day_has_close": 32,
+          "last_day_has_volume": 32,
+          "last_day_fully_normal": 32
+        }
+      ]
+    },
+    "suspension_class_full_list": {
+      "note": "**暫停類**（中間消失一段後又回來，期末仍在）完整清單。**暫停的股票在停牌期間仍然屬於 universe** —— 與退出類的處置完全不同。",
+      "sql_verbatim": "WITH cal AS (SELECT DISTINCT trade_date d FROM candidate_prices),\n     lim AS (SELECT min(d) AS first_d, max(d) AS last_d FROM cal),\n     s   AS (SELECT stock_id, count(*) AS n_days,\n                    min(trade_date) AS first_seen, max(trade_date) AS last_seen\n             FROM candidate_prices GROUP BY stock_id),\n     x   AS (SELECT s.*,\n                    (SELECT count(*) FROM cal WHERE d BETWEEN s.first_seen AND s.last_seen) AS span_days\n             FROM s)\n\nSELECT x.stock_id, max(c.security_name) AS security_name, max(c.source) AS source,\n       x.first_seen, x.last_seen, x.n_days, x.span_days,\n       (x.span_days - x.n_days) AS missing_days\nFROM x JOIN candidate_prices c ON c.stock_id = x.stock_id\nWHERE x.span_days > x.n_days AND x.last_seen = (SELECT last_d FROM lim)\nGROUP BY x.stock_id, x.first_seen, x.last_seen, x.n_days, x.span_days\nORDER BY (x.span_days - x.n_days) DESC, x.stock_id;",
+      "columns": [
+        "stock_id",
+        "security_name",
+        "source",
+        "first_seen",
+        "last_seen",
+        "n_days",
+        "span_days",
+        "missing_days"
+      ],
+      "rows": [
+        {
+          "stock_id": "4950",
+          "security_name": "金耘國際",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 541,
+          "span_days": 740,
+          "missing_days": 199
+        },
+        {
+          "stock_id": "8291",
+          "security_name": "尚茂",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 611,
+          "span_days": 740,
+          "missing_days": 129
+        },
+        {
+          "stock_id": "5481",
+          "security_name": "新華",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 653,
+          "span_days": 740,
+          "missing_days": 87
+        },
+        {
+          "stock_id": "8080",
+          "security_name": "泰霖",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 666,
+          "span_days": 740,
+          "missing_days": 74
+        },
+        {
+          "stock_id": "8101",
+          "security_name": "華冠",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 682,
+          "span_days": 740,
+          "missing_days": 58
+        },
+        {
+          "stock_id": "1225",
+          "security_name": "福懋油",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 687,
+          "span_days": 740,
+          "missing_days": 53
+        },
+        {
+          "stock_id": "1435",
+          "security_name": "中福",
+          "source": "twse_mi_index",
+          "first_seen": "2023-09-14",
+          "last_seen": "2026-08-21",
+          "n_days": 677,
+          "span_days": 712,
+          "missing_days": 35
+        },
+        {
+          "stock_id": "1591",
+          "security_name": "駿吉-KY",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 713,
+          "span_days": 740,
+          "missing_days": 27
+        },
+        {
+          "stock_id": "2489",
+          "security_name": "瑞軒",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 720,
+          "span_days": 740,
+          "missing_days": 20
+        },
+        {
+          "stock_id": "1538",
+          "security_name": "正峰",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 726,
+          "span_days": 740,
+          "missing_days": 14
+        },
+        {
+          "stock_id": "2911",
+          "security_name": "麗嬰房",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 726,
+          "span_days": 740,
+          "missing_days": 14
+        },
+        {
+          "stock_id": "3481",
+          "security_name": "群創",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 726,
+          "span_days": 740,
+          "missing_days": 14
+        },
+        {
+          "stock_id": "4946",
+          "security_name": "辣椒",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 726,
+          "span_days": 740,
+          "missing_days": 14
+        },
+        {
+          "stock_id": "8932",
+          "security_name": "智通*",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 726,
+          "span_days": 740,
+          "missing_days": 14
+        },
+        {
+          "stock_id": "3308",
+          "security_name": "聯德",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 727,
+          "span_days": 740,
+          "missing_days": 13
+        },
+        {
+          "stock_id": "3321",
+          "security_name": "同泰",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 730,
+          "span_days": 740,
+          "missing_days": 10
+        },
+        {
+          "stock_id": "1236",
+          "security_name": "宏亞",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "1414",
+          "security_name": "東和",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "1423",
+          "security_name": "利華",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "1459",
+          "security_name": "聯發",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "1776",
+          "security_name": "展宇",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "1805",
+          "security_name": "寶徠",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "1808",
+          "security_name": "潤隆",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "2022",
+          "security_name": "聚亨",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "2101",
+          "security_name": "南港",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "2107",
+          "security_name": "厚生",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "2314",
+          "security_name": "台揚",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "2327",
+          "security_name": "國巨*",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "2371",
+          "security_name": "大同",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "2380",
+          "security_name": "虹光",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "2535",
+          "security_name": "達欣工",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "2614",
+          "security_name": "東森",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "2726",
+          "security_name": "雅茗-KY",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "2740",
+          "security_name": "華軒",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "2832",
+          "security_name": "台產",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "3018",
+          "security_name": "隆銘綠能",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "3025",
+          "security_name": "星通",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "3064",
+          "security_name": "泰偉",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "3086",
+          "security_name": "華義*",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "3115",
+          "security_name": "富榮綱",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "3259",
+          "security_name": "鑫創",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "3290",
+          "security_name": "東浦",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "3432",
+          "security_name": "台端",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "3494",
+          "security_name": "誠研",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "3593",
+          "security_name": "力銘",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "4414",
+          "security_name": "如興",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "4763",
+          "security_name": "材料*-KY",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "4961",
+          "security_name": "天鈺",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "4994",
+          "security_name": "傳奇",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "5227",
+          "security_name": "立凱-KY",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "5278",
+          "security_name": "尚凡*",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "5314",
+          "security_name": "世紀*",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "5345",
+          "security_name": "馥鴻",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "5348",
+          "security_name": "系通",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "5469",
+          "security_name": "瀚宇博",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "5529",
+          "security_name": "鉅陞",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "5904",
+          "security_name": "寶雅*",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "6120",
+          "security_name": "達運",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "6161",
+          "security_name": "捷波",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "6164",
+          "security_name": "華興",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "6167",
+          "security_name": "久正",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "6208",
+          "security_name": "日揚",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "6228",
+          "security_name": "全譜",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "6276",
+          "security_name": "安鈦克",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "6465",
+          "security_name": "威潤",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "6763",
+          "security_name": "綠界科技*",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "8034",
+          "security_name": "榮群",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "8093",
+          "security_name": "保銳",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "8103",
+          "security_name": "瀚荃",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "8249",
+          "security_name": "菱光",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "8422",
+          "security_name": "可寧衛*",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "8499",
+          "security_name": "鼎炫-KY",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "9927",
+          "security_name": "泰銘",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "9945",
+          "security_name": "潤泰新",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 733,
+          "span_days": 740,
+          "missing_days": 7
+        },
+        {
+          "stock_id": "2352",
+          "security_name": "佳世達",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 734,
+          "span_days": 740,
+          "missing_days": 6
+        },
+        {
+          "stock_id": "2607",
+          "security_name": "榮運",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 734,
+          "span_days": 740,
+          "missing_days": 6
+        },
+        {
+          "stock_id": "3041",
+          "security_name": "揚智",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 734,
+          "span_days": 740,
+          "missing_days": 6
+        },
+        {
+          "stock_id": "3057",
+          "security_name": "喬鼎",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 734,
+          "span_days": 740,
+          "missing_days": 6
+        },
+        {
+          "stock_id": "3356",
+          "security_name": "奇偶",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 734,
+          "span_days": 740,
+          "missing_days": 6
+        },
+        {
+          "stock_id": "4154",
+          "security_name": "樂威科-KY",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 734,
+          "span_days": 740,
+          "missing_days": 6
+        },
+        {
+          "stock_id": "4530",
+          "security_name": "宏易",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 734,
+          "span_days": 740,
+          "missing_days": 6
+        },
+        {
+          "stock_id": "5381",
+          "security_name": "合正",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 734,
+          "span_days": 740,
+          "missing_days": 6
+        },
+        {
+          "stock_id": "5515",
+          "security_name": "建國",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 734,
+          "span_days": 740,
+          "missing_days": 6
+        },
+        {
+          "stock_id": "7780",
+          "security_name": "大研生醫*",
+          "source": "twse_mi_index",
+          "first_seen": "2025-09-09",
+          "last_seen": "2026-08-21",
+          "n_days": 224,
+          "span_days": 230,
+          "missing_days": 6
+        },
+        {
+          "stock_id": "8476",
+          "security_name": "台境*",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 734,
+          "span_days": 740,
+          "missing_days": 6
+        },
+        {
+          "stock_id": "8937",
+          "security_name": "合騏*",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 734,
+          "span_days": 740,
+          "missing_days": 6
+        },
+        {
+          "stock_id": "9924",
+          "security_name": "福興",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 734,
+          "span_days": 740,
+          "missing_days": 6
+        },
+        {
+          "stock_id": "1441",
+          "security_name": "大東",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 735,
+          "span_days": 740,
+          "missing_days": 5
+        },
+        {
+          "stock_id": "2025",
+          "security_name": "千興",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 735,
+          "span_days": 740,
+          "missing_days": 5
+        },
+        {
+          "stock_id": "3149",
+          "security_name": "正達",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 735,
+          "span_days": 740,
+          "missing_days": 5
+        },
+        {
+          "stock_id": "3152",
+          "security_name": "璟德",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 735,
+          "span_days": 740,
+          "missing_days": 5
+        },
+        {
+          "stock_id": "3171",
+          "security_name": "炎洲流通",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 735,
+          "span_days": 740,
+          "missing_days": 5
+        },
+        {
+          "stock_id": "3191",
+          "security_name": "雲科",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 735,
+          "span_days": 740,
+          "missing_days": 5
+        },
+        {
+          "stock_id": "4174",
+          "security_name": "浩鼎",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 735,
+          "span_days": 740,
+          "missing_days": 5
+        },
+        {
+          "stock_id": "4806",
+          "security_name": "桂田文創",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-10-12",
+          "last_seen": "2026-08-21",
+          "n_days": 690,
+          "span_days": 695,
+          "missing_days": 5
+        },
+        {
+          "stock_id": "5301",
+          "security_name": "寶得利",
+          "source": "tpex_daily_quotes",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 735,
+          "span_days": 740,
+          "missing_days": 5
+        },
+        {
+          "stock_id": "6919",
+          "security_name": "康霈*",
+          "source": "twse_mi_index",
+          "first_seen": "2024-10-04",
+          "last_seen": "2026-08-21",
+          "n_days": 452,
+          "span_days": 457,
+          "missing_days": 5
+        },
+        {
+          "stock_id": "2363",
+          "security_name": "矽統",
+          "source": "twse_mi_index",
+          "first_seen": "2023-08-07",
+          "last_seen": "2026-08-21",
+          "n_days": 736,
+          "span_days": 740,
+          "missing_days": 4
+        }
+      ]
+    },
+    "suspension_gap_length_distribution": {
+      "note": "暫停期間長度的分佈。**缺口長度本身不帶語意**（階段一實測：1459 與 2380 缺口同為 7 天，成因顯然不同），但分佈能告訴 SB6 要處理的規模。",
+      "sql_verbatim": "WITH cal AS (SELECT DISTINCT trade_date d FROM candidate_prices),\n     lim AS (SELECT min(d) AS first_d, max(d) AS last_d FROM cal),\n     s   AS (SELECT stock_id, count(*) AS n_days,\n                    min(trade_date) AS first_seen, max(trade_date) AS last_seen\n             FROM candidate_prices GROUP BY stock_id),\n     x   AS (SELECT s.*,\n                    (SELECT count(*) FROM cal WHERE d BETWEEN s.first_seen AND s.last_seen) AS span_days\n             FROM s)\n\nSELECT (span_days - n_days) AS missing_days, count(*) AS n_stocks\nFROM x\nWHERE span_days > n_days AND last_seen = (SELECT last_d FROM lim)\nGROUP BY 1 ORDER BY 1;",
+      "columns": [
+        "missing_days",
+        "n_stocks"
+      ],
+      "rows": [
+        {
+          "missing_days": 4,
+          "n_stocks": 1
+        },
+        {
+          "missing_days": 5,
+          "n_stocks": 10
+        },
+        {
+          "missing_days": 6,
+          "n_stocks": 13
+        },
+        {
+          "missing_days": 7,
+          "n_stocks": 58
+        },
+        {
+          "missing_days": 10,
+          "n_stocks": 1
+        },
+        {
+          "missing_days": 13,
+          "n_stocks": 1
+        },
+        {
+          "missing_days": 14,
+          "n_stocks": 5
+        },
+        {
+          "missing_days": 20,
+          "n_stocks": 1
+        },
+        {
+          "missing_days": 27,
+          "n_stocks": 1
+        },
+        {
+          "missing_days": 35,
+          "n_stocks": 1
+        },
+        {
+          "missing_days": 53,
+          "n_stocks": 1
+        },
+        {
+          "missing_days": 58,
+          "n_stocks": 1
+        },
+        {
+          "missing_days": 74,
+          "n_stocks": 1
+        },
+        {
+          "missing_days": 87,
+          "n_stocks": 1
+        },
+        {
+          "missing_days": 129,
+          "n_stocks": 1
+        },
+        {
+          "missing_days": 199,
+          "n_stocks": 1
+        }
+      ]
+    }
+  },
+  "FINDING_stock_level_attendance": "**日期層級的交叉比對結構上看不到個股層級的洞** —— 兩來源各 740 天、互相缺少 0 天，但那證明的是「天」不是「股」。個股層級實測：全期出席 1,668 檔、新進 206 檔、**暫停後回來 98 檔**、**退出 32 檔**（30 檔區間內無缺口 + 2 檔曾暫停後退出）。**階段一從 60 天窗只看到 4 檔退出，三年資料是 32 檔。** 兩類對 Point-in-Time universe 的意義完全不同：**退出是退出事件；暫停的股票在停牌期間仍然屬於 universe**。⚠ **本步驟刻意不判斷原因** —— 「從報表中消失 ≠ 下市」的邊界是 `UG-G2-SB6` 的題目，這裡只把**對象集合與時間邊界**弄清楚。",
+  "FINDING_exit_has_no_warning_signal": "**32 檔退出股，末見日當天全部量價俱全**（有收盤價 32／32、有成交量 32／32）。階段一在 60 天窗、4 檔上的發現「消失前一天完全正常」，**在三年、全市場、32 檔上零例外成立**。也就是說：**「消失」在資料內部沒有任何前導訊號**，只能靠「後面沒有了」偵測，而那是一個只有在事後、且需要跨日比對才成立的判斷。**逐列檢查在原理上抓不到它。**"
+}

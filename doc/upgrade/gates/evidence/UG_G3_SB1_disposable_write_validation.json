@@ -1,0 +1,70 @@
+{
+  "purpose": "UG-G3-SB1 Gate A §11 DoD 第 2 項——target_triple_barrier／label_reason 於隔離拋棄式容器寫入驗證，含 float64→INTEGER 轉型檢查（審查方 2026-09-09 §三揭露的待驗事項）。",
+  "date": "2026-09-09",
+  "authorization": "PO 2026-09-09：第 2 項不需授權，可先做（真實庫寫入第 6 項才需 binding confirmation）。",
+  "method": {
+    "container": "獨立拋棄式容器 ug_g3_sb1_tb_write_tmpdb（postgres:18），加入既有 docker network stock_prediction_system2_devcontainer_default（與 db-1 同網，app 容器可用容器名解析），非 postgres-data 掛載，database 名稱本身即含 tmpdb 樣式（觸發 db_target_guard.py 的『非真實庫』識別，訊號 B 不成立）",
+    "connection_check": "連線確認 current_database()='ug_g3_sb1_tb_write_tmpdb', inet_server_port()=5432（拋棄式容器，非真實開發庫）",
+    "schema_setup": "database/init_db.py（schema.sql）→ database/apply_migrations.py（v1~v9 全部套用成功，含 migration 002 的 target_triple_barrier/label_reason 三項 CHECK 約束）",
+    "steps": [
+      "1. 對合成資料（6 列，涵蓋 label=1／insufficient_data／no_entry 三種情形）呼叫 generate_triple_barrier_labels()，DataFrame 層 target_triple_barrier 為 float64",
+      "2. 轉型 result['target_triple_barrier'].astype('Int64')（pandas 可空整數型），逐列 NaN→None、數值→int() 後以 psycopg2 INSERT；label_reason 欄同樣須逐列 pd.isna() 判斷後轉 None（詳見 nan_to_none_both_columns_required 節）——pandas 3.0.5 下 label_reason 欄 dtype 為 str，正常產生標籤（target 非 NULL）時該欄缺值以 float NaN 表示，非 None（見 src/ml/triple_barrier.py docstring 訂正）",
+      "3. 回讀確認：pg_typeof(target_triple_barrier)='integer'，label=1 該列正確寫入整數 1（非浮點 1.0），NULL 列正確為 SQL NULL 並帶對應 label_reason",
+      "4. known-FAIL：對三個 DB CHECK 約束個別注入違規 INSERT，確認全部被拒絕；另做一個合法對照組確認正常寫入不受影響",
+      "5. 對真實開發庫 postgres@localhost:5432 執行零觸碰查證（COUNT(*) WHERE target_triple_barrier IS NOT NULL = 0；COUNT(*) WHERE stock_id IN 測試用代碼 = 0）",
+      "6. docker rm -f -v ug_g3_sb1_tb_write_tmpdb 拆除容器與匿名卷，二次 docker ps -a 確認已移除"
+    ]
+  },
+  "write_verification": {
+    "insert_result": "6 列全部成功寫入",
+    "roundtrip_sample": [
+      {"trade_date": "2026-01-01", "stock_id": "T1", "target_triple_barrier": 1, "label_reason": null, "pg_typeof": "integer"},
+      {"trade_date": "2026-01-02", "stock_id": "T1", "target_triple_barrier": null, "label_reason": "insufficient_data", "pg_typeof": "integer"},
+      {"trade_date": "2026-01-08", "stock_id": "T1", "target_triple_barrier": null, "label_reason": "no_entry", "pg_typeof": "integer"}
+    ],
+    "dtype_cast_conclusion": "DataFrame 層 float64（含 NaN）必須先轉 pandas 可空整數型 Int64（或逐列 int()/None），直接把 float64 的 1.0 或 numpy.nan 傳給 psycopg2 對 INTEGER 欄位會有型別不相容風險；本驗證確認 astype('Int64') + 逐列 pd.isna() 判斷 None 的轉型路徑正確，寫入後型別為原生 integer，非字串化的 '1.0'"
+  },
+  "nan_to_none_both_columns_required": {
+    "finding": "【2026-09-09 審查方發現，PM 已重現】target_triple_barrier 的 float64→INTEGER 轉型並非唯一需要處理的欄位——label_reason 同樣需要 NaN→None 轉換，且不轉換時的失敗模式與 target_triple_barrier 不同，容易被誤判為『已處理好了』",
+    "reproduction_case_A": {
+      "case": "raw numpy.nan 直接寫入 target_triple_barrier（INTEGER 欄）",
+      "result": "REJECTED — psycopg2.errors.NumericValueOutOfRange: integer out of range（PostgreSQL 無法把 NaN 轉為 INTEGER，型別層級即拒絕，不到 CHECK 約束那一關）"
+    },
+    "reproduction_case_B_labeled_row": {
+      "case": "一筆正常產生標籤的列（target_triple_barrier=1，來自 generate_triple_barrier_labels() 真實輸出），label_reason 欄未轉換、原樣為 float NaN，直接交給 psycopg2 INSERT 進 TEXT 欄位",
+      "result": "REJECTED — psycopg2.errors.CheckViolation: violates check constraint \"chk_label_reason_consistency\"",
+      "mechanism": "psycopg2 對 TEXT 欄位的 float NaN 值會轉接為文字 'NaN' 寫入（非拒絕、非轉成 SQL NULL），使該列同時具有 target_triple_barrier=1（非 NULL）與 label_reason='NaN'（非 NULL）——違反不變式，由 CHECK 約束攔下，而非在轉型階段就被發現",
+      "significance": "這不是靜默缺陷（CHECK 約束確實攔住了），但錯誤訊息不會直接指向『忘了轉 label_reason』，若無本次逐一排查容易誤診為其他原因；Gate B 真實庫寫入腳本必須對兩欄分別做 pd.isna() → None 轉換，不能只轉 target_triple_barrier"
+    },
+    "reproduction_case_C_control": {
+      "case": "target_triple_barrier 以 raw float 1.0（非 Int64 轉型）直接寫入 INTEGER 欄，label_reason=None",
+      "result": "SUCCEEDED，寫入後型別為原生 integer（PostgreSQL 對『整數值的浮點數』會靜默接受並轉型，只有帶小數部分或 NaN 才會在型別層級失敗）——說明 Int64 轉型雖是建議做法，但非此案例失敗的必要條件，真正必要的是先做 pd.isna() 判斷"
+    }
+  },
+  "known_fail_verification": {
+    "invariant_violation": {
+      "case": "target_triple_barrier=1 且 label_reason='ambiguous_dual_barrier' 同時非 NULL",
+      "result": "REJECTED — psycopg2.errors.CheckViolation: violates check constraint \"chk_label_reason_consistency\""
+    },
+    "target_domain_violation": {
+      "case": "target_triple_barrier=2（值域 {-1,0,1} 之外）",
+      "result": "REJECTED — psycopg2.errors.CheckViolation: violates check constraint \"chk_target_triple_barrier_domain\""
+    },
+    "reason_domain_violation": {
+      "case": "label_reason='bogus_reason'（不在 {'ambiguous_dual_barrier','insufficient_data','no_entry'} 值域）",
+      "result": "REJECTED — psycopg2.errors.CheckViolation: violates check constraint \"chk_label_reason_domain\""
+    },
+    "control_valid_case": {
+      "case": "target_triple_barrier=-1, label_reason=NULL",
+      "result": "SUCCEEDED（合法對照組，用以證明前三項的 REJECTED 不是連線或語法問題導致的全面失敗）"
+    }
+  },
+  "real_db_zero_touch_verification": {
+    "connection_check": "postgres@localhost:5432（真實開發庫）",
+    "target_triple_barrier_non_null_count": 0,
+    "test_stock_ids_present_count": 0,
+    "conclusion": "全程對真實開發庫零寫入，僅執行過一次唯讀 SELECT 做零觸碰查證本身"
+  },
+  "teardown_verification": "docker rm -f -v ug_g3_sb1_tb_write_tmpdb 後，docker ps -a --filter name=ug_g3_sb1_tb_write_tmpdb 輸出為空（容器與匿名卷皆已移除）",
+  "note_on_credentials": "本檔連線參數（host/dbname/user/password）皆為拋棄式容器的臨時值，容器已拆除即失效；即便如此仍不在此檔留下字面 password 值，比照 CHAL-008 的教訓，一律以敘述方式呈現而非可直接複製執行的完整字面指令"
+}

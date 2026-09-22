@@ -1,0 +1,383 @@
+{
+  "purpose": "UG-G2-SB6 §6 第 3 項的**修正後**逐月對號基準：60 日窗**嚴格早於** `effective_date`。",
+  "date": "2026-09-03",
+  "evidence_label": "`VERIFIED THIS SESSION`（PM 對真實庫唯讀查詢，2026-09-03）",
+  "SUPERSEDES": "本檔取代 `G2_SB6_union_count_calibration_4y.json` 的 46 列基準。**舊檔不是數錯，是窗口定義錯** —— 它用了含 `effective_date` 當日的窗口。",
+  "THE_CONFLICT": {
+    "found_when": "Gate A 核准後、實作 `universe_builder.py` 時（2026-09-03）",
+    "found_by": "PM（讀設計決定窗口邊界時）",
+    "statement": "**同一份已核准的提案，對「60 日窗要不要含 `effective_date` 當天」給了兩個相反的答案。**",
+    "side_a_strictly_before": [
+      "DEC-017（**APPROVED ADR**）§Decision 逐字：「每月 Universe 只能使用**生效日前已知**的 60 交易日成交資料」。",
+      "提案 §5 的 P1 逐字：`max(trade_date) < effective_date`。"
+    ],
+    "side_b_includes_the_day": [
+      "§6 第 3 項的校準 SQL：`c.rk BETWEEN e.rk-59 AND e.rk` —— **含當日**。",
+      "§7 決策點 1 的 K = 1 文字：「股票必須在 `effective_date` **當天**出現於報表中」。",
+      "K 校準的 SQL 亦為 `g.rk BETWEEN e.rk-59 AND e.rk`，且 `gap = e.rk - last_rk`，`gap = 0` 即「當天出現」。"
+    ],
+    "resolution": "**採 A（嚴格早於）。** 依 `CLAUDE.md` §0.2 的來源優先順序，**已核准的 ADR（DEC-017，優先序 2）高於 Gate A 提案（過程文件）**；且提案自己的 P1 也站在 A 這邊 —— **站在 B 的是兩段 SQL 與一句措辭，不是決策**。",
+    "why_it_matters_physically": "一份在 `2022-11-01` 生效的快照，若使用了當天的整日成交金額，**要等到當天收盤後才算得出來** —— 在當天做任何決定時它並不存在。那正是 Look-ahead Bias。**這不是文字之爭，是那份快照能不能被使用的問題。**",
+    "IMPACT_measured": {
+      "effective_dates": "**不變，仍是 46** —— 兩種窗口都要求 `rk >= 61`。",
+      "union_counts": "**46 列中有 8 列改變**，差異 1~2 檔。",
+      "consequence": "**若沿用舊基準，`universe_builder` 的正確實作會在 §6 第 3 項上 FAIL 8 次。** 而那個 FAIL 指向的是基準錯，不是實作錯 —— **這正是「判準必須在跑之前寫死」與「判準本身可能是錯的」同時成立的情形**。處置：**先改判準、再跑實作**，且改判準的依據是 DEC-017，不是實作的輸出。本檔於 `universe_builder` 首次執行**之前**產生。 ⚠ **本檔於 `universe_builder` 首次執行之前產生這一句，其證據標籤見 `process_note_label`。**",
+      "changed_rows": [
+        {
+          "effective_date": "2023-03-01",
+          "twse_inclusive": 973,
+          "twse_exclusive": 973,
+          "tpex_inclusive": 809,
+          "tpex_exclusive": 808
+        },
+        {
+          "effective_date": "2024-05-02",
+          "twse_inclusive": 1010,
+          "twse_exclusive": 1010,
+          "tpex_inclusive": 819,
+          "tpex_exclusive": 821
+        },
+        {
+          "effective_date": "2024-09-02",
+          "twse_inclusive": 1023,
+          "twse_exclusive": 1022,
+          "tpex_inclusive": 825,
+          "tpex_exclusive": 824
+        },
+        {
+          "effective_date": "2024-10-01",
+          "twse_inclusive": 1025,
+          "twse_exclusive": 1025,
+          "tpex_inclusive": 831,
+          "tpex_exclusive": 830
+        },
+        {
+          "effective_date": "2025-04-01",
+          "twse_inclusive": 1043,
+          "twse_exclusive": 1043,
+          "tpex_inclusive": 847,
+          "tpex_exclusive": 848
+        },
+        {
+          "effective_date": "2025-07-01",
+          "twse_inclusive": 1049,
+          "twse_exclusive": 1049,
+          "tpex_inclusive": 853,
+          "tpex_exclusive": 854
+        },
+        {
+          "effective_date": "2026-02-02",
+          "twse_inclusive": 1072,
+          "twse_exclusive": 1071,
+          "tpex_inclusive": 878,
+          "tpex_exclusive": 878
+        },
+        {
+          "effective_date": "2026-07-01",
+          "twse_inclusive": 1083,
+          "twse_exclusive": 1084,
+          "tpex_inclusive": 893,
+          "tpex_exclusive": 893
+        }
+      ],
+      "process_note_label": "`REPORTED, NOT INDEPENDENTLY VERIFIED`（複查方 2026-09-03 判定）—— **修正後的判準於 `universe_builder` 首次執行之前落檔**，順序若顛倒就成了照著結果改判準。⚠ **但這項順序無法被獨立驗證**：mtime 記的是**最後一次寫入**而非**首次執行**（兩者不是同一件事），mtime 本身可被改寫，且兩個檔在**同一個 commit** 裡、git 歷史不帶順序。**回報者：PM；不可重跑：產物不記錄事件發生的先後。**\n**這不影響本次結論** —— 判準的正確性建立在 DEC-017 的逐字條文上，**與它何時被寫下無關**。**有風險的不是判準錯，是無法證明過程是乾淨的。**\n**機制化**：見 DEC-033 §Decision 第 6 條 —— 往後判準在實作期被修改時，**單獨 commit 一次再跑**，git 歷史即帶順序。"
+    },
+    "K_EQUALS_1_RESTATEMENT": "K = 1 的語意隨之改為：**該股必須在 `effective_date` 之前最後一個交易日出現**。在原校準的度量下這相當於 `gap <= 1`，而校準實測 **K 從 1 到 15 皆零誤判**，故 K = 1 的新語意**仍落在零誤判區間內**。⚠ **但這是換算，不是重測** —— 原校準的排名是用含當日的窗口算的，排名輕微變動時該落在哪一格未經重新量測。標籤 `INFERENCE`。**重測需求已記入報告，不在本檔宣稱為已驗證。**"
+  },
+  "sql_verbatim": "WITH cal AS (\n  SELECT trade_date d, row_number() OVER (ORDER BY trade_date)::int rk\n  FROM (SELECT DISTINCT trade_date FROM candidate_prices) x),\neff AS (\n  SELECT c.rk, c.d FROM cal c\n  JOIN (SELECT min(d) md FROM cal GROUP BY date_trunc('month', d)) m ON m.md = c.d\n  WHERE c.rk >= 61)\nSELECT e.d,\n  count(DISTINCT cp.stock_id) FILTER (WHERE cp.source = 'twse_mi_index'),\n  count(DISTINCT cp.stock_id) FILTER (WHERE cp.source = 'tpex_daily_quotes'),\n  count(DISTINCT cp.stock_id)\nFROM eff e\nJOIN cal c ON c.rk BETWEEN e.rk - 60 AND e.rk - 1\nJOIN candidate_prices cp ON cp.trade_date = c.d\nGROUP BY e.d ORDER BY e.d;",
+  "generated_from": "postgres @ localhost:5432（真實開發庫，唯讀查詢）",
+  "USAGE": "⚠⚠ **管線必須走自己的路徑去數，不得重跑本檔的 SQL。** 正確作法：從 `universe_snapshots` 實際寫入的列去數（每個 `effective_date` 的相異 `stock_id`，`included` 兩種都算），再與下表比對。**若管線直接重用本 SQL，這個檢查就是拿自己比自己、永遠通過**（§9A.1）。\n⚠ 注意 `union_all` **不等於** `twse + tpex`：7 檔曾跨市場，在同一個 60 日窗內可能同時出現於兩個來源。",
+  "effective_dates": 46,
+  "baseline": [
+    {
+      "effective_date": "2022-11-01",
+      "twse": 975,
+      "tpex": 802,
+      "union_all": 1776
+    },
+    {
+      "effective_date": "2022-12-01",
+      "twse": 975,
+      "tpex": 806,
+      "union_all": 1780
+    },
+    {
+      "effective_date": "2023-01-03",
+      "twse": 974,
+      "tpex": 809,
+      "union_all": 1783
+    },
+    {
+      "effective_date": "2023-02-01",
+      "twse": 974,
+      "tpex": 810,
+      "union_all": 1784
+    },
+    {
+      "effective_date": "2023-03-01",
+      "twse": 973,
+      "tpex": 808,
+      "union_all": 1781
+    },
+    {
+      "effective_date": "2023-04-06",
+      "twse": 980,
+      "tpex": 810,
+      "union_all": 1790
+    },
+    {
+      "effective_date": "2023-05-02",
+      "twse": 980,
+      "tpex": 810,
+      "union_all": 1790
+    },
+    {
+      "effective_date": "2023-06-01",
+      "twse": 981,
+      "tpex": 811,
+      "union_all": 1792
+    },
+    {
+      "effective_date": "2023-07-03",
+      "twse": 984,
+      "tpex": 813,
+      "union_all": 1797
+    },
+    {
+      "effective_date": "2023-08-01",
+      "twse": 984,
+      "tpex": 812,
+      "union_all": 1796
+    },
+    {
+      "effective_date": "2023-09-01",
+      "twse": 985,
+      "tpex": 812,
+      "union_all": 1797
+    },
+    {
+      "effective_date": "2023-10-02",
+      "twse": 987,
+      "tpex": 813,
+      "union_all": 1800
+    },
+    {
+      "effective_date": "2023-11-01",
+      "twse": 990,
+      "tpex": 814,
+      "union_all": 1803
+    },
+    {
+      "effective_date": "2023-12-01",
+      "twse": 995,
+      "tpex": 817,
+      "union_all": 1811
+    },
+    {
+      "effective_date": "2024-01-02",
+      "twse": 1002,
+      "tpex": 820,
+      "union_all": 1819
+    },
+    {
+      "effective_date": "2024-02-01",
+      "twse": 1006,
+      "tpex": 818,
+      "union_all": 1821
+    },
+    {
+      "effective_date": "2024-03-01",
+      "twse": 1006,
+      "tpex": 817,
+      "union_all": 1820
+    },
+    {
+      "effective_date": "2024-04-01",
+      "twse": 1010,
+      "tpex": 820,
+      "union_all": 1829
+    },
+    {
+      "effective_date": "2024-05-02",
+      "twse": 1010,
+      "tpex": 821,
+      "union_all": 1830
+    },
+    {
+      "effective_date": "2024-06-03",
+      "twse": 1017,
+      "tpex": 820,
+      "union_all": 1837
+    },
+    {
+      "effective_date": "2024-07-01",
+      "twse": 1022,
+      "tpex": 823,
+      "union_all": 1845
+    },
+    {
+      "effective_date": "2024-08-01",
+      "twse": 1020,
+      "tpex": 824,
+      "union_all": 1844
+    },
+    {
+      "effective_date": "2024-09-02",
+      "twse": 1022,
+      "tpex": 824,
+      "union_all": 1846
+    },
+    {
+      "effective_date": "2024-10-01",
+      "twse": 1025,
+      "tpex": 830,
+      "union_all": 1855
+    },
+    {
+      "effective_date": "2024-11-01",
+      "twse": 1029,
+      "tpex": 832,
+      "union_all": 1861
+    },
+    {
+      "effective_date": "2024-12-02",
+      "twse": 1030,
+      "tpex": 833,
+      "union_all": 1863
+    },
+    {
+      "effective_date": "2025-01-02",
+      "twse": 1035,
+      "tpex": 839,
+      "union_all": 1874
+    },
+    {
+      "effective_date": "2025-02-03",
+      "twse": 1038,
+      "tpex": 841,
+      "union_all": 1879
+    },
+    {
+      "effective_date": "2025-03-03",
+      "twse": 1038,
+      "tpex": 844,
+      "union_all": 1882
+    },
+    {
+      "effective_date": "2025-04-01",
+      "twse": 1043,
+      "tpex": 848,
+      "union_all": 1891
+    },
+    {
+      "effective_date": "2025-05-02",
+      "twse": 1044,
+      "tpex": 848,
+      "union_all": 1892
+    },
+    {
+      "effective_date": "2025-06-02",
+      "twse": 1046,
+      "tpex": 854,
+      "union_all": 1900
+    },
+    {
+      "effective_date": "2025-07-01",
+      "twse": 1049,
+      "tpex": 854,
+      "union_all": 1903
+    },
+    {
+      "effective_date": "2025-08-01",
+      "twse": 1051,
+      "tpex": 855,
+      "union_all": 1905
+    },
+    {
+      "effective_date": "2025-09-01",
+      "twse": 1053,
+      "tpex": 857,
+      "union_all": 1909
+    },
+    {
+      "effective_date": "2025-10-01",
+      "twse": 1060,
+      "tpex": 857,
+      "union_all": 1916
+    },
+    {
+      "effective_date": "2025-11-03",
+      "twse": 1060,
+      "tpex": 861,
+      "union_all": 1921
+    },
+    {
+      "effective_date": "2025-12-01",
+      "twse": 1066,
+      "tpex": 863,
+      "union_all": 1929
+    },
+    {
+      "effective_date": "2026-01-02",
+      "twse": 1067,
+      "tpex": 874,
+      "union_all": 1941
+    },
+    {
+      "effective_date": "2026-02-02",
+      "twse": 1071,
+      "tpex": 878,
+      "union_all": 1948
+    },
+    {
+      "effective_date": "2026-03-02",
+      "twse": 1073,
+      "tpex": 880,
+      "union_all": 1952
+    },
+    {
+      "effective_date": "2026-04-01",
+      "twse": 1076,
+      "tpex": 881,
+      "union_all": 1956
+    },
+    {
+      "effective_date": "2026-05-04",
+      "twse": 1079,
+      "tpex": 884,
+      "union_all": 1963
+    },
+    {
+      "effective_date": "2026-06-01",
+      "twse": 1085,
+      "tpex": 889,
+      "union_all": 1974
+    },
+    {
+      "effective_date": "2026-07-01",
+      "twse": 1084,
+      "tpex": 893,
+      "union_all": 1977
+    },
+    {
+      "effective_date": "2026-08-03",
+      "twse": 1087,
+      "tpex": 893,
+      "union_all": 1979
+    }
+  ],
+  "summary": {
+    "twse": {
+      "min": 973,
+      "max": 1087
+    },
+    "tpex": {
+      "min": 802,
+      "max": 893
+    },
+    "union_all": {
+      "min": 1776,
+      "max": 1979
+    }
+  }
+}

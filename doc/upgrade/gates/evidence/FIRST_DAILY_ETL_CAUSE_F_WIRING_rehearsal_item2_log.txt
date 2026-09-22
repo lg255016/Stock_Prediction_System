@@ -1,0 +1,78 @@
+DB IDENTITY: ('rehearsal_db2', 55440)
+===== SCOPE DISCLOSURE =====
+今天 (09-18) previous_business_day=09-17，candidate_prices 現有最新僅到 09-16，有 1 天價格缺口（§0.5 #30 機制），與本次要測的 PTT 失敗→SOURCE_FAILED 無關。為避免這個不相干的缺口在本次「整日執行」裡被真的補上、混淆「只動 source_status 與社群八欄」的比對，本次額外把 run_price_batch／run_twse_pipeline_from_candidate_prices／run_tpex_pipeline_from_candidate_prices／run_us_stock_pipeline 也 mock 掉（不觸網、不寫 stock_prices），只讓 PTT 真的失敗＋NLP／特徵階段照常對真實（拋棄式）DB 執行。
+===== BEFORE row count ===== 449326
+/workspaces/Stock_Prediction_System2/src/extractors/trend_discover.py:7: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+[FeatureAggregator] 已初始化 ML 特徵聚合器 (支援雙模式時間對齊、研究指標與題材情緒溢出)
+===== EXECUTING run_all_daily_tasks() (real DB writes to disposable, PTT forced to fail) =====
+
+========== UG-G2-SB7 全市場批次取價 ==========
+
+========== 正在載入追蹤股票標的清單 ==========
+[INFO] 取得 8 檔啟用標的: ['2330', '6488', 'NVDA', '2382', '8069', '3008', '2059', '2454']
+[Batch] tracked_stocks_daily 2026-09-17｜OK 8／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 8
+[INFO] 特徵表落後股價表：daily_ml_features.max=2026-09-16，stock_prices.max=2026-09-16，n_lag=0 個交易日
+
+========== 啟動 AI 熱門趨勢探索 ==========
+
+========== 正在載入追蹤關鍵字清單 ==========
+[INFO] 取得 31 個追蹤關鍵字：['環球晶', '廣達', '台積電', '輝達', '降息', '非農', 'AI伺服器', '矽光子', '凌巨', '記憶體', '川湖', '聯發科', '美債', '元太', '大立光', 'ASIC/AI晶片', '電子紙應用', '光學鏡頭', '散熱模組', 'CoWoS', 'AI晶片與ASIC', '電子紙與電子標籤', 'ASIC/IC設計', '加密貨幣概念', '電子紙', '生技醫療', 'AI伺服器與運算', '蘋果供應鏈', '高頻寬記憶體(HBM)', '銅箔基板(CCL)', '營建營造']
+  [2026-09-18] 看板批次 FETCH_FAILED（31 個關鍵字全部受影響）：rehearsal: forced PTT full-day failure
+[Batch] ptt 2026-09-18｜OK 0／NO_DATA 0／FETCH_FAILED 31／REFUSED 0｜合計 31
+
+========== 開始執行 NLP 情緒運算管線 (Batch Checkpointing 模式) ==========
+🎉 所有文章情緒分數計算完畢！本次總共處理了 0 筆資料。
+
+========== 啟動 ML 特徵工程管線 ==========
+[INFO] [Feature] 開始聚合特徵：股價 449326 筆, 文章 1266 筆 (Cutoff: 15:30:00)
+[INFO] [Feature] 特徵表聚合完成！
+
+[Load] 準備寫入 449326 筆特徵數據至 daily_ml_features...
+[Load] 成功執行資料庫作業。已處理 449326 筆資料。
+
+========== UG-G3-SB2 每日尾端重算掛點 ==========
+
+[Load] 準備更新 2754 筆 Triple-Barrier 尾端重算標籤...
+[Load] Triple-Barrier 尾端重算完成，實際影響 2754 列（預期 2754 列）。
+
+========== 所有 ETL 任務執行完畢 ==========
+===== AFTER row count ===== 449326
+===== total differing rows ===== 47
+price-derived column violations (must be 0): 0
+non-social/source_status violations (must be 0): 0
+===== rows flipped to SOURCE_FAILED ===== 47
+  ('2059', '2026-09-07')
+  ('2059', '2026-09-08')
+  ('2059', '2026-09-09')
+  ('2059', '2026-09-10')
+  ('2059', '2026-09-11')
+  ('2059', '2026-09-14')
+  ('2330', '2026-09-07')
+  ('2330', '2026-09-08')
+  ('2330', '2026-09-09')
+  ('2330', '2026-09-10')
+article_count NOT NULL violations on SOURCE_FAILED rows (must be 0): 0
+===== today etl_run_log PTT rows =====
+count: 31
+  ('2026-09-18', 'AI伺服器', 'FETCH_FAILED')
+  ('2026-09-18', 'AI伺服器與運算', 'FETCH_FAILED')
+  ('2026-09-18', 'AI晶片與ASIC', 'FETCH_FAILED')
+  ('2026-09-18', 'ASIC/AI晶片', 'FETCH_FAILED')
+  ('2026-09-18', 'ASIC/IC設計', 'FETCH_FAILED')
+  ('2026-09-18', 'CoWoS', 'FETCH_FAILED')
+  ('2026-09-18', '元太', 'FETCH_FAILED')
+  ('2026-09-18', '光學鏡頭', 'FETCH_FAILED')
+  ('2026-09-18', '凌巨', 'FETCH_FAILED')
+  ('2026-09-18', '加密貨幣概念', 'FETCH_FAILED')
+non-FETCH_FAILED rows today (must be 0): 0
+===== Python fetch_failed_source_keys() AFTER (for cross-check) =====
+count: 47
+flipped_to_failed subset of python_keys_after ? True

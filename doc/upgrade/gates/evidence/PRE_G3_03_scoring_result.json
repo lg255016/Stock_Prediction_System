@@ -1,0 +1,65 @@
+{
+  "purpose": "PRE-G3-03 評分階段結果（criteria 60a8d6e §N1~N5）",
+  "pre_registered_estimate": {
+    "articles_to_score": 1250,
+    "fuzzy_rate_basis": "S1 試點 98 篇實測 10.2%",
+    "expected_fuzzy_articles": 128,
+    "batch_size": 500,
+    "expected_db_batches": 3,
+    "expected_llm_calls": 3,
+    "N2_stop_threshold": 5
+  },
+  "binding": {
+    "current_database": "b1_pilot_tmpdb",
+    "inet_server_addr": "172.19.0.3"
+  },
+  "before": {
+    "market_articles_total": 1250,
+    "already_scored": 0,
+    "to_score": 1250,
+    "sentiment_cache_rows": 0
+  },
+  "batches": [
+    {
+      "batch_no": 1,
+      "rows": 500
+    },
+    {
+      "batch_no": 2,
+      "rows": 500
+    },
+    {
+      "batch_no": 3,
+      "rows": 250
+    }
+  ],
+  "llm_calls": [
+    {
+      "call_no": 1,
+      "titles_count": 58,
+      "outcome": "OK"
+    },
+    {
+      "call_no": 2,
+      "titles_count": 61,
+      "outcome": "OK"
+    },
+    {
+      "call_no": 3,
+      "titles_count": 29,
+      "outcome": "OK"
+    }
+  ],
+  "fallback_or_failure_events": [],
+  "after": {
+    "market_articles_total": 1250,
+    "scored": 1250,
+    "still_null": 0,
+    "sentiment_cache_rows": 135,
+    "sentiment_cache_new_rows": 135
+  },
+  "N4_verdict": "PASS",
+  "null_articles": [],
+  "N2_verdict": "PASS（3 次 <= 5）",
+  "outcome": "OK"
+}

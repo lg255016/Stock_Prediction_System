@@ -1,0 +1,167 @@
+{
+  "purpose": "UG-G2-SB5 A6 關鍵字覆蓋率量測的輸入快照",
+  "taken_at_utc": "2026-08-29T08:10:13.027355+00:00",
+  "taken_at_local": "2026-08-29T08:10:13.027366+00:00",
+  "source_of_truth": {
+    "table": "tracking_keywords",
+    "filter": "is_active = TRUE",
+    "query": "SELECT keyword, category, is_active, updated_at FROM tracking_keywords WHERE is_active = TRUE ORDER BY keyword;",
+    "current_database": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "server_version": "PostgreSQL 18.6 (Debian 18.6-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit"
+  },
+  "keyword_count": 25,
+  "keywords": [
+    {
+      "keyword": "AI伺服器",
+      "category": "theme",
+      "is_active": true,
+      "updated_at": "2026-08-17T08:19:27.741633"
+    },
+    {
+      "keyword": "AI晶片與ASIC",
+      "category": "ai_discovered",
+      "is_active": true,
+      "updated_at": "2026-08-21T04:00:38.877083"
+    },
+    {
+      "keyword": "ASIC/AI晶片",
+      "category": "ai_discovered",
+      "is_active": true,
+      "updated_at": "2026-08-21T03:56:28.832810"
+    },
+    {
+      "keyword": "ASIC/IC設計",
+      "category": "ai_discovered",
+      "is_active": true,
+      "updated_at": "2026-08-21T04:35:11.729351"
+    },
+    {
+      "keyword": "CoWoS",
+      "category": "theme",
+      "is_active": true,
+      "updated_at": "2026-08-21T03:59:52.444284"
+    },
+    {
+      "keyword": "元太",
+      "category": "ai_discovered",
+      "is_active": true,
+      "updated_at": "2026-08-21T02:30:32.637591"
+    },
+    {
+      "keyword": "光學鏡頭",
+      "category": "ai_discovered",
+      "is_active": true,
+      "updated_at": "2026-08-21T03:56:28.832810"
+    },
+    {
+      "keyword": "凌巨",
+      "category": "ai_discovered",
+      "is_active": true,
+      "updated_at": "2026-08-17T08:20:57.011171"
+    },
+    {
+      "keyword": "加密貨幣概念",
+      "category": "ai_discovered",
+      "is_active": true,
+      "updated_at": "2026-08-21T04:35:11.729351"
+    },
+    {
+      "keyword": "台積電",
+      "category": "core_stock",
+      "is_active": true,
+      "updated_at": "2026-08-17T08:19:27.741633"
+    },
+    {
+      "keyword": "大立光",
+      "category": "ai_discovered",
+      "is_active": true,
+      "updated_at": "2026-08-21T02:30:32.637591"
+    },
+    {
+      "keyword": "川湖",
+      "category": "ai_discovered",
+      "is_active": true,
+      "updated_at": "2026-08-17T08:20:57.112638"
+    },
+    {
+      "keyword": "廣達",
+      "category": "core_stock",
+      "is_active": true,
+      "updated_at": "2026-08-17T08:19:27.741633"
+    },
+    {
+      "keyword": "散熱模組",
+      "category": "theme",
+      "is_active": true,
+      "updated_at": "2026-08-21T03:59:52.444284"
+    },
+    {
+      "keyword": "環球晶",
+      "category": "core_stock",
+      "is_active": true,
+      "updated_at": "2026-08-17T08:19:27.741633"
+    },
+    {
+      "keyword": "矽光子",
+      "category": "theme",
+      "is_active": true,
+      "updated_at": "2026-08-17T08:19:27.741633"
+    },
+    {
+      "keyword": "美債",
+      "category": "ai_discovered",
+      "is_active": true,
+      "updated_at": "2026-08-20T15:49:32.626067"
+    },
+    {
+      "keyword": "聯發科",
+      "category": "ai_discovered",
+      "is_active": true,
+      "updated_at": "2026-08-20T15:49:32.626067"
+    },
+    {
+      "keyword": "記憶體",
+      "category": "ai_discovered",
+      "is_active": true,
+      "updated_at": "2026-08-17T08:20:57.065242"
+    },
+    {
+      "keyword": "輝達",
+      "category": "core_stock",
+      "is_active": true,
+      "updated_at": "2026-08-17T08:19:27.741633"
+    },
+    {
+      "keyword": "降息",
+      "category": "macro",
+      "is_active": true,
+      "updated_at": "2026-08-17T08:19:27.741633"
+    },
+    {
+      "keyword": "電子紙",
+      "category": "ai_discovered",
+      "is_active": true,
+      "updated_at": "2026-08-21T04:35:11.729351"
+    },
+    {
+      "keyword": "電子紙應用",
+      "category": "ai_discovered",
+      "is_active": true,
+      "updated_at": "2026-08-21T03:56:28.832810"
+    },
+    {
+      "keyword": "電子紙與電子標籤",
+      "category": "ai_discovered",
+      "is_active": true,
+      "updated_at": "2026-08-21T04:00:38.877083"
+    },
+    {
+      "keyword": "非農",
+      "category": "macro",
+      "is_active": true,
+      "updated_at": "2026-08-17T08:19:27.741633"
+    }
+  ]
+}

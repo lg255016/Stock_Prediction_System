@@ -1,0 +1,61 @@
+======================================================================
+段 B 場景 1b：整條 run_all_daily_tasks() 對拋棄式庫真跑
+（探索因 last_probed=None 真的走到 run_discovery()；NLP 撞 PerDay 配額）
+======================================================================
+[BINDING][開始前] current_database=gemquota_rehearsal2 inet_server_port=55502 (expect gemquota_rehearsal2/55502)
+/workspaces/Stock_Prediction_System2/src/transform/nlp_processor.py:8: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+[INFO] today_taipei() = 2026-09-18
+[INFO] fetch_last_discovery_probed_date() 事前值 = None （預期 None）
+[SETUP] 合成操作：article_id=15 的 sentiment_score 設回 NULL
+[FeatureAggregator] 已初始化 ML 特徵聚合器 (支援雙模式時間對齊、研究指標與題材情緒溢出)
+
+========== UG-G2-SB7 全市場批次取價 ==========
+
+========== 正在載入追蹤股票標的清單 ==========
+[INFO] 取得 8 檔啟用標的: ['2330', '6488', 'NVDA', '2382', '8069', '3008', '2059', '2454']
+[Batch] tracked_stocks_daily 2026-09-18｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+[INFO] 特徵表落後股價表：daily_ml_features.max=2026-09-17，stock_prices.max=2026-09-17，n_lag=0 個交易日
+
+========== 啟動 AI 熱門趨勢探索 ==========
+[Discover] 收集到 1 篇熱門標題，正在呼叫 Gemini 分析題材趨勢與成分股...
+[Discover] Gemini 未回傳可新增的熱門詞彙，本次未寫入資料庫。
+
+========== 正在載入追蹤關鍵字清單 ==========
+[INFO] 取得 31 個追蹤關鍵字：['環球晶', '廣達', '台積電', '輝達', '降息', '非農', 'AI伺服器', '矽光子', '凌巨', '記憶體', '川湖', '聯發科', '美債', '元太', '大立光', 'ASIC/AI晶片', '電子紙應用', '光學鏡頭', '散熱模組', 'CoWoS', 'AI晶片與ASIC', '電子紙與電子標籤', 'ASIC/IC設計', '加密貨幣概念', '電子紙', '生技醫療', 'AI伺服器與運算', '蘋果供應鏈', '高頻寬記憶體(HBM)', '銅箔基板(CCL)', '營建營造']
+[Batch] ptt 2026-09-18｜OK 31／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 31
+
+========== 開始執行 NLP 情緒運算管線 (Batch Checkpointing 模式) ==========
+⏳ 撈取 1 筆待處理資料，啟動 Hybrid 管線...
+[Gemini API] 正在批次處理 1 筆複雜標題 (具備 429 指數退避防護)...
+[WARNING] NLP 每日配額耗盡，本次停止，剩餘 1 篇留待下次：429 You exceeded your current quota, please check your plan and billing details. quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier", model: gemini-3.8-flash
+
+========== 啟動 ML 特徵工程管線 ==========
+[INFO] [Feature] 開始聚合特徵：股價 449334 筆, 文章 1267 筆 (Cutoff: 15:30:00)
+[INFO] [Feature] 特徵表聚合完成！
+
+[Load] 準備寫入 449334 筆特徵數據至 daily_ml_features...
+[Load] 成功執行資料庫作業。已處理 449334 筆資料。
+
+========== UG-G3-SB2 每日尾端重算掛點 ==========
+
+[Load] 準備更新 2754 筆 Triple-Barrier 尾端重算標籤...
+[Load] Triple-Barrier 尾端重算完成，實際影響 2754 列（預期 2754 列）。
+
+========== 所有 ETL 任務執行完畢 ==========
+
+[VERIFY] ai_discovery 列： [('2026-09-18', 'NO_DATA', None)]
+[VERIFY] nlp_gemini 列： [('2026-09-18', 'REFUSED', '剩餘 1 篇未評分，每日配額耗盡：429 You exceeded your current quota, please check your plan and billing details. quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier", model: gemini-3.8-flash')]
+[VERIFY] generate_content 呼叫次數（探索）： 1
+[VERIFY] generate_content 呼叫次數（NLP）： 1
+[VERIFY] today_taipei().isoformat() = 2026-09-18 （應與 nlp_gemini／ai_discovery 列的 batch_key 相同，證明傳的是 tracked_batch_key）
+[VERIFY] daily_ml_features 總列數（特徵階段是否完成的旁證）： [(449334,)]
+
+[SCENARIO 1b] 執行完畢，未拋例外，exit 0

@@ -1,0 +1,182 @@
+{
+  "purpose": "UG-G3-SB2a 段 2 前置：candidate_prices 8 交易日全市場缺口回補（2026-08-24~09-02）、段 1（stock_prices 回補）重跑補齊同 8 天、段 2 既有 4 檔（2330/2382/6488/NVDA）基線比對重跑。PO 2026-09-11 binding confirmation 逐步授權，任一步不符即停、回報、不進下一步（本次執行過程中兩次觸發此規則：TPEX 端間歇性失敗、基線比對鍵不對齊誤判）。",
+  "date": "2026-09-11",
+  "part_A_candidate_prices_gap_backfill": {
+    "background": "UG-G3-SB2a 段 2 基線比對期間唯讀量測發現 candidate_prices 於 2026-08-24~2026-08-28、2026-08-31~2026-09-02 共 8 個交易日 TWSE+TPEX 零列（08-21 有 1,972 檔、09-03 有 1,972 檔）。WebSearch 交叉核對三個獨立來源（含 TWSE 官方休市日期表轉載）確認：這 8 天皆非休市日，2026 年 8-9 月僅一般週末與 09-25（中秋）、09-28（教師節）為假日，皆不落在此區間，故為真實資料缺口。另查證 2026-07-10（週五）為颱風巴威（Bawei）造成的全日休市（5 個新聞來源交叉證實：工商時報、經濟日報、自由財經、PChome、Yahoo奇摩股市），candidate_prices 該日無列正確反映市場實況，非缺口，不需回補。成因推測（未查證）：UG-G2-SB9 四年候選池回補停在 2026-08-21，UG-G2-SB7 每日批次從 2026-09-03 才開始執行，中間窗口無銜接機制。",
+    "script": "scripts/verify/ug_g3_sb2a_backfill_candidate_prices_gap.py（commit e37455d 起支援 --dates/--markets 重試參數）",
+    "pre_backup": {
+      "command": "docker exec stock_prediction_system2_devcontainer-db-1 bash -c 'pg_dump -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\" -Fc -f /tmp/<filename>'（本機 socket 免密碼）",
+      "file_path": "D:\\Python\\Database_Backups\\Stock_Prediction_System2\\stock_prediction_system2_PRE_g3_sb2a_cp_gap_20260911_010029.dump",
+      "file_size_bytes": 79322398,
+      "pg_dump_exit_code": 0,
+      "restore_verification": {
+        "container": "獨立拋棄式容器 sb2a_gap_restore_check（postgres:18，隨機密碼，未掛 postgres-data），資料庫 sb2a_gap_restore_tmpdb",
+        "pg_restore_exit_code": 0,
+        "verified_counts": {
+          "candidate_prices": 1825814,
+          "stock_prices": 445635,
+          "universe_snapshots": 85641
+        },
+        "teardown": "docker rm -f sb2a_gap_restore_check；db-1 容器內兩次 /tmp 暫存檔（pg_dump 產出、還原用副本）皆已清除"
+      }
+    },
+    "pre_write_baseline": {
+      "T0": "2026-09-10 17:05:06.514438+00:00",
+      "candidate_prices_count": 1825814,
+      "stock_prices_count_and_md5": [445635, "ea817f9684c48444a77489fc3c72d794"]
+    },
+    "attempt_1_full_8_days": {
+      "command": "printf 'postgres\\n' | docker exec -i -u vscode -w /workspaces/Stock_Prediction_System2 -e DB_HOST=localhost -e DB_PORT=5432 <app> python scripts/verify/ug_g3_sb2a_backfill_candidate_prices_gap.py --write --backup /workspaces/Database_Backups/Stock_Prediction_System2/stock_prediction_system2_PRE_g3_sb2a_cp_gap_20260911_010029.dump",
+      "exit_code_note": "本次執行指令用 printf | docker exec | tee 管線，PM 誤用 ${PIPESTATUS[0]}（實為 printf 的離開碼，恆 0）想抓 docker exec 的離開碼——這是 PM 自己的方法論錯誤，已於當時揭露；腳本本身印出的 FAIL 結論才是真相，之後改用 `docker exec ... > file 2>&1; echo $?`（無管線）取得正確離開碼。",
+      "per_day_result": {
+        "2026-08-24": {"twse": "OK (1086)", "tpex": "OK (886)", "status": "PASS"},
+        "2026-08-25": {"twse": "OK (1086)", "tpex": "FETCH_FAILED (SSL: CERTIFICATE_VERIFY_FAILED, Missing Subject Key Identifier)", "status": "FAIL"},
+        "2026-08-26": {"twse": "OK (1086)", "tpex": "FETCH_FAILED (同上錯誤)", "status": "FAIL"},
+        "2026-08-27": {"twse": "OK (1085)", "tpex": "OK (887)", "status": "PASS"},
+        "2026-08-28": {"twse": "OK (1085)", "tpex": "OK (887)", "status": "PASS"},
+        "2026-08-31": {"twse": "OK (1085)", "tpex": "OK (888)", "status": "PASS"},
+        "2026-09-01": {"twse": "OK (1085)", "tpex": "OK (888)", "status": "PASS"},
+        "2026-09-02": {"twse": "OK (1085)", "tpex": "OK (887)", "status": "PASS"}
+      },
+      "candidate_prices_after": 1839820,
+      "outcome": "腳本自帶的寫入後核對正確抓到 08-25/08-26 不符，如實回報 FAIL，未 rollback（批次路徑逐市場各自 commit），PM 停下未繼續 POST 備份或段 1 重跑"
+    },
+    "pm_initial_hypothesis_rejected": "PM 最初推論「連續兩次同樣錯誤 ⇒ 該日期本身有問題」，PO 複核指出不成立：CERTIFICATE_VERIFY_FAILED 發生在 TLS 握手階段，此時 HTTP 請求（含日期參數）尚未送出，伺服器在握手階段不知道要哪一天，失敗不可能由日期決定。判斷方法論教訓：判斷是否為輸入本身的問題前，必須先確認失敗發生在哪一層。",
+    "po_diagnosis_reported_not_independently_verified": {
+      "label": "REPORTED, NOT INDEPENDENTLY VERIFIED（回報者：PO，位置：2026-09-11 訊息）",
+      "checks": [
+        "(1) 專案自己的 fetch_market_report('tpex', 2026-08-25) 單次呼叫 0.3 秒成功——端點當下可用",
+        "(2) requests.head 對站根連續 6 次成功；openssl s_client 4 次握手鏈皆為 TWCA 三層、verify 0",
+        "(3) Python 3.14 的 ssl.create_default_context() 預設開 VERIFY_X509_STRICT，對 tpex 憑證鏈 3/3 必失敗，錯誤訊息與實際撞到的逐字相同（Missing Subject Key Identifier）——鏈中某 CA 憑證缺 SKI 擴充，嚴格模式依 RFC 5280 拒絕；requests/urllib3 2.7 不走嚴格模式，平常能過，間歇失敗屬傳輸層/伺服端節點差異，與日期無關"
+      ],
+      "conclusion": "登記為 RISK-028（見 doc/upgrade/contracts/REMAINING_RISKS.md）"
+    },
+    "attempt_2_retry_0825_0826_tpex_only": {
+      "command": "docker exec ... python scripts/verify/ug_g3_sb2a_backfill_candidate_prices_gap.py --write --backup <同一份 PRE 檔> --dates 2026-08-25,2026-08-26 --markets tpex",
+      "backup_age_at_retry": "31.0 分鐘前（同一份 PRE 檔沿用，未逾 24h）",
+      "per_day_result": {
+        "2026-08-25": {"tpex": "FETCH_FAILED (同一錯誤，第 2 次)", "status": "FAIL"},
+        "2026-08-26": {"tpex": "OK (887)（暫時性問題已解決）", "status": "PASS"}
+      },
+      "candidate_prices_after": 1840707,
+      "outcome": "08-26 完整；08-25 仍缺 TPEX。依 PO 指示「再失敗就停，不第三次重試」，PM 停下回報，未繼續"
+    },
+    "attempt_3_retry_0825_tpex_only": {
+      "authorization": "PO 提出新證據（TLS 握手層診斷）推翻「日期本身有問題」的推論後，本則授權第三次重試",
+      "command": "docker exec ... python scripts/verify/ug_g3_sb2a_backfill_candidate_prices_gap.py --write --backup <同一份 PRE 檔> --dates 2026-08-25 --markets tpex",
+      "backup_age_at_retry": "423.3 分鐘前（約 7 小時，未逾 24h，沿用同一份 PRE 檔）",
+      "result": {"tpex": "OK (887, HTTP 嘗試 2 次)", "status": "PASS"},
+      "candidate_prices_after": 1841594,
+      "exit_code": 0,
+      "outcome": "8/8 天全數完成，寫入後核對通過"
+    },
+    "final_verification": {
+      "query_1_total": {"sql": "SELECT count(*) FROM candidate_prices;", "result": 1841594},
+      "query_2_per_day_per_market": {
+        "sql": "SELECT trade_date, source, count(*) FROM candidate_prices WHERE trade_date BETWEEN '2026-08-24' AND '2026-09-02' GROUP BY trade_date, source ORDER BY trade_date, source;",
+        "result": [
+          ["2026-08-24", "tpex_daily_quotes", 886], ["2026-08-24", "twse_mi_index", 1086],
+          ["2026-08-25", "tpex_daily_quotes", 887], ["2026-08-25", "twse_mi_index", 1086],
+          ["2026-08-26", "tpex_daily_quotes", 887], ["2026-08-26", "twse_mi_index", 1086],
+          ["2026-08-27", "tpex_daily_quotes", 887], ["2026-08-27", "twse_mi_index", 1085],
+          ["2026-08-28", "tpex_daily_quotes", 887], ["2026-08-28", "twse_mi_index", 1085],
+          ["2026-08-31", "tpex_daily_quotes", 888], ["2026-08-31", "twse_mi_index", 1085],
+          ["2026-09-01", "tpex_daily_quotes", 888], ["2026-09-01", "twse_mi_index", 1085],
+          ["2026-09-02", "tpex_daily_quotes", 887], ["2026-09-02", "twse_mi_index", 1085]
+        ]
+      },
+      "query_3_universe_458_coverage": {
+        "sql": "SELECT cp.trade_date, count(DISTINCT cp.stock_id) FROM candidate_prices cp JOIN (SELECT DISTINCT stock_id FROM universe_snapshots WHERE included) u ON u.stock_id = cp.stock_id WHERE cp.trade_date BETWEEN '2026-08-24' AND '2026-09-02' GROUP BY cp.trade_date ORDER BY cp.trade_date;",
+        "result": "全部 8 天皆 454 檔"
+      },
+      "query_4_etl_run_log_cumulative": {"sql": "count WHERE batch_key BETWEEN 08-24 AND 09-02 AND source IN (twse_mi_index, tpex_daily_quotes)", "result": 19}
+    },
+    "post_backup": {
+      "file_path": "D:\\Python\\Database_Backups\\Stock_Prediction_System2\\stock_prediction_system2_POST_g3_sb2a_cp_gap_20260911_080543.dump",
+      "file_size_bytes": 79925556,
+      "pg_dump_exit_code": 0
+    }
+  },
+  "part_B_stage1_stock_prices_rerun": {
+    "backup_reused": "part_A 的 POST dump 即本步的 PRE（中間無其他寫入、24h 內）：stock_prediction_system2_POST_g3_sb2a_cp_gap_20260911_080543.dump",
+    "pre_write_baseline": {
+      "T1": "2026-09-11 00:07:20.273063+00:00",
+      "stock_prices_count_and_md5": [445635, "ea817f9684c48444a77489fc3c72d794"]
+    },
+    "command": "printf 'postgres\\n' | docker exec -i -u vscode -w /workspaces/Stock_Prediction_System2 -e DB_HOST=localhost -e DB_PORT=5432 <app> python scripts/verify/ug_g3_sb2a_backfill_stock_prices.py --write --backup /workspaces/Database_Backups/Stock_Prediction_System2/stock_prediction_system2_POST_g3_sb2a_cp_gap_20260911_080543.dump",
+    "script_version": "961b69f（執行過程中未修改，依授權條件）",
+    "raw_output_summary": {
+      "candidate_pool": "448509 列，458 檔",
+      "stock_prices_existing": 445635,
+      "inserted": 3628,
+      "skipped_existing": 444881,
+      "source_distribution_inserted": {"twse_mi_index": 2604, "tpex_daily_quotes": 1024},
+      "per_stock_insert_min_max": "min=6（2330）、max=8（1101）、檔數=454",
+      "existing_3_stocks": {
+        "2330": {"candidate_prices": 993, "inserted": 6, "skipped": 987},
+        "2382": {"candidate_prices": 993, "inserted": 6, "skipped": 987},
+        "6488": {"candidate_prices": 993, "inserted": 8, "skipped": 985}
+      },
+      "null_price_rows_inserted": 0,
+      "check_1_insert_count": "3628 == 3628 PASS",
+      "check_2_total_count": "449263 == 449263（寫入前 + 插入）PASS",
+      "check_3_per_stock_count": "458 檔皆等於「插入前 + 待插入」PASS",
+      "check_4_spot_check": "100 列（隨機樣本 + 全部 SQL NULL 價格列）逐欄讀回相符 PASS",
+      "commit": "COMMIT 完成",
+      "exit_code": 0
+    },
+    "post_write_verification": {
+      "total_count": 449263,
+      "pre_existing_rows_unchanged": {"count": 445635, "md5": "ea817f9684c48444a77489fc3c72d794", "note": "與 T1 基線 md5 完全相同，零位元組被段 1 重跑動到"},
+      "newly_inserted_rows": 3628,
+      "universe_458_coverage_in_stock_prices": "2026-08-24~09-02 全部 8 天皆 454 檔",
+      "daily_ml_features": {"count": 3713, "target_triple_barrier_non_null": 3529, "label_reason_non_null": 184, "note": "與段 1 首次寫入前後一致，段 1 不動此表"}
+    },
+    "post_backup": {
+      "file_path": "D:\\Python\\Database_Backups\\Stock_Prediction_System2\\stock_prediction_system2_POST_g3_sb2a_stock_prices_rerun_20260911_080855.dump",
+      "file_size_bytes": 79989682,
+      "pg_dump_exit_code": 0
+    }
+  },
+  "part_C_baseline_rerun": {
+    "background": "段 1 先於段 2 執行，stock_prices 對既有 3 檔台股多出 8 個交易日，daily_ml_features 對這些新日期尚無列（段 2 尚未執行）。初版基線腳本把任何鍵不對齊都當成阻斷性 __key_mismatch__，PM 首次執行 C 步驟時被此設計缺陷擋下，回報後由 PO 裁決腳本改版（commit c54246c）：compare_columns() 拆分 __right_only__（daily_ml_features 有、重算沒有——孤兒列，永遠阻斷）與 __left_only__（重算有、daily_ml_features 沒有——新鍵，交由 compute_expected_new_keys() 核對預期集合，不符才阻斷）。",
+    "command": "docker exec ... python scripts/verify/ug_g3_sb2a_stage2_baseline_comparison.py --allow-diff-after 2026-08-21 --allow-diff-stocks 2330,2382,6488",
+    "script_version": "c54246c",
+    "full_recompute": {"stocks": 459, "rows": 449263, "elapsed_seconds": 7.73},
+    "compare_subset": {"stocks": ["2330", "2382", "6488", "NVDA"], "existing_rows": 3713},
+    "left_only_new_keys": {
+      "count": 20,
+      "expected_vs_actual": "恰好相符，missing=0, extra=0",
+      "breakdown": {
+        "2330": ["2026-08-24", "2026-08-25", "2026-08-26", "2026-08-27", "2026-08-28", "2026-08-31"],
+        "2382": ["2026-08-24", "2026-08-25", "2026-08-26", "2026-08-27", "2026-08-28", "2026-08-31"],
+        "6488": ["2026-08-24", "2026-08-25", "2026-08-26", "2026-08-27", "2026-08-28", "2026-08-31", "2026-09-01", "2026-09-02"]
+      },
+      "note": "2330/2382 缺 09-01/09-02（既知的批次覆蓋缺口，該兩天在缺口回補前就已存在於 stock_prices，非本次新鍵）；6488 無此缺口，8 天皆新鍵。與段 1 重跑的逐股插入數（2330:6, 2382:6, 6488:8）完全對應"
+    },
+    "right_only_orphans": {"count": 0, "note": "無孤兒列——daily_ml_features 沒有任何重算生不出對應列的情況"},
+    "column_comparison": {
+      "total_columns_compared": 25,
+      "zero_diff_columns": ["close_price", "volume", "amplitude_ratio", "article_count", "sentiment_mean", "bullishness_index", "agreement_index", "comment_volume_ratio", "comment_polarization", "net_push_momentum", "source_status"],
+      "columns_with_allowed_diffs_only": {
+        "return_1d": 3, "rsi_14": 10, "volatility_5d": 10, "volatility_20d": 10,
+        "ma5_bias_ratio": 10, "ma20_bias_ratio": 10, "volume_ratio_5d": 10,
+        "target_next_close": 3, "target_return_1d": 3, "target_up_down": 2,
+        "sentiment_3d_ma": 4, "sentiment_5d_ma": 8, "sentiment_lag_1": 2, "sentiment_lag_2": 3
+      },
+      "total_allowed_diffs": 88,
+      "disallowed_diffs": 0,
+      "diff_date_range": "2026-08-21（target_* 三欄，因 08-21 首次有 T+1 收盤價）與 2026-09-01~09-04（滾動窗口跨進補回日期、文章 roll-forward 改對到正確交易日）",
+      "diff_stocks": "僅 2330/2382/6488（NVDA 零差異）",
+      "note": "所有 88 筆差異皆落在 --allow-diff-after 2026-08-21 --allow-diff-stocks 2330,2382,6488 的允許範圍內，0 筆不允許範圍的差異"
+    },
+    "conclusion": "PASS：25 個比對欄位皆無不允許範圍的差異（4 檔、3713 列）。允許範圍內差異共 88 筆。"
+  },
+  "teardown_summary": "sb2a_gap_restore_check 拋棄式容器已 docker rm -f，docker ps -a 過濾輸出為空；db-1 容器內所有暫存 dump 副本（PRE 備份原始產出、還原用副本、POST 備份原始產出，共 4 次 pg_dump/cp 週期）皆已個別清除，未殘留於任何容器",
+  "documentation_updates": {
+    "REMAINING_RISKS.md": "新增 RISK-027（feature_aggregator.py 交易日曆跨市場聯集導致文章流失）、RISK-028（TPEX 端間歇性 SSL 憑證驗證失敗）",
+    "PROJECT_STATUS.md": "§0.5 新增延續列記錄本次進度，§0.5 #20 閘門解除條件明文維持不變",
+    "commits": ["e37455d（--dates/--markets 重試參數）", "c54246c（基線比對孤兒列/新鍵語意修正）"]
+  },
+  "note_on_credentials": "本檔不含任何字面 password 值（CHAL-008 教訓）"
+}

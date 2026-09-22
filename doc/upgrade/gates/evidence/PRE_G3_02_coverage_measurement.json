@@ -1,0 +1,274 @@
+{
+  "purpose": "PRE-G3-02 逐標的覆蓋率 —— 真實庫完整回補後，唯讀呼叫生產聚合函式量測",
+  "date": "2026-09-07",
+  "method": "DBWriter.fetch_all_for_features() + FeatureAggregator.generate_daily_features()（與 main_etl_pipeline.py:544-557 生產路徑完全相同，未寫回資料庫）",
+  "binding": {
+    "database": "postgres",
+    "port": 5432
+  },
+  "window": {
+    "start": "2026-01-17",
+    "end": "2026-09-06"
+  },
+  "input_sizes": {
+    "df_prices": 3713,
+    "df_articles": 1250,
+    "df_mapping": 5,
+    "df_theme_mapping": 43
+  },
+  "scope_limitation": "failed_source_keys=None（預設）—— 本次唯讀量測無對應 etl_run_log，不區分 SOURCE_FAILED，此為量測範圍限制",
+  "per_stock": {
+    "2330": {
+      "window_trading_days": 146,
+      "covered_days": 126,
+      "coverage_pct": 86.3,
+      "monthly": [
+        {
+          "month": "2026-01",
+          "total_trading_days": 10,
+          "covered_days": 8,
+          "coverage_pct": 80.0
+        },
+        {
+          "month": "2026-02",
+          "total_trading_days": 12,
+          "covered_days": 11,
+          "coverage_pct": 91.7
+        },
+        {
+          "month": "2026-03",
+          "total_trading_days": 22,
+          "covered_days": 17,
+          "coverage_pct": 77.3
+        },
+        {
+          "month": "2026-04",
+          "total_trading_days": 20,
+          "covered_days": 17,
+          "coverage_pct": 85.0
+        },
+        {
+          "month": "2026-05",
+          "total_trading_days": 20,
+          "covered_days": 19,
+          "coverage_pct": 95.0
+        },
+        {
+          "month": "2026-06",
+          "total_trading_days": 21,
+          "covered_days": 18,
+          "coverage_pct": 85.7
+        },
+        {
+          "month": "2026-07",
+          "total_trading_days": 22,
+          "covered_days": 21,
+          "coverage_pct": 95.5
+        },
+        {
+          "month": "2026-08",
+          "total_trading_days": 15,
+          "covered_days": 11,
+          "coverage_pct": 73.3
+        },
+        {
+          "month": "2026-09",
+          "total_trading_days": 4,
+          "covered_days": 4,
+          "coverage_pct": 100.0
+        }
+      ],
+      "first_trade_date_in_window": "2026-01-19",
+      "last_trade_date_in_window": "2026-09-04"
+    },
+    "2382": {
+      "window_trading_days": 146,
+      "covered_days": 33,
+      "coverage_pct": 22.6,
+      "monthly": [
+        {
+          "month": "2026-01",
+          "total_trading_days": 10,
+          "covered_days": 0,
+          "coverage_pct": 0.0
+        },
+        {
+          "month": "2026-02",
+          "total_trading_days": 12,
+          "covered_days": 4,
+          "coverage_pct": 33.3
+        },
+        {
+          "month": "2026-03",
+          "total_trading_days": 22,
+          "covered_days": 4,
+          "coverage_pct": 18.2
+        },
+        {
+          "month": "2026-04",
+          "total_trading_days": 20,
+          "covered_days": 5,
+          "coverage_pct": 25.0
+        },
+        {
+          "month": "2026-05",
+          "total_trading_days": 20,
+          "covered_days": 7,
+          "coverage_pct": 35.0
+        },
+        {
+          "month": "2026-06",
+          "total_trading_days": 21,
+          "covered_days": 4,
+          "coverage_pct": 19.0
+        },
+        {
+          "month": "2026-07",
+          "total_trading_days": 22,
+          "covered_days": 5,
+          "coverage_pct": 22.7
+        },
+        {
+          "month": "2026-08",
+          "total_trading_days": 15,
+          "covered_days": 4,
+          "coverage_pct": 26.7
+        },
+        {
+          "month": "2026-09",
+          "total_trading_days": 4,
+          "covered_days": 0,
+          "coverage_pct": 0.0
+        }
+      ],
+      "first_trade_date_in_window": "2026-01-19",
+      "last_trade_date_in_window": "2026-09-04"
+    },
+    "6488": {
+      "window_trading_days": 144,
+      "covered_days": 12,
+      "coverage_pct": 8.33,
+      "monthly": [
+        {
+          "month": "2026-01",
+          "total_trading_days": 10,
+          "covered_days": 0,
+          "coverage_pct": 0.0
+        },
+        {
+          "month": "2026-02",
+          "total_trading_days": 12,
+          "covered_days": 0,
+          "coverage_pct": 0.0
+        },
+        {
+          "month": "2026-03",
+          "total_trading_days": 22,
+          "covered_days": 0,
+          "coverage_pct": 0.0
+        },
+        {
+          "month": "2026-04",
+          "total_trading_days": 20,
+          "covered_days": 1,
+          "coverage_pct": 5.0
+        },
+        {
+          "month": "2026-05",
+          "total_trading_days": 20,
+          "covered_days": 3,
+          "coverage_pct": 15.0
+        },
+        {
+          "month": "2026-06",
+          "total_trading_days": 21,
+          "covered_days": 1,
+          "coverage_pct": 4.8
+        },
+        {
+          "month": "2026-07",
+          "total_trading_days": 22,
+          "covered_days": 4,
+          "coverage_pct": 18.2
+        },
+        {
+          "month": "2026-08",
+          "total_trading_days": 15,
+          "covered_days": 2,
+          "coverage_pct": 13.3
+        },
+        {
+          "month": "2026-09",
+          "total_trading_days": 2,
+          "covered_days": 1,
+          "coverage_pct": 50.0
+        }
+      ],
+      "first_trade_date_in_window": "2026-01-19",
+      "last_trade_date_in_window": "2026-09-04"
+    },
+    "NVDA": {
+      "window_trading_days": 159,
+      "covered_days": 91,
+      "coverage_pct": 57.23,
+      "monthly": [
+        {
+          "month": "2026-01",
+          "total_trading_days": 9,
+          "covered_days": 6,
+          "coverage_pct": 66.7
+        },
+        {
+          "month": "2026-02",
+          "total_trading_days": 19,
+          "covered_days": 14,
+          "coverage_pct": 73.7
+        },
+        {
+          "month": "2026-03",
+          "total_trading_days": 22,
+          "covered_days": 11,
+          "coverage_pct": 50.0
+        },
+        {
+          "month": "2026-04",
+          "total_trading_days": 21,
+          "covered_days": 7,
+          "coverage_pct": 33.3
+        },
+        {
+          "month": "2026-05",
+          "total_trading_days": 20,
+          "covered_days": 15,
+          "coverage_pct": 75.0
+        },
+        {
+          "month": "2026-06",
+          "total_trading_days": 21,
+          "covered_days": 12,
+          "coverage_pct": 57.1
+        },
+        {
+          "month": "2026-07",
+          "total_trading_days": 22,
+          "covered_days": 13,
+          "coverage_pct": 59.1
+        },
+        {
+          "month": "2026-08",
+          "total_trading_days": 21,
+          "covered_days": 12,
+          "coverage_pct": 57.1
+        },
+        {
+          "month": "2026-09",
+          "total_trading_days": 4,
+          "covered_days": 1,
+          "coverage_pct": 25.0
+        }
+      ],
+      "first_trade_date_in_window": "2026-01-20",
+      "last_trade_date_in_window": "2026-09-04"
+    }
+  }
+}

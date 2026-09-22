@@ -1,0 +1,4949 @@
+{
+  "risk_id": "RISK-023",
+  "adr": "DEC-039",
+  "write_timestamp": "20260914_130807",
+  "target": "postgres@localhost:5432",
+  "total_impacted_rows": 352,
+  "impacted_stock_count": 8,
+  "impacted_rows": [
+    {
+      "stock_id": "2059",
+      "trade_date": "2026-02-05",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.0615234375,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2059",
+      "trade_date": "2026-05-07",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.09750000000000003,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2059",
+      "trade_date": "2026-06-05",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.2775000000000001,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2059",
+      "trade_date": "2026-06-08",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.6296296296296297,
+        "comment_polarization": 0.12888888888888883,
+        "net_push_momentum": 0.08333333333333337
+      }
+    },
+    {
+      "stock_id": "2059",
+      "trade_date": "2026-07-06",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.586734693877551,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2059",
+      "trade_date": "2026-08-06",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.18306213017751483,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2059",
+      "trade_date": "2026-08-07",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.0135135135135136,
+        "comment_polarization": 0.03669410150891628,
+        "net_push_momentum": 0.07763532763532766
+      }
+    },
+    {
+      "stock_id": "2059",
+      "trade_date": "2026-08-11",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 3.026666666666667,
+        "comment_polarization": 0.23568431998278894,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2059",
+      "trade_date": "2026-08-12",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.7777777777777778,
+        "comment_polarization": 0.30140343060815333,
+        "net_push_momentum": -0.0384306014836
+      }
+    },
+    {
+      "stock_id": "2059",
+      "trade_date": "2026-08-13",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.039832285115304,
+        "comment_polarization": 0.4963579604578563,
+        "net_push_momentum": -0.12614347616754928
+      }
+    },
+    {
+      "stock_id": "2059",
+      "trade_date": "2026-08-17",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 2.8938053097345136,
+        "comment_polarization": 0.19354873614958445,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2059",
+      "trade_date": "2026-08-18",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.23397075365579303,
+        "comment_polarization": 0.2584876543209875,
+        "net_push_momentum": -0.03691520467836251
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-01-19",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.6002834505839765,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-01-20",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.8835443037974684,
+        "comment_polarization": 0.21791845990096725,
+        "net_push_momentum": 0.25212233653792093
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-01-21",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.7463087248322148,
+        "comment_polarization": 0.8478142736384495,
+        "net_push_momentum": -0.4942438513867085
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-01-22",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.3544921875,
+        "comment_polarization": 0.23745288633207706,
+        "net_push_momentum": 0.48312954650982814
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-01-23",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.1849912739965096,
+        "comment_polarization": 0.417590027700831,
+        "net_push_momentum": -0.11008154188287611
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-01-26",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 4.729166666666667,
+        "comment_polarization": 0.46476862132560504,
+        "net_push_momentum": -0.031562802712302274
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-01-27",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.5765069551777435,
+        "comment_polarization": 0.5894052219813366,
+        "net_push_momentum": -0.09081839299541361
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-01-29",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.24935064935064935,
+        "comment_polarization": 0.27363119834710736,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-02-02",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.3,
+        "comment_polarization": 0.8662842503898418,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-02-03",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.5726681127982647,
+        "comment_polarization": 0.9690858591957493,
+        "net_push_momentum": -0.18984746596686894
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-02-04",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.43209876543209874,
+        "comment_polarization": 0.9822222222222222,
+        "net_push_momentum": -0.30915750915750917
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-02-05",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 2.2621184919210053,
+        "comment_polarization": 0.17180370090423014,
+        "net_push_momentum": 1.0433862433862433
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-02-09",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.3723404255319149,
+        "comment_polarization": 0.2869135802469136,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-02-10",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.6992125984251969,
+        "comment_polarization": 0.2919393218322428,
+        "net_push_momentum": -0.0029810298102981303
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-02-11",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 2.856140350877193,
+        "comment_polarization": 0.33239143367043433,
+        "net_push_momentum": -0.024390243902439046
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-02-23",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 5.592061742006615,
+        "comment_polarization": 0.35847042476368207,
+        "net_push_momentum": -0.016117756718968423
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-02-24",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.18494623655913978,
+        "comment_polarization": 0.2232117207698937,
+        "net_push_momentum": 0.08040051819065097
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-02-25",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 4.748330765279918,
+        "comment_polarization": 0.6972139705462725,
+        "net_push_momentum": -0.33109596686543485
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-02-26",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.4482018250134192,
+        "comment_polarization": 0.7660140616549487,
+        "net_push_momentum": -0.06653903510539683
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-03-02",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.3291972651304128,
+        "comment_polarization": 0.2996328152507419,
+        "net_push_momentum": 0.35315850239155533
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-03-03",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.05654918463966334,
+        "comment_polarization": 0.4006243496357961,
+        "net_push_momentum": -0.06268588423701671
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-03-05",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.10923694779116466,
+        "comment_polarization": 0.12888888888888883,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-03-10",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 5.68141592920354,
+        "comment_polarization": 0.4676957517700958,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-03-12",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.11253196930946291,
+        "comment_polarization": 0.621301775147929,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-03-16",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 3.4898550724637682,
+        "comment_polarization": 0.7396307221300127,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-03-17",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.6772151898734177,
+        "comment_polarization": 0.39364418167159365,
+        "net_push_momentum": 0.2684245949713956
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-03-18",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.5279429250891796,
+        "comment_polarization": 1.0,
+        "net_push_momentum": -0.7786885245901639
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-03-19",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.21414141414141413,
+        "comment_polarization": 0.46597633136094685,
+        "net_push_momentum": 0.7307692307692307
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-03-20",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.7639569049951028,
+        "comment_polarization": 0.4499305555555555,
+        "net_push_momentum": 0.01089743589743597
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-03-23",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.581758422350041,
+        "comment_polarization": 0.4633585722011899,
+        "net_push_momentum": -0.009108527131783006
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-03-24",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 9.51,
+        "comment_polarization": 0.6014235499118731,
+        "net_push_momentum": -0.10122902561083302
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-03-25",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.1253720238095237,
+        "comment_polarization": 0.5945689296126615,
+        "net_push_momentum": 0.005405579953500328
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-03-26",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.10651828298887123,
+        "comment_polarization": 0.6939791760977818,
+        "net_push_momentum": -0.08354320451584885
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-03-27",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.17410572966128524,
+        "comment_polarization": 0.34369492068578755,
+        "net_push_momentum": 0.25693509291677885
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-03-30",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.22283669486011712,
+        "comment_polarization": 0.6048979591836735,
+        "net_push_momentum": -0.18155515370705244
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-03-31",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.203113941967445,
+        "comment_polarization": 0.5164899945916712,
+        "net_push_momentum": 0.06677740863787374
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-04-01",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.0692019950124687,
+        "comment_polarization": 0.48560534802472455,
+        "net_push_momentum": 0.02186427754479603
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-04-02",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.5439642324888228,
+        "comment_polarization": 0.625371581450654,
+        "net_push_momentum": -0.105144149236857
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-04-07",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.9324419422941591,
+        "comment_polarization": 0.4629683584872677,
+        "net_push_momentum": 0.1207554619636747
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-04-09",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.2865090403337969,
+        "comment_polarization": 0.2973615916955017,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-04-10",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.6782810685249709,
+        "comment_polarization": 0.5595867768595041,
+        "net_push_momentum": -0.1745989304812834
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-04-13",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.8132530120481927,
+        "comment_polarization": 0.24419689960230495,
+        "net_push_momentum": 0.20573300573300568
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-04-15",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.8462929475587703,
+        "comment_polarization": 0.26299394802420784,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-04-16",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 5.932394366197183,
+        "comment_polarization": 0.29222754387072336,
+        "net_push_momentum": -0.017198431206275178
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-04-17",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 2.491566265060241,
+        "comment_polarization": 0.5045773545285417,
+        "net_push_momentum": -0.13742947388725468
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-04-20",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.22448979591836735,
+        "comment_polarization": 0.7126155808268679,
+        "net_push_momentum": -0.1677801867174019
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-04-21",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.08702928870292886,
+        "comment_polarization": 0.1479289940828401,
+        "net_push_momentum": 0.386994448850119
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-04-22",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.08186655751125665,
+        "comment_polarization": 0.41222222222222216,
+        "net_push_momentum": -0.1564102564102564
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-04-23",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.30081650193382037,
+        "comment_polarization": 0.23688730347469933,
+        "net_push_momentum": 0.10689655172413792
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-04-24",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.07779349363507779,
+        "comment_polarization": 0.68359375,
+        "net_push_momentum": -0.31106321839080464
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-04-27",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 28.53233830845771,
+        "comment_polarization": 0.5693626922214436,
+        "net_push_momentum": 0.09372961513372469
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-04-28",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.3975714845280062,
+        "comment_polarization": 0.30741858474843475,
+        "net_push_momentum": 0.17598514996694647
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-04-29",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.5421597633136095,
+        "comment_polarization": 0.4375,
+        "net_push_momentum": -0.08221476510067116
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-04-30",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.08433390508862207,
+        "comment_polarization": 0.2928719008264462,
+        "net_push_momentum": 0.09090909090909094
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-05-04",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.1369622475856014,
+        "comment_polarization": 0.39851358024691363,
+        "net_push_momentum": -0.06535353535353539
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-05-05",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.2960210930009588,
+        "comment_polarization": 0.28307315253876075,
+        "net_push_momentum": 0.0711597729115977
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-05-06",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.05647058823529412,
+        "comment_polarization": 0.29085872576177296,
+        "net_push_momentum": -0.00461006530925856
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-05-07",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.4881808838643371,
+        "comment_polarization": 0.9418540314873497,
+        "net_push_momentum": -0.600970511384845
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-05-11",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 6.099838969404187,
+        "comment_polarization": 0.5457937966715891,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-05-12",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.894022891055532,
+        "comment_polarization": 0.5525626721276746,
+        "net_push_momentum": -0.00504065703951484
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-05-13",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.3369464230411892,
+        "comment_polarization": 0.3850138504155125,
+        "net_push_momentum": 0.11530296329057943
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-05-14",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.1438021282714984,
+        "comment_polarization": 0.08050290861324838,
+        "net_push_momentum": 0.17469358327325157
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-05-15",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.5955451348182884,
+        "comment_polarization": 0.23825321242253417,
+        "net_push_momentum": -0.08612304450028363
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-05-18",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.33409844427441976,
+        "comment_polarization": 0.2536675886698645,
+        "net_push_momentum": -0.00887573964497046
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-05-19",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.327653997378768,
+        "comment_polarization": 0.40828402366863903,
+        "net_push_momentum": -0.09467455621301768
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-05-20",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.8358547655068079,
+        "comment_polarization": 0.6884802595997837,
+        "net_push_momentum": -0.21109123434704835
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-05-21",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.5940204563335956,
+        "comment_polarization": 0.2098765432098766,
+        "net_push_momentum": 0.3307493540051679
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-05-25",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 9.3248730964467,
+        "comment_polarization": 0.5856341209795977,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-05-26",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.7075751163774863,
+        "comment_polarization": 0.6683674241850748,
+        "net_push_momentum": -0.06783708846897651
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-05-27",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 2.0722158874952488,
+        "comment_polarization": 0.6877617273960313,
+        "net_push_momentum": -0.017092637142042122
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-05-28",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.3180492976411344,
+        "comment_polarization": 0.7865961720226843,
+        "net_push_momentum": -0.09682632750015036
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-05-29",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.36511983681795,
+        "comment_polarization": 0.27225354327171436,
+        "net_push_momentum": 0.39112404698124875
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-06-01",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.8514365802382621,
+        "comment_polarization": 0.24469859793142512,
+        "net_push_momentum": 0.016000211223910488
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-06-02",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.3561298455720139,
+        "comment_polarization": 0.44618712817739326,
+        "net_push_momentum": -0.12489473343266178
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-06-03",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.890640724589064,
+        "comment_polarization": 0.2368308925640702,
+        "net_push_momentum": 0.1294094591063496
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-06-04",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.8073522568636575,
+        "comment_polarization": 0.2970385766861807,
+        "net_push_momentum": -0.035167558019724265
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-06-08",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.42242787152966793,
+        "comment_polarization": 0.9680084605724106,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-06-10",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 2.154418604651163,
+        "comment_polarization": 0.43405437252756496,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-06-11",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 3.8799392097264436,
+        "comment_polarization": 0.3774141489960593,
+        "net_push_momentum": 0.03674751790875952
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-06-12",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.02920254586297267,
+        "comment_polarization": 0.29085872576177296,
+        "net_push_momentum": 0.05306416726748375
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-06-15",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.056338028169014086,
+        "comment_polarization": 0.18999999999999995,
+        "net_push_momentum": 0.05789473684210533
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-06-17",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.2816679779701023,
+        "comment_polarization": 0.27484130859375,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-06-18",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.6875320677270395,
+        "comment_polarization": 0.4041243459526008,
+        "net_push_momentum": -0.07963267543859653
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-06-22",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 5.745704467353952,
+        "comment_polarization": 0.5690997306965417,
+        "net_push_momentum": -0.11549988214297735
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-06-23",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.4454022988505747,
+        "comment_polarization": 0.61625812514684,
+        "net_push_momentum": -0.036960915869753586
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-06-24",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.3472498343273691,
+        "comment_polarization": 0.5358048544861731,
+        "net_push_momentum": 0.06184965477000881
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-06-25",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.8074344911639245,
+        "comment_polarization": 0.2864472821264611,
+        "net_push_momentum": 0.16340181557572864
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-06-26",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.24609148812970472,
+        "comment_polarization": 0.5851766733697215,
+        "net_push_momentum": -0.20065270028424054
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-06-29",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.140825998645904,
+        "comment_polarization": 0.9625390218522373,
+        "net_push_momentum": -0.45051940951339525
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-06-30",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.5777096114519428,
+        "comment_polarization": 0.27652265821112443,
+        "net_push_momentum": 0.657026325546904
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-07-01",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.8963675213675215,
+        "comment_polarization": 0.35302457466918713,
+        "net_push_momentum": -0.04622688655672158
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-07-02",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.9913793103448276,
+        "comment_polarization": 0.44212010364273746,
+        "net_push_momentum": -0.057434245840042975
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-07-06",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.3618864292589028,
+        "comment_polarization": 0.314208984375,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-07-07",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.8140703517587939,
+        "comment_polarization": 0.42731921110299487,
+        "net_push_momentum": -0.0713682432432432
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-07-08",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.263905325443787,
+        "comment_polarization": 0.5640209702158834,
+        "net_push_momentum": -0.09646967541704388
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-07-09",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 4.935270805812418,
+        "comment_polarization": 0.5254871642254542,
+        "net_push_momentum": 0.028561839523596477
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-07-13",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.1772758384668036,
+        "comment_polarization": 0.5624460627715787,
+        "net_push_momentum": -0.027370321641519535
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-07-14",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.29334038054968287,
+        "comment_polarization": 0.3599999999999999,
+        "net_push_momentum": 0.13852140077821018
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-07-15",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.18334206390780514,
+        "comment_polarization": 0.494320987654321,
+        "net_push_momentum": -0.0888888888888889
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-07-16",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 5.9741331865712715,
+        "comment_polarization": 0.4111647964671665,
+        "net_push_momentum": 0.05624487116363042
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-07-17",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 2.4778285407148615,
+        "comment_polarization": 0.6782199075886914,
+        "net_push_momentum": -0.2000993451066
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-07-20",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.7741308572662492,
+        "comment_polarization": 0.40535232224465934,
+        "net_push_momentum": 0.20387738345041517
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-07-21",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.025416836112240746,
+        "comment_polarization": 0.68359375,
+        "net_push_momentum": -0.20863402061855674
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-07-22",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.4904801324503311,
+        "comment_polarization": 0.4972763168197224,
+        "net_push_momentum": 0.14653010033444813
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-07-24",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.13446475195822455,
+        "comment_polarization": 0.9473259876377318,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-07-27",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.09145880574452,
+        "comment_polarization": 0.47330377966493975,
+        "net_push_momentum": 0.4962301999031611
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-07-28",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.828335056876939,
+        "comment_polarization": 0.6880123366609854,
+        "net_push_momentum": -0.16717983806591408
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-07-29",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 2.208092485549133,
+        "comment_polarization": 0.42780511714537794,
+        "net_push_momentum": 0.19787708500579793
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-07-30",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.4014336917562724,
+        "comment_polarization": 0.28520661157024796,
+        "net_push_momentum": 0.08901890189018902
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-07-31",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.5572436245252306,
+        "comment_polarization": 0.24584487534626032,
+        "net_push_momentum": 0.022966507177033524
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-08-04",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.45081967213114754,
+        "comment_polarization": 0.68359375,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-08-06",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.23005181347150258,
+        "comment_polarization": 0.6343969713358573,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-08-07",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.7921928817451206,
+        "comment_polarization": 0.6198767595680932,
+        "net_push_momentum": 0.011890190592760974
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-08-10",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 3.546489563567363,
+        "comment_polarization": 0.5002972651605233,
+        "net_push_momentum": 0.09035519834067929
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-08-11",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.734144222415291,
+        "comment_polarization": 0.4795710391207506,
+        "net_push_momentum": 0.01451107290929321
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-08-12",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.3328671328671329,
+        "comment_polarization": 0.21234375000000005,
+        "net_push_momentum": 0.16609237536656885
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-08-13",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.267741935483871,
+        "comment_polarization": 0.16498216409036848,
+        "net_push_momentum": 0.026293103448275956
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-08-17",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.30120481927710846,
+        "comment_polarization": 0.30915837409343894,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-08-19",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.2262295081967213,
+        "comment_polarization": 0.29085872576177296,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-08-20",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 3.9330143540669855,
+        "comment_polarization": 0.37877648086583027,
+        "net_push_momentum": -0.05392792325641682
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-08-21",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.105,
+        "comment_polarization": 0.8263888888888888,
+        "net_push_momentum": -0.3715106732348112
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-08-25",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.7643312101910827,
+        "comment_polarization": 0.32179930795847755,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-08-26",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.28354430379746837,
+        "comment_polarization": 0.5351239669421488,
+        "net_push_momentum": -0.14171122994652408
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-08-28",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 13.464,
+        "comment_polarization": 0.47660029337411447,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-08-31",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.9196428571428572,
+        "comment_polarization": 0.3449711577768021,
+        "net_push_momentum": 0.08587483424994025
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-09-01",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.2828649138712602,
+        "comment_polarization": 0.17355371900826455,
+        "net_push_momentum": 0.09975238769013084
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-09-02",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.10899182561307902,
+        "comment_polarization": 0.6294896030245747,
+        "net_push_momentum": -0.300395256916996
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-09-03",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.6346328195829556,
+        "comment_polarization": 0.2592717011556034,
+        "net_push_momentum": 0.2519600855310049
+      }
+    },
+    {
+      "stock_id": "2330",
+      "trade_date": "2026-09-04",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.328381548084441,
+        "comment_polarization": 0.14577594123048676,
+        "net_push_momentum": 0.06358668653750621
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-02-09",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.14437499999999992,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-02-23",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.1851851851851851,
+        "comment_polarization": 0.14098750743604993,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-02-26",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.7692307692307693,
+        "comment_polarization": 0.05632653061224491,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-03-02",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.3620689655172414,
+        "comment_polarization": 0.1377551020408163,
+        "net_push_momentum": -0.042857142857142816
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-03-09",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.7727272727272727,
+        "comment_polarization": 0.06347554630593122,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-03-24",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.75,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-04-08",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.11870054144106612,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-04-09",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.5972222222222223,
+        "comment_polarization": 0.18258585100394076,
+        "net_push_momentum": -0.034665921162985835
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-04-14",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.46808510638297873,
+        "comment_polarization": 0.7065972222222223,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-04-29",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.1940857438016529,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-05-06",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.5730994152046783,
+        "comment_polarization": 0.37011841773746545,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-05-07",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.14074074074074075,
+        "comment_polarization": 0.32179930795847755,
+        "net_push_momentum": 0.029878618113912236
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-05-08",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.6554621848739496,
+        "comment_polarization": 0.22560000000000002,
+        "net_push_momentum": 0.05647058823529416
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-05-14",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 2.8666666666666667,
+        "comment_polarization": 0.26925078043704476,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-05-22",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.16498216409036848,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-06-02",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.5555555555555556,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-06-03",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.4615384615384615,
+        "comment_polarization": 0.1479289940828401,
+        "net_push_momentum": 0.2564102564102565
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-06-17",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.14577594123048676,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-07-07",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.36937716262975784,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-07-14",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.66,
+        "comment_polarization": 0.1024930747922439,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-07-17",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.14705882352941177,
+        "comment_polarization": 0.75,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-07-29",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.26530612244897966,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-07-30",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.5,
+        "comment_polarization": 0.19619500594530315,
+        "net_push_momentum": 0.039408866995073955
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-08-07",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.32179930795847755,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2382",
+      "trade_date": "2026-08-13",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.6451612903225806,
+        "comment_polarization": 0.12888888888888883,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-01-23",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.2604000000000001,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-01-26",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.4861111111111111,
+        "comment_polarization": 0.2174556213017752,
+        "net_push_momentum": 0.024615384615384595
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-01-27",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 2.7962962962962963,
+        "comment_polarization": 0.1626023495906016,
+        "net_push_momentum": 0.030478955007256947
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-02-05",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.24012075831024926,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-02-11",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.31045241809672386,
+        "comment_polarization": 0.19366930445647645,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-02-23",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.26397146254458975,
+        "comment_polarization": 0.75,
+        "net_push_momentum": -0.3979591836734694
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-02-24",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.391025641025641,
+        "comment_polarization": 0.3425858290723155,
+        "net_push_momentum": 0.31081081081081086
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-03-02",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.23262032085561496,
+        "comment_polarization": 0.2438563327032136,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-03-04",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.6086956521739131,
+        "comment_polarization": 0.4375,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-03-11",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 4.620689655172414,
+        "comment_polarization": 0.4217664930555556,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-03-19",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.26530612244897966,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-03-27",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.12358533272974193,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-04-02",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.12605042016806722,
+        "comment_polarization": 0.2098765432098766,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-04-13",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 7.75,
+        "comment_polarization": 0.3716537775133848,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-04-15",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.16,
+        "comment_polarization": 0.1377551020408163,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-04-24",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.6956004756242569,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-04-27",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 4.488888888888889,
+        "comment_polarization": 0.21603732638888895,
+        "net_push_momentum": 0.33369252873563215
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-04-30",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.0080645161290323,
+        "comment_polarization": 0.18999999999999995,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-05-04",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 5.622994652406417,
+        "comment_polarization": 0.31593315972222236,
+        "net_push_momentum": -0.07291666666666674
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-05-05",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.3433559650824442,
+        "comment_polarization": 0.06934256055363319,
+        "net_push_momentum": 0.1376225490196079
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-05-06",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.12038014783526926,
+        "comment_polarization": 0.22560000000000002,
+        "net_push_momentum": -0.08470588235294119
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-05-07",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.7606490872210954,
+        "comment_polarization": 0.7483686829568483,
+        "net_push_momentum": -0.378371335504886
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-05-08",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.6157635467980296,
+        "comment_polarization": 0.47599688126531525,
+        "net_push_momentum": 0.22225193251981135
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-05-11",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.8116927260367097,
+        "comment_polarization": 0.3722485207100592,
+        "net_push_momentum": 0.06842709529276692
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-05-12",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.12663085188027629,
+        "comment_polarization": 0.38752362948960295,
+        "net_push_momentum": -0.009698996655518322
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-05-13",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.11494252873563218,
+        "comment_polarization": 0.5351239669421488,
+        "net_push_momentum": -0.10079051383399218
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-05-25",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.424788536800909,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-05-26",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.15019762845849802,
+        "comment_polarization": 0.07840000000000003,
+        "net_push_momentum": 0.20157303370786517
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-05-27",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.726027397260274,
+        "comment_polarization": 0.5306614572204755,
+        "net_push_momentum": -0.27491712707182314
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-05-28",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.08256880733944955,
+        "comment_polarization": 0.2098765432098766,
+        "net_push_momentum": 0.20380601596071202
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-06-01",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.1978609625668448,
+        "comment_polarization": 0.234375,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-06-03",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.7191780821917808,
+        "comment_polarization": 0.07544378698224852,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-06-09",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.5094339622641509,
+        "comment_polarization": 0.14098750743604993,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-06-10",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.2484472049689441,
+        "comment_polarization": 0.5017301038062283,
+        "net_push_momentum": -0.22094691535150646
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-06-11",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 7.2368421052631575,
+        "comment_polarization": 0.6734693877551021,
+        "net_push_momentum": -0.13445378151260512
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-06-16",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.5625,
+        "comment_polarization": 0.4375,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-06-17",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.32142857142857145,
+        "comment_polarization": 0.06347554630593122,
+        "net_push_momentum": 0.217741935483871
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-06-18",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.3603133159268929,
+        "comment_polarization": 0.24584487534626032,
+        "net_push_momentum": -0.09932088285229201
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-06-23",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 3.292207792207792,
+        "comment_polarization": 0.3425858290723155,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-06-24",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.1481481481481481,
+        "comment_polarization": 0.20378698224852065,
+        "net_push_momentum": 0.0814968814968815
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-06-25",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.717948717948718,
+        "comment_polarization": 0.8844,
+        "net_push_momentum": -0.5523076923076924
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-06-26",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.696,
+        "comment_polarization": 0.293684925305568,
+        "net_push_momentum": 0.5004255319148936
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-07-13",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.33633695005945297,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-07-14",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.047244094488188976,
+        "comment_polarization": 0.18999999999999995,
+        "net_push_momentum": 0.08534482758620687
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-08-03",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.42673469387755103,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-08-04",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.47318611987381703,
+        "comment_polarization": 0.3599999999999999,
+        "net_push_momentum": 0.04285714285714293
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-08-11",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.695364238410596,
+        "comment_polarization": 0.2438563327032136,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-08-17",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.2169811320754717,
+        "comment_polarization": 0.30555555555555547,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-08-21",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.4166666666666667,
+        "comment_polarization": 0.4375,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-08-24",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 2.0,
+        "comment_polarization": 0.3599999999999999,
+        "net_push_momentum": 0.050000000000000044
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-08-25",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.2,
+        "comment_polarization": 0.38265306122448983,
+        "net_push_momentum": -0.014285714285714346
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-08-31",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.4915254237288136,
+        "comment_polarization": 0.34631054775916714,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-09-01",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 4.979591836734694,
+        "comment_polarization": 0.17499666291642035,
+        "net_push_momentum": 0.09978630493356877
+      }
+    },
+    {
+      "stock_id": "2454",
+      "trade_date": "2026-09-02",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.5219298245614035,
+        "comment_polarization": 0.02234566342633515,
+        "net_push_momentum": 0.08046710171237914
+      }
+    },
+    {
+      "stock_id": "3008",
+      "trade_date": "2026-02-06",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.5774999999999999,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "3008",
+      "trade_date": "2026-02-25",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.11418685121107264,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "3008",
+      "trade_date": "2026-04-17",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.24979849959699918,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "3008",
+      "trade_date": "2026-05-19",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.6975,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "3008",
+      "trade_date": "2026-06-03",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.234375,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "3008",
+      "trade_date": "2026-06-08",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.9736842105263158,
+        "comment_polarization": 0.2174556213017752,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "3008",
+      "trade_date": "2026-06-10",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.2894736842105263,
+        "comment_polarization": 0.42449464922711067,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "3008",
+      "trade_date": "2026-06-12",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.4772727272727273,
+        "comment_polarization": 0.7400999615532489,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "3008",
+      "trade_date": "2026-06-18",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 2.484848484848485,
+        "comment_polarization": 0.3510802469135802,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "3008",
+      "trade_date": "2026-06-29",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.32675871137409607,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "3008",
+      "trade_date": "2026-07-06",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.4125,
+        "comment_polarization": 0.20746579417013677,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "3008",
+      "trade_date": "2026-07-09",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.05263157894736842,
+        "comment_polarization": 0.5555555555555556,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "3008",
+      "trade_date": "2026-07-13",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.18181818181818182,
+        "comment_polarization": 0.75,
+        "net_push_momentum": -0.16666666666666663
+      }
+    },
+    {
+      "stock_id": "3008",
+      "trade_date": "2026-08-07",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.1024930747922439,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "3008",
+      "trade_date": "2026-08-21",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.30555555555555547,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "3008",
+      "trade_date": "2026-08-26",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.5844155844155844,
+        "comment_polarization": 0.05632653061224491,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "6488",
+      "trade_date": "2026-04-10",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.47107438016528924,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "6488",
+      "trade_date": "2026-05-05",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.5555555555555556,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "6488",
+      "trade_date": "2026-05-11",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 21.666666666666668,
+        "comment_polarization": 0.4833984375,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "6488",
+      "trade_date": "2026-05-20",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.2520087655222789,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "6488",
+      "trade_date": "2026-06-22",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.150146484375,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "6488",
+      "trade_date": "2026-07-02",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.3360768175582991,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "6488",
+      "trade_date": "2026-07-23",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.1721983337812416,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "6488",
+      "trade_date": "2026-07-28",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.9132947976878613,
+        "comment_polarization": 0.38265306122448983,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "6488",
+      "trade_date": "2026-07-30",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 2.3855421686746987,
+        "comment_polarization": 0.15444576562293566,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "6488",
+      "trade_date": "2026-08-05",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.12090680100755667,
+        "comment_polarization": 0.27249134948096887,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "6488",
+      "trade_date": "2026-08-14",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.5904,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "6488",
+      "trade_date": "2026-09-03",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.15972222222222232,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-01-22",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.51,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-02-06",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.26530612244897966,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-03-09",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.609375,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-03-16",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 4.5,
+        "comment_polarization": 0.2174556213017752,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-03-23",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.6304347826086957,
+        "comment_polarization": 0.29085872576177296,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-04-07",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.15972222222222232,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-04-08",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.5714285714285714,
+        "comment_polarization": 0.26530612244897966,
+        "net_push_momentum": -0.059523809523809534
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-05-08",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.18999999999999995,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-05-12",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 3.6666666666666665,
+        "comment_polarization": 0.07015306122448972,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-05-13",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 2.0701754385964914,
+        "comment_polarization": 0.4963579604578563,
+        "net_push_momentum": -0.25460829493087556
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-05-18",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.49523809523809526,
+        "comment_polarization": 0.1024930747922439,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-05-25",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 3.6666666666666665,
+        "comment_polarization": 0.03603305785123967,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-05-27",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.54,
+        "comment_polarization": 0.2520087655222789,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-06-03",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.5636363636363637,
+        "comment_polarization": 0.2098765432098766,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-06-09",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.4827586206896552,
+        "comment_polarization": 0.07015306122448972,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-07-08",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.3599999999999999,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-08-10",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.09750000000000003,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "8069",
+      "trade_date": "2026-08-21",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.2880859375,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-01-20",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.42298446745562135,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-01-26",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.5257142857142857,
+        "comment_polarization": 0.5017301038062283,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-01-27",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.47761194029850745,
+        "comment_polarization": 0.2290303390838786,
+        "net_push_momentum": 0.17216642754662836
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-01-28",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.810126582278481,
+        "comment_polarization": 0.4058159722222222,
+        "net_push_momentum": -0.10721544715447151
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-01-29",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.2242152466367713,
+        "comment_polarization": 0.44880624426078974,
+        "net_push_momentum": -0.02840909090909094
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-01-30",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 4.088888888888889,
+        "comment_polarization": 0.23250420045291842,
+        "net_push_momentum": 0.13364413364413363
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-02-02",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 2.3510971786833856,
+        "comment_polarization": 0.38265306122448983,
+        "net_push_momentum": -0.09035409035409037
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-02-03",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.897163120567376,
+        "comment_polarization": 0.385886649408284,
+        "net_push_momentum": -0.002060439560439553
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-02-04",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.3445149592021759,
+        "comment_polarization": 0.37832840236686394,
+        "net_push_momentum": 0.004807692307692291
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-02-06",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.07820136852394917,
+        "comment_polarization": 0.7155555555555555,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-02-09",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.3259361997226076,
+        "comment_polarization": 0.39412710007304597,
+        "net_push_momentum": 0.2450450450450451
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-02-10",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.1151515151515152,
+        "comment_polarization": 0.5088026882898679,
+        "net_push_momentum": -0.07752367752367761
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-02-11",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.21414913957934992,
+        "comment_polarization": 0.26530612244897966,
+        "net_push_momentum": 0.1562881562881563
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-02-12",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.3368421052631579,
+        "comment_polarization": 0.07840000000000003,
+        "net_push_momentum": 0.10285714285714287
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-02-23",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.2520087655222789,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-02-25",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 3.9827586206896552,
+        "comment_polarization": 0.5402045411897165,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-02-26",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.6758620689655173,
+        "comment_polarization": 0.345116776370744,
+        "net_push_momentum": 0.13116636313247287
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-02-27",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 4.168539325842697,
+        "comment_polarization": 0.5523752834467122,
+        "net_push_momentum": -0.14020093586567584
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-03-02",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.6546593578700078,
+        "comment_polarization": 0.49196468990493436,
+        "net_push_momentum": 0.04371833839918948
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-03-03",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.2575227431770469,
+        "comment_polarization": 0.5351239669421488,
+        "net_push_momentum": -0.030947775628626717
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-03-04",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.25624178712220763,
+        "comment_polarization": 0.609375,
+        "net_push_momentum": -0.05681818181818177
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-03-09",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.14136125654450263,
+        "comment_polarization": 0.1377551020408163,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-03-10",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.7225130890052356,
+        "comment_polarization": 0.417590027700831,
+        "net_push_momentum": -0.16541353383458646
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-03-12",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 3.696969696969697,
+        "comment_polarization": 0.39733379501385047,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-03-17",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.8352941176470587,
+        "comment_polarization": 0.4126997991090925,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-03-18",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.1,
+        "comment_polarization": 0.20021151431026507,
+        "net_push_momentum": 0.127953802902515
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-03-20",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.41025641025641024,
+        "comment_polarization": 0.06777645659928644,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-03-23",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 2.3315649867374004,
+        "comment_polarization": 0.1516620498614959,
+        "net_push_momentum": -0.04446460980036304
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-04-01",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.25220034936844926,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-04-20",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.33984375,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-04-21",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 2.806451612903226,
+        "comment_polarization": 0.33448753462603886,
+        "net_push_momentum": 0.003289473684210509
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-04-27",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.0464135021097047,
+        "comment_polarization": 0.2919393218322428,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-04-28",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.44,
+        "comment_polarization": 0.51,
+        "net_push_momentum": -0.14146341463414636
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-04-30",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.25,
+        "comment_polarization": 0.4859380562477751,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-05-04",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 4.293929712460064,
+        "comment_polarization": 0.25220034936844926,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-05-06",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.20350877192982456,
+        "comment_polarization": 0.1787109375,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-05-07",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.0906200317965024,
+        "comment_polarization": 0.5017301038062283,
+        "net_push_momentum": -0.20036764705882348
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-05-08",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.30113636363636365,
+        "comment_polarization": 0.36937716262975784,
+        "net_push_momentum": 0.08823529411764697
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-05-11",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.15120274914089346,
+        "comment_polarization": 0.8487654320987654,
+        "net_push_momentum": -0.4052287581699346
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-05-12",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 9.0,
+        "comment_polarization": 0.3883957922419461,
+        "net_push_momentum": 0.39316239316239315
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-05-14",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.9175946547884187,
+        "comment_polarization": 0.2786639144304749,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-05-18",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 4.2839248434238,
+        "comment_polarization": 0.3170533413836598,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-05-19",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.04469763365468887,
+        "comment_polarization": 0.47107438016528924,
+        "net_push_momentum": -0.09913314069793289
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-05-20",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.0037174721189591076,
+        "comment_polarization": 0.75,
+        "net_push_momentum": -0.2272727272727273
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-05-21",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.0778739184177997,
+        "comment_polarization": 0.3391883454734652,
+        "net_push_momentum": 0.3129032258064516
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-05-22",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.18614718614718614,
+        "comment_polarization": 0.4833984375,
+        "net_push_momentum": -0.09415322580645158
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-05-26",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.4824380165289257,
+        "comment_polarization": 0.20340204384662408,
+        "net_push_momentum": 0.17377336448598135
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-05-27",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.5166374781085814,
+        "comment_polarization": 0.043950617283950666,
+        "net_push_momentum": 0.0852544132917964
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-05-28",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.7096247960848288,
+        "comment_polarization": 0.2467070131719472,
+        "net_push_momentum": -0.10985324947589092
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-06-01",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 3.45,
+        "comment_polarization": 0.2689750000000001,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-06-02",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.1927144535840188,
+        "comment_polarization": 0.4006243496357961,
+        "net_push_momentum": -0.08080645161290323
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-06-03",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 3.1669421487603304,
+        "comment_polarization": 0.19191376188320508,
+        "net_push_momentum": 0.1247426218256692
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-06-04",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 2.864390243902439,
+        "comment_polarization": 0.3599999999999999,
+        "net_push_momentum": -0.0989361702127659
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-06-05",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.03827751196172249,
+        "comment_polarization": 0.51,
+        "net_push_momentum": -0.10000000000000009
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-06-08",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.6631142687981053,
+        "comment_polarization": 0.4752309504619009,
+        "net_push_momentum": 0.024409448818897728
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-06-16",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": null,
+        "comment_polarization": 0.4375,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-06-18",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.2142857142857142,
+        "comment_polarization": 0.38752362948960295,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-06-25",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 2.1346153846153846,
+        "comment_polarization": 0.5555555555555556,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-06-29",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.1696428571428572,
+        "comment_polarization": 0.35338505686045274,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-06-30",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.2377049180327868,
+        "comment_polarization": 0.20035133136094663,
+        "net_push_momentum": 0.09010705789056306
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-07-01",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.49242424242424243,
+        "comment_polarization": 0.29656607700312165,
+        "net_push_momentum": -0.0555210918114144
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-07-07",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.21428571428571427,
+        "comment_polarization": 0.09297052154195018,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-07-08",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.180327868852459,
+        "comment_polarization": 0.8650562265722616,
+        "net_push_momentum": -0.5850340136054422
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-07-10",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.934959349593496,
+        "comment_polarization": 0.8580130224742701,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-07-13",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.6790123456790124,
+        "comment_polarization": 0.7669441141498217,
+        "net_push_momentum": 0.10594702648675663
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-07-15",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.24175824175824176,
+        "comment_polarization": 0.40828402366863903,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-07-20",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 3.189873417721519,
+        "comment_polarization": 0.3599999999999999,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-07-21",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.3466666666666667,
+        "comment_polarization": 0.29085872576177296,
+        "net_push_momentum": 0.042105263157894646
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-07-24",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.961038961038961,
+        "comment_polarization": 0.2703993055555556,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-07-27",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 2.5283842794759828,
+        "comment_polarization": 0.23997370151216302,
+        "net_push_momentum": 0.017628205128205177
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-07-28",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 6.324324324324324,
+        "comment_polarization": 0.38554630593132166,
+        "net_push_momentum": -0.08792390405293637
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-07-29",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.22818791946308725,
+        "comment_polarization": 0.3193750000000001,
+        "net_push_momentum": 0.041129032258064524
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-07-30",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.16614745586708204,
+        "comment_polarization": 0.26530612244897966,
+        "net_push_momentum": 0.03214285714285714
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-08-05",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 3.3454545454545452,
+        "comment_polarization": 0.3198001913061963,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-08-10",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.23783783783783785,
+        "comment_polarization": 0.25413223140495866,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-08-11",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.9565217391304348,
+        "comment_polarization": 0.37984375000000004,
+        "net_push_momentum": -0.07613636363636367
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-08-13",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.34615384615384615,
+        "comment_polarization": 0.07840000000000003,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-08-14",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.7445652173913042,
+        "comment_polarization": 0.5189906347554629,
+        "net_push_momentum": -0.2664516129032257
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-08-17",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 2.2054794520547945,
+        "comment_polarization": 0.4678177909164203,
+        "net_push_momentum": 0.035959809624537264
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-08-19",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.5838926174496645,
+        "comment_polarization": 0.2869135802469136,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-08-24",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.8778280542986425,
+        "comment_polarization": 0.17355371900826455,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-08-26",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.16560509554140126,
+        "comment_polarization": 0.2098765432098766,
+        "net_push_momentum": null
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-08-27",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 8.946428571428571,
+        "comment_polarization": 0.5880493592006633,
+        "net_push_momentum": -0.24705507800063664
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-08-28",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.0456026058631922,
+        "comment_polarization": 0.5925758261656857,
+        "net_push_momentum": -0.0035359385478266336
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-08-31",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 1.1145958986731002,
+        "comment_polarization": 0.3007580261593342,
+        "net_push_momentum": 0.19790902421129852
+      }
+    },
+    {
+      "stock_id": "NVDA",
+      "trade_date": "2026-09-03",
+      "old": {
+        "comment_volume_ratio": null,
+        "comment_polarization": null,
+        "net_push_momentum": null
+      },
+      "new": {
+        "comment_volume_ratio": 0.056902002107481565,
+        "comment_polarization": 0.40828402366863903,
+        "net_push_momentum": null
+      }
+    }
+  ],
+  "suspect_article_ids": [
+    1815,
+    2662
+  ],
+  "out_of_bounds_comment_count": 13,
+  "stock_prices_fingerprint_after": {
+    "row_count": 449263,
+    "md5": "8e820d66d94567279580129a9b7c0be4"
+  },
+  "pre_backup": "stock_prediction_system2_PRE_risk023_comment_features_20260914_130807.dump",
+  "post_backup": "stock_prediction_system2_POST_risk023_comment_features_20260914_130807.dump"
+}

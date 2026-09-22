@@ -1,0 +1,759 @@
+{
+  "target": "target_triple_barrier",
+  "oof_path": "/workspaces/Database_Backups/Stock_Prediction_System2/ml_panels/oof_target_triple_barrier_20260915_025542.parquet",
+  "oof_sha256": "b9c1d432f0912a2cf9e2a3b3e544d32a57efb45464fc500646a34a7d6f94466c",
+  "sb4_report_evidence_path": "doc/upgrade/gates/evidence/UG_G3_SB4_meta_learner_report_target_triple_barrier.json",
+  "sb4_model_match": {
+    "actual_macro_f1_meta_eval": {
+      "LogisticRegression": 0.3175150780224993,
+      "RidgeClassifier": 0.30061969077419937
+    },
+    "matched_within_tolerance": 1e-09
+  },
+  "calib_fit_folds": [
+    27,
+    28,
+    29
+  ],
+  "calib_eval_folds": [
+    30,
+    31,
+    32
+  ],
+  "calib_fit_row_count": 8475,
+  "calib_eval_row_count": 8255,
+  "calib_fit_class_distribution": {
+    "-1": 4723,
+    "0": 297,
+    "1": 3455
+  },
+  "calib_eval_class_distribution": {
+    "-1": 4601,
+    "0": 389,
+    "1": 3265
+  },
+  "lr_native_proba_brier_calib_eval": 0.5191778511996518,
+  "calibration_results": {
+    "LogisticRegression__sigmoid": {
+      "model_name": "LogisticRegression",
+      "method": "sigmoid",
+      "auc_calib_fit_raw": {
+        "-1": 0.5430525979340767,
+        "0": 0.8295208545881081,
+        "1": 0.5026993040861157
+      },
+      "per_class_quality": {
+        "-1": {
+          "auc_before": 0.552222232928826,
+          "auc_after": 0.552222232928826,
+          "n_unique_calibrated_values": 8255,
+          "platt_slope": 0.06382374154371075,
+          "platt_intercept": 0.1264088006859346
+        },
+        "0": {
+          "auc_before": 0.9045026037019825,
+          "auc_after": 0.9045026037019825,
+          "n_unique_calibrated_values": 8255,
+          "platt_slope": 1.216430131756554,
+          "platt_intercept": -0.9222457511653753
+        },
+        "1": {
+          "auc_before": 0.5229791896196682,
+          "auc_after": 0.5229791896196682,
+          "n_unique_calibrated_values": 8255,
+          "platt_slope": 7.142397398742612e-05,
+          "platt_intercept": -0.3737008050947718
+        }
+      },
+      "n_unique_calibrated_values": {
+        "-1": 8255,
+        "0": 8255,
+        "1": 8255
+      },
+      "brier_before": 0.528709963985577,
+      "brier_after": 0.5196138852147298,
+      "log_loss_before": 0.799326411062322,
+      "log_loss_after": 0.7801183305833522,
+      "fixed_threshold_rule": "argmax（三類別）",
+      "fixed_threshold_macro_f1_before": 0.33690014527596013,
+      "fixed_threshold_macro_f1_after": 0.2437030226283332,
+      "fixed_threshold_per_class_before": {
+        "-1": {
+          "precision": 0.5621102519331505,
+          "recall": 0.9795696587698326,
+          "f1": 0.7143196766780252,
+          "support": 4601
+        },
+        "0": {
+          "precision": 0.4166666666666667,
+          "recall": 0.2185089974293059,
+          "f1": 0.2866779089376054,
+          "support": 389
+        },
+        "1": {
+          "precision": 0.48484848484848486,
+          "recall": 0.004900459418070444,
+          "f1": 0.009702850212249849,
+          "support": 3265
+        },
+        "macro_f1": 0.33690014527596013
+      },
+      "fixed_threshold_per_class_after": {
+        "-1": {
+          "precision": 0.5575081808265665,
+          "recall": 0.9997826559443599,
+          "f1": 0.7158418923124805,
+          "support": 4601
+        },
+        "0": {
+          "precision": 0.75,
+          "recall": 0.007712082262210797,
+          "f1": 0.015267175572519083,
+          "support": 389
+        },
+        "1": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 3265
+        },
+        "macro_f1": 0.2437030226283332
+      },
+      "reliability_before": [
+        {
+          "bin_counts": [
+            0,
+            0,
+            44,
+            514,
+            3762,
+            3935,
+            0,
+            0,
+            0,
+            0
+          ],
+          "mean_predicted": [
+            NaN,
+            NaN,
+            0.28273494889832135,
+            0.3602437868459858,
+            0.4698483167109769,
+            0.5060288692295525,
+            NaN,
+            NaN,
+            NaN,
+            NaN
+          ],
+          "observed_frequency": [
+            NaN,
+            NaN,
+            0.3181818181818182,
+            0.43190661478599224,
+            0.542796384901648,
+            0.5903430749682338,
+            NaN,
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "bin_counts": [
+            6069,
+            1314,
+            510,
+            285,
+            76,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "mean_predicted": [
+            0.03093994945340319,
+            0.1446508756466194,
+            0.2403558950787121,
+            0.3441978127582246,
+            0.43245552648004615,
+            0.5027067157991921,
+            NaN,
+            NaN,
+            NaN,
+            NaN
+          ],
+          "observed_frequency": [
+            0.006920415224913495,
+            0.0837138508371385,
+            0.17254901960784313,
+            0.3894736842105263,
+            0.4868421052631579,
+            1.0,
+            NaN,
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "bin_counts": [
+            0,
+            0,
+            155,
+            1280,
+            6791,
+            29,
+            0,
+            0,
+            0,
+            0
+          ],
+          "mean_predicted": [
+            NaN,
+            NaN,
+            0.28093030438802835,
+            0.3639749224255227,
+            0.4627854920160786,
+            0.5000000024747563,
+            NaN,
+            NaN,
+            NaN,
+            NaN
+          ],
+          "observed_frequency": [
+            NaN,
+            NaN,
+            0.16129032258064516,
+            0.34765625,
+            0.40951259019290237,
+            0.4827586206896552,
+            NaN,
+            NaN,
+            NaN,
+            NaN
+          ]
+        }
+      ],
+      "reliability_after": [
+        {
+          "bin_counts": [
+            0,
+            0,
+            0,
+            87,
+            721,
+            7416,
+            31,
+            0,
+            0,
+            0
+          ],
+          "mean_predicted": [
+            NaN,
+            NaN,
+            NaN,
+            0.38177857396849907,
+            0.46190084811202775,
+            0.5634703070475522,
+            0.6643543869283876,
+            NaN,
+            NaN,
+            NaN
+          ],
+          "observed_frequency": [
+            NaN,
+            NaN,
+            NaN,
+            0.3563218390804598,
+            0.463245492371706,
+            0.5691747572815534,
+            0.4838709677419355,
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "bin_counts": [
+            7158,
+            731,
+            297,
+            69,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "mean_predicted": [
+            0.021543841700316955,
+            0.13654900084122176,
+            0.24351121212062085,
+            0.3309200443237007,
+            NaN,
+            NaN,
+            NaN,
+            NaN,
+            NaN,
+            NaN
+          ],
+          "observed_frequency": [
+            0.01858060910868958,
+            0.14500683994528044,
+            0.3838383838383838,
+            0.5217391304347826,
+            NaN,
+            NaN,
+            NaN,
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "bin_counts": [
+            0,
+            0,
+            53,
+            1714,
+            6488,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "mean_predicted": [
+            NaN,
+            NaN,
+            0.28830092887837505,
+            0.37093770154407313,
+            0.4144901893149637,
+            NaN,
+            NaN,
+            NaN,
+            NaN,
+            NaN
+          ],
+          "observed_frequency": [
+            NaN,
+            NaN,
+            0.1509433962264151,
+            0.3547257876312719,
+            0.40829223181257707,
+            NaN,
+            NaN,
+            NaN,
+            NaN,
+            NaN
+          ]
+        }
+      ],
+      "calibration_not_meaningful": false
+    },
+    "RidgeClassifier__sigmoid": {
+      "model_name": "RidgeClassifier",
+      "method": "sigmoid",
+      "auc_calib_fit_raw": {
+        "-1": 0.5411518260908037,
+        "0": 0.8382030956009925,
+        "1": 0.5147566607664854
+      },
+      "per_class_quality": {
+        "-1": {
+          "auc_before": 0.5518561265625248,
+          "auc_after": 0.5518561265625248,
+          "n_unique_calibrated_values": 8255,
+          "platt_slope": 1.6283988636298639,
+          "platt_intercept": 0.0019081870877313278
+        },
+        "0": {
+          "auc_before": 0.9118679396602606,
+          "auc_after": 0.9118679396602606,
+          "n_unique_calibrated_values": 8255,
+          "platt_slope": 4.865197115079203,
+          "platt_intercept": 0.86910395727489
+        },
+        "1": {
+          "auc_before": 0.5282720417864826,
+          "auc_after": 0.5282720417864826,
+          "n_unique_calibrated_values": 8255,
+          "platt_slope": 0.7411263243789241,
+          "platt_intercept": -0.21048378373836052
+        }
+      },
+      "n_unique_calibrated_values": {
+        "-1": 8255,
+        "0": 8255,
+        "1": 8255
+      },
+      "brier_before": 0.5769158648036737,
+      "brier_after": 0.5207400880859983,
+      "log_loss_before": 0.9527946129538515,
+      "log_loss_after": 0.7896873444945067,
+      "fixed_threshold_rule": "argmax（三類別）",
+      "fixed_threshold_macro_f1_before": 0.31522766387329587,
+      "fixed_threshold_macro_f1_after": 0.31217496826208446,
+      "fixed_threshold_per_class_before": {
+        "-1": {
+          "precision": 0.560622914349277,
+          "recall": 0.985872636383395,
+          "f1": 0.7147809643870154,
+          "support": 4601
+        },
+        "0": {
+          "precision": 0.43283582089552236,
+          "recall": 0.14910025706940874,
+          "f1": 0.22179732313575526,
+          "support": 389
+        },
+        "1": {
+          "precision": 0.5,
+          "recall": 0.004594180704441042,
+          "f1": 0.009104704097116844,
+          "support": 3265
+        },
+        "macro_f1": 0.31522766387329587
+      },
+      "fixed_threshold_per_class_after": {
+        "-1": {
+          "precision": 0.5604001976284585,
+          "recall": 0.986089980439035,
+          "f1": 0.7146570055918721,
+          "support": 4601
+        },
+        "0": {
+          "precision": 0.4296875,
+          "recall": 0.14138817480719795,
+          "f1": 0.2127659574468085,
+          "support": 389
+        },
+        "1": {
+          "precision": 0.4838709677419355,
+          "recall": 0.004594180704441042,
+          "f1": 0.009101941747572815,
+          "support": 3265
+        },
+        "macro_f1": 0.31217496826208446
+      },
+      "reliability_before": [
+        {
+          "bin_counts": [
+            0,
+            0,
+            17,
+            992,
+            7246,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "mean_predicted": [
+            NaN,
+            NaN,
+            0.2923958216920906,
+            0.37341467757102836,
+            0.4273537127095545,
+            NaN,
+            NaN,
+            NaN,
+            NaN,
+            NaN
+          ],
+          "observed_frequency": [
+            NaN,
+            NaN,
+            0.29411764705882354,
+            0.45463709677419356,
+            0.5720397460667954,
+            NaN,
+            NaN,
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "bin_counts": [
+            0,
+            30,
+            7866,
+            344,
+            15,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "mean_predicted": [
+            NaN,
+            0.1840648969789573,
+            0.22277539910456387,
+            0.33554098981202,
+            0.4089115644333183,
+            NaN,
+            NaN,
+            NaN,
+            NaN,
+            NaN
+          ],
+          "observed_frequency": [
+            NaN,
+            0.0,
+            0.03178235443681668,
+            0.375,
+            0.6666666666666666,
+            NaN,
+            NaN,
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "bin_counts": [
+            0,
+            0,
+            41,
+            8185,
+            27,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          "mean_predicted": [
+            NaN,
+            NaN,
+            0.2958802986818872,
+            0.351617919067837,
+            0.4596718482265782,
+            0.5144993206595541,
+            NaN,
+            NaN,
+            NaN,
+            NaN
+          ],
+          "observed_frequency": [
+            NaN,
+            NaN,
+            0.14634146341463414,
+            0.39645693341478316,
+            0.5185185185185185,
+            0.0,
+            NaN,
+            NaN,
+            NaN,
+            NaN
+          ]
+        }
+      ],
+      "reliability_after": [
+        {
+          "bin_counts": [
+            0,
+            2,
+            69,
+            178,
+            423,
+            7330,
+            253,
+            0,
+            0,
+            0
+          ],
+          "mean_predicted": [
+            NaN,
+            0.17532012363795793,
+            0.2533986862651368,
+            0.35484200266001276,
+            0.46071205156860123,
+            0.5632064052176549,
+            0.6098108215583742,
+            NaN,
+            NaN,
+            NaN
+          ],
+          "observed_frequency": [
+            NaN,
+            0.5,
+            0.36231884057971014,
+            0.38764044943820225,
+            0.47044917257683216,
+            0.5657571623465212,
+            0.6324110671936759,
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "bin_counts": [
+            7664,
+            289,
+            136,
+            92,
+            56,
+            18,
+            0,
+            0,
+            0,
+            0
+          ],
+          "mean_predicted": [
+            0.025381630508032348,
+            0.13945468028564378,
+            0.247614082931603,
+            0.3466984766189831,
+            0.4546148804557471,
+            0.5317725114178855,
+            NaN,
+            NaN,
+            NaN,
+            NaN
+          ],
+          "observed_frequency": [
+            0.025313152400835072,
+            0.23875432525951557,
+            0.40441176470588236,
+            0.391304347826087,
+            0.39285714285714285,
+            0.7222222222222222,
+            NaN,
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "bin_counts": [
+            0,
+            0,
+            79,
+            1689,
+            6463,
+            22,
+            2,
+            0,
+            0,
+            0
+          ],
+          "mean_predicted": [
+            NaN,
+            NaN,
+            0.2746595364160807,
+            0.38299465722397347,
+            0.4145192942058251,
+            0.5559169688962678,
+            0.6314521814122068,
+            NaN,
+            NaN,
+            NaN
+          ],
+          "observed_frequency": [
+            NaN,
+            NaN,
+            0.1518987341772152,
+            0.3783303730017762,
+            0.40259941203775335,
+            0.5454545454545454,
+            0.0,
+            NaN,
+            NaN,
+            NaN
+          ]
+        }
+      ],
+      "calibration_not_meaningful": false
+    }
+  },
+  "specialist_raw_auc": {
+    "lr": {
+      "-1": {
+        "meta_train_auc": 0.547781157700486,
+        "calib_fit_auc": 0.5091691093848684,
+        "calib_eval_auc": 0.5412091229304878
+      },
+      "0": {
+        "meta_train_auc": 0.911843922566846,
+        "calib_fit_auc": 0.8384073061255747,
+        "calib_eval_auc": 0.9104090560591711
+      },
+      "1": {
+        "meta_train_auc": 0.524961827392316,
+        "calib_fit_auc": 0.4968144210423141,
+        "calib_eval_auc": 0.5278620334083174
+      }
+    },
+    "rf": {
+      "-1": {
+        "meta_train_auc": 0.5485677379112381,
+        "calib_fit_auc": 0.534513514593332,
+        "calib_eval_auc": 0.5344061171823502
+      },
+      "0": {
+        "meta_train_auc": 0.9044048999259702,
+        "calib_fit_auc": 0.8170076076654702,
+        "calib_eval_auc": 0.9075930904344426
+      },
+      "1": {
+        "meta_train_auc": 0.5250949979060144,
+        "calib_fit_auc": 0.5042362244221378,
+        "calib_eval_auc": 0.5088230979570167
+      }
+    },
+    "lgbm": {
+      "-1": {
+        "meta_train_auc": 0.5463335525402235,
+        "calib_fit_auc": 0.5239317067456041,
+        "calib_eval_auc": 0.5280445506539534
+      },
+      "0": {
+        "meta_train_auc": 0.8993546547791831,
+        "calib_fit_auc": 0.8283536432228045,
+        "calib_eval_auc": 0.9027311255300055
+      },
+      "1": {
+        "meta_train_auc": 0.5211078513420101,
+        "calib_fit_auc": 0.5008919171360866,
+        "calib_eval_auc": 0.5063949031293828
+      }
+    },
+    "xgb": {
+      "-1": {
+        "meta_train_auc": 0.5445802237006829,
+        "calib_fit_auc": 0.5242432069259583,
+        "calib_eval_auc": 0.5285209350386336
+      },
+      "0": {
+        "meta_train_auc": 0.8951477309489371,
+        "calib_fit_auc": 0.8289843902463125,
+        "calib_eval_auc": 0.9008890562160403
+      },
+      "1": {
+        "meta_train_auc": 0.5205664264888958,
+        "calib_fit_auc": 0.4996339389187101,
+        "calib_eval_auc": 0.5060908954202432
+      }
+    }
+  },
+  "specialist_raw_auc_note": null,
+  "platt_c": 1000000.0,
+  "reliability_n_bins": 10,
+  "max_rows_used": null,
+  "total_elapsed_seconds": 5.274754390993621,
+  "script_commit": "7c65b4f61aaa97cd17888f6925814ef65d5736e5",
+  "script_dirty": false,
+  "script_dirty_paths": [],
+  "script_untracked_paths": [
+    ".claude/settings.local.json",
+    "doc/upgrade/gates/evidence/UG_G3_SB5_calibration_report_target_up_down.json"
+  ],
+  "run_timestamp": "2026-09-15T08:05:25.083056+00:00"
+}

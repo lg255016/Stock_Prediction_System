@@ -1,0 +1,180 @@
+{
+  "title": "UG-G3-SB2a 段 3：458＋NVDA 檔 Triple-Barrier 標籤重算（daily_ml_features 真實庫寫入）",
+  "date": "2026-09-11",
+
+  "background": {
+    "summary": "段 2（458＋NVDA 檔特徵回補）完成並經審查員複核通過（commit 49aef94、e14212b）後，PO 核准段 3 設計（Triple-Barrier 458＋NVDA 檔全部重算）。設計核准含一項必改（重建段 1 回補前序列改用 stock_prices.created_at 判斷，不硬寫日期清單——2330/2382 在缺口回補前已有 09-01/09-02 兩列，若照 8 個缺口日期硬扣會多扣兩列）與四項補充（互補集合檢查、SB1 三道檢查改分批寫法、80 列 NULL 對照、RISK-025 揭露）。腳本與測試完成後，審查員複核通過並要求第二輪收緊：(1) 既有 3 檔差異改用「相等」而非「子集」當作 PASS 條件；(2) 增加標籤分布與算術對帳輸出（只揭露）。",
+    "design_approval": "PO 2026-09-11（段 3 設計送審核准訊息）",
+    "reviewer_review_round_1": "腳本＋測試＋唯讀預覽送審，通過，PM 自行在 dry-run 期間發現並修正一個 bug：RISK-025 表與 80 列 NULL 對照原本查 DB 現況（唯讀預覽階段仍是寫入前舊值，示範不出任何東西），改為吃記憶體中剛算出的 df_result_full；同時訂正一處文件描述錯誤（NULL 列自身的標籤與自身缺值無關，no_entry 出現在 NULL 列的前一列）。",
+    "reviewer_review_round_2": "審查員自行對真實庫跑一次唯讀預覽＋拋棄式庫 --write dry-run，逐一列出 25 個預期受影響鍵並手動歸因驗證設計正確；要求把「差異 ⊆ 預期」收緊為「差異＝預期」（相等斷言），並要求段級輸出補上標籤分布與算術對帳（no_entry／insufficient_data 對帳，只揭露不把關）。兩項要求併入 commit 837a0c0。",
+    "commit": "837a0c0（scripts/verify/ug_g3_sb2a_write_triple_barrier_labels.py 新增、tests/test_sb2a_write_triple_barrier_labels.py 新增，30 個測試）",
+    "pre_commit_test_results": {
+      "full_suite": "692/692 OK",
+      "contract_check": "Part B 13/13 PASS",
+      "format_check": "numstat 與 -w 無落差、diff --check 乾淨、credential grep 無命中",
+      "evidence_label": "VERIFIED THIS SESSION，容器 Python 3.14.6"
+    }
+  },
+
+  "design_key_facts": {
+    "reconstruct_pre_rerun_prices": "排除「屬於 COMPARE_STOCK_IDS 且 stock_prices.created_at >= 2026-09-11」的列，重建段 1 今日重跑（8 天缺口回補）前的序列形狀——不依賴人工枚舉日期清單，用寫入時間這個結構性事實判斷",
+    "compute_expected_relabel_impact": "對既有 3 檔台股，用「回補前序列」與「現在完整序列」各重算一次 Triple-Barrier，逐列比較，分岔的 (stock_id, trade_date) 即為機械算出的預期受影響範圍——經第二輪複核確認，實際差異與此集合應完全相等（非僅子集），因為既有標籤本來就是同一份程式碼對同一份舊序列算出的結果",
+    "write_mechanism": "execute_values 的 UPDATE...FROM (VALUES %s)...RETURNING，每批一交易，RETURNING 收集實際影響列數（不用 cur.rowcount，避免 execute_values 分頁陷阱）",
+    "batch_verification": "commit 前三道檢查：(a) RETURNING 計數 (b) 該批 (stock_id, label_reason) 分布快篩 (c) 一次 SELECT 該批鍵集合後向量化逐列比對——三者皆通過才 commit，任一失敗 rollback 該批並停止",
+    "transaction_boundary_compensation": "check_full_table_recompute_equality()：段級對全表 449,263 列的兩個標籤欄做「重算 vs 庫內」逐列相等比對，中斷造成的部分完成狀態在此必定露餡"
+  },
+
+  "part_A_pre_backup": {
+    "risk_013_step": 1,
+    "filename": "stock_prediction_system2_PRE_g3_sb2a_labels_20260911_140624.dump",
+    "location": "D:\\Python\\Database_Backups\\Stock_Prediction_System2\\",
+    "size_bytes": 121190834,
+    "pg_dump_rc": 0,
+    "restore_verification": {
+      "method": "拋棄式 postgres:18 容器（--memory=2g --cpus=0.5），空庫 createdb + pg_restore",
+      "pg_restore_rc": 0,
+      "verified_counts": {
+        "stock_prices": 449263,
+        "daily_ml_features": 449263,
+        "labels_triple_barrier": 3529,
+        "labels_reason": 184
+      },
+      "teardown": "已拆除"
+    },
+    "evidence_label": "VERIFIED THIS SESSION"
+  },
+
+  "part_B_t0_baseline": {
+    "risk_013_step": 2,
+    "t0_utc": "2026-09-11T14:08:40Z",
+    "stock_prices_md5": "ce23c629a461359689cb63f53fd7573d",
+    "stock_prices_row_count": 449263,
+    "daily_ml_features_25_feature_columns_md5": "c48c0167c7a3ae9bbaa9f15ec349cc1d",
+    "daily_ml_features_25_feature_columns_note": "25 個特徵欄（不含 target_triple_barrier／label_reason），段 3 只動標籤兩欄，特徵欄不得改變",
+    "nvda_labels_md5": "1ee746dddbbf66cf2eb48e265fc03c1d",
+    "nvda_labels_row_count": 754,
+    "existing_4_stocks_labels_snapshot_md5": "552aabba42622b96500e7036fdbaf25d",
+    "existing_4_stocks_labels_row_count": 3733,
+    "evidence_label": "VERIFIED THIS SESSION"
+  },
+
+  "part_C_readonly_preview": {
+    "risk_013_step": 3,
+    "constants_guard": {"actual_rows": 449263, "expected_rows": 449263,
+      "actual_labels": [3529, 184], "expected_labels": [3529, 184], "result": "PASS"},
+    "full_compute": {"stocks": 459, "rows": 449263, "elapsed_seconds": 4.70},
+    "expected_impact_key_count": 25,
+    "evidence_label": "VERIFIED THIS SESSION"
+  },
+
+  "part_D_write_execution": {
+    "risk_013_step": 4,
+    "command": "printf 'postgres\\n' | MSYS_NO_PATHCONV=1 docker exec -i -u vscode -w /workspaces/Stock_Prediction_System2 -e DB_HOST=localhost -e DB_PORT=5432 stock_prediction_system2_devcontainer-app-1 python scripts/verify/ug_g3_sb2a_write_triple_barrier_labels.py --write --backup /workspaces/Database_Backups/Stock_Prediction_System2/stock_prediction_system2_PRE_g3_sb2a_labels_20260911_140624.dump",
+    "script_exit_code": 0,
+    "batches_completed": "[1,2,3,4,5,6,7,8,9,10]/10（全數完成，無中途失敗，每批 46,049～49,636 列）",
+    "script_reported_segment_checks": {
+      "1_total_row_count": {"actual": 449263, "expected": 449263, "result": "PASS"},
+      "2_consistency_invariant": {"violations": 0, "result": "PASS"},
+      "3_full_table_recompute_equality": {"mismatches": 0, "result": "PASS"},
+      "4_impact_equality": {"actual_diff": 25, "expected": 25, "is_equal": true, "result": "PASS",
+        "complement_violations": 0},
+      "5_risk025": "337/459 檔 Timeout 佔比 <5%（只揭露）"
+    },
+    "label_distribution": {
+      "target_triple_barrier": {"-1": 226956, "1": 162288, "0": 21199},
+      "label_reason": {"ambiguous_dual_barrier": 36388, "insufficient_data": 1892, "no_entry": 540}
+    },
+    "note_this_matches_reviewer_dry_run": "PM 的真實庫寫入輸出與審查員的拋棄式庫 dry-run 輸出逐字相符（10 批 OK、5 項 PASS、實際差異 25=預期 25、六類分布六個數字完全相同）",
+    "evidence_label": "VERIFIED THIS SESSION"
+  },
+
+  "part_E_independent_post_write_verification": {
+    "risk_013_step": 5,
+    "methodology": "不信任腳本自身回報，另用全新 SQL 查詢重新核對；既有 3 檔的 25 個變動鍵，額外用第二個拋棄式容器重新還原 PRE 備份取得寫入前逐列原始值，與寫入後現況逐列比對，精確列出前值→後值（不只是計數）",
+    "checks": {
+      "1_total_row_count": {"value": 449263, "expected": 449263, "result": "PASS"},
+      "2_label_counts": {"value": [410443, 38820], "expected": [410443, 38820], "result": "PASS",
+        "note": "410443 = 226956(-1) + 162288(1) + 21199(0)；38820 = 36388(ambiguous)+1892(insufficient)+540(no_entry)；兩者相加 449263，與總列數一致（一致性不變式的另一種佐證）"},
+      "3_consistency_invariant": {"violations": 0, "result": "PASS"},
+      "4_25_feature_columns_md5_unchanged": {
+        "value": "c48c0167c7a3ae9bbaa9f15ec349cc1d",
+        "expected": "c48c0167c7a3ae9bbaa9f15ec349cc1d（T0 基準）",
+        "result": "PASS，證明段 3 完全未觸及 25 個特徵欄，只動了標籤兩欄"
+      },
+      "5_stock_prices_md5_unchanged": {
+        "value": "ce23c629a461359689cb63f53fd7573d",
+        "expected": "ce23c629a461359689cb63f53fd7573d（T0 基準）",
+        "result": "PASS"
+      },
+      "6_nvda_labels_md5_unchanged": {
+        "value": "1ee746dddbbf66cf2eb48e265fc03c1d",
+        "expected": "1ee746dddbbf66cf2eb48e265fc03c1d（T0 基準）",
+        "result": "PASS，NVDA 對照組驗證：不在缺口回補範圍內的股票，標籤逐位元組零變動"
+      },
+      "7_existing_3_stocks_25_changed_keys": {
+        "method": "第二個拋棄式容器重新還原 PRE 備份取得寫入前原始值，與寫入後現況逐列比對",
+        "count": 25,
+        "detail": {
+          "2330": [
+            {"trade_date": "2026-08-21", "before": [null, "insufficient_data"], "after": [-1, null]},
+            {"trade_date": "2026-08-24", "before": [null, null], "after": [1, null]},
+            {"trade_date": "2026-08-25", "before": [null, null], "after": [1, null]},
+            {"trade_date": "2026-08-26", "before": [null, null], "after": [-1, null]},
+            {"trade_date": "2026-08-27", "before": [null, null], "after": [-1, null]},
+            {"trade_date": "2026-08-28", "before": [null, null], "after": [0, null]},
+            {"trade_date": "2026-08-31", "before": [null, null], "after": [null, "insufficient_data"]}
+          ],
+          "2382": [
+            {"trade_date": "2026-08-21", "before": [null, "insufficient_data"], "after": [1, null]},
+            {"trade_date": "2026-08-24", "before": [null, null], "after": [1, null]},
+            {"trade_date": "2026-08-25", "before": [null, null], "after": [1, null]},
+            {"trade_date": "2026-08-26", "before": [null, null], "after": [-1, null]},
+            {"trade_date": "2026-08-27", "before": [null, null], "after": [-1, null]},
+            {"trade_date": "2026-08-28", "before": [null, null], "after": [1, null]},
+            {"trade_date": "2026-08-31", "before": [null, null], "after": [null, "insufficient_data"]}
+          ],
+          "6488": [
+            {"trade_date": "2026-08-19", "before": [null, "insufficient_data"], "after": [-1, null]},
+            {"trade_date": "2026-08-20", "before": [null, "insufficient_data"], "after": [-1, null]},
+            {"trade_date": "2026-08-21", "before": [null, "insufficient_data"], "after": [1, null]},
+            {"trade_date": "2026-08-24", "before": [null, null], "after": [-1, null]},
+            {"trade_date": "2026-08-25", "before": [null, null], "after": [-1, null]},
+            {"trade_date": "2026-08-26", "before": [null, null], "after": [-1, null]},
+            {"trade_date": "2026-08-27", "before": [null, null], "after": [null, "ambiguous_dual_barrier"]},
+            {"trade_date": "2026-08-28", "before": [null, null], "after": [-1, null]},
+            {"trade_date": "2026-08-31", "before": [null, null], "after": [null, "insufficient_data"]},
+            {"trade_date": "2026-09-01", "before": [null, null], "after": [null, "insufficient_data"]},
+            {"trade_date": "2026-09-02", "before": [null, null], "after": [null, "insufficient_data"]}
+          ]
+        },
+        "mechanism_confirmation": "2330/2382 各 7 個變動鍵（08-21 由 insufficient_data 尾端變為真實值 ＋ 08-24~08-31 六個全新鍵）；6488 11 個（08-19~08-21 三天由 insufficient_data 尾端變為真實值 ＋ 08-24~09-02 八個全新鍵）——與審查員手動歸因完全一致",
+        "result": "PASS，25 個鍵精確比對完成，無範圍外差異"
+      }
+    },
+    "evidence_label": "VERIFIED THIS SESSION"
+  },
+
+  "part_F_post_backup": {
+    "risk_013_step": 6,
+    "filename": "stock_prediction_system2_POST_g3_sb2a_labels_20260911_141614.dump",
+    "location": "D:\\Python\\Database_Backups\\Stock_Prediction_System2\\",
+    "size_bytes": 121403470,
+    "pg_dump_rc": 0,
+    "evidence_label": "VERIFIED THIS SESSION"
+  },
+
+  "disclosure_label_distribution": {
+    "purpose": "誠實揭露，不美化（SB3 D3 裁決輸入）",
+    "target_triple_barrier": {"-1": 226956, "1": 162288, "0": 21199},
+    "label_reason": {"ambiguous_dual_barrier": 36388, "insufficient_data": 1892, "no_entry": 540},
+    "observations": [
+      "ambiguous_dual_barrier 佔比 8.1%（36388/449263）——偏高，同日觸及雙邊 barrier 的比例不小",
+      "-1 : +1 = 226956 : 162288，明顯偏空（約 1.4:1）",
+      "Timeout(0) 佔比 4.7%（21199/449263）"
+    ],
+    "risk_025_disclosure": "337/459 檔 Timeout 佔比 <5%（閾值只揭露不把關，DEC-018／SB3 D3 裁決範圍）",
+    "note": "三項觀察皆為 SB3（模型訓練）階段的輸入，本段（UG-G3-SB2a 段 3）只負責如實記錄，不做任何調整或篩選"
+  },
+
+  "note_on_credentials": "本檔不含任何字面密碼值；拋棄式容器密碼皆為 openssl rand -hex 12 隨機產生，執行後即隨容器銷毀；真實庫連線密碼取自環境變數，未記入本檔"
+}

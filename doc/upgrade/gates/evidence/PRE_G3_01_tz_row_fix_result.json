@@ -1,0 +1,50 @@
+{
+  "date": "2026-09-06 20:05:02.110017",
+  "article_id": 1495,
+  "rowcount": 1,
+  "outcome": "COMMITTED",
+  "row_after": {
+    "total_comments": 25,
+    "comments_scraped_at": "2026-09-05 13:53:32.868583"
+  },
+  "3a": {
+    "counts_as_of": {
+      "push_count": 16,
+      "boo_count": 0,
+      "neutral_count": 9,
+      "total_comments": 25
+    },
+    "expected": {
+      "push_count": 16,
+      "boo_count": 0,
+      "neutral_count": 9,
+      "total_comments": 25
+    },
+    "verdict": "PASS"
+  },
+  "3b": {
+    "fingerprint_after": "4fc208b95dbc6ea9d7c4b381d6ba97b5",
+    "rows": 137,
+    "fingerprint_before": "4fc208b95dbc6ea9d7c4b381d6ba97b5",
+    "verdict": "PASS",
+    "PROVES": "(i) 這次 UPDATE 沒有動到預期以外的東西",
+    "DOES_NOT_PROVE": "(ii) 修正不會改變任何特徵值 —— 表沒被重算，指紋當然不變"
+  },
+  "3c": {
+    "tables": {
+      "article_comments": 38,
+      "candidate_prices": 1825814,
+      "daily_ml_features": 137,
+      "etl_run_log": 38,
+      "market_articles": 332,
+      "stock_prices": 137,
+      "universe_snapshots": 85641
+    },
+    "total_comments_still_25": true,
+    "verdict": "PASS"
+  },
+  "etl_run_log_untouched": {
+    "rows_after_switch_point": 0,
+    "note": "38 列未被修正，維持現狀"
+  }
+}

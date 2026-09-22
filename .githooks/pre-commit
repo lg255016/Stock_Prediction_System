@@ -1,0 +1,363 @@
+#!/usr/bin/env bash
+#
+# GOV-04 pre-commit hook
+#
+# 四項檢查：
+#   1. 跨文件契約驗證（gate0_contract_check.py）        非零 -> abort
+#   2. 格式／行尾夾帶偵測（numstat vs numstat -w）      不一致 -> abort
+#   3. 秘密偵測（檔名層 + 內容層，GOV-13）              命中 -> abort
+#   4. 列印 staged 檔案清單                             僅顯示，不擋
+#
+# ⚠ 檢查目標不一致，這是已知限制：
+#   檢查 2/3/4 針對「已 staged 的內容」（git diff --cached）。
+#   檢查 1 針對「工作區」—— gate0_contract_check.py 以 open() 讀磁碟檔案。
+#
+#   因此在下列情況，檢查 1 驗的不是將被 commit 的內容：
+#     - `git add -p` 部分暫存
+#     - staged 之後又修改工作區
+#
+#   正解需要 `git stash --keep-index` 之類的暫存切換，但那會寫入 repo，
+#   而本 hook 的設計約束是「不得有任何寫入」（GOV-04 邊界）。
+#   因此**不修改行為，只誠實標明限制**。送審時的權威驗證仍以
+#   gate-submit skill 在容器內執行的結果為準。
+#
+# 【已知限制】檢查 2 的落差**不蘊含**存在純空白／行尾變更。
+#
+#   numstat 與 numstat -w 的差異有三個來源，只有第一個是本檢查想擋的：
+#     (1) 真的有純空白／行尾變更            <- 該擋
+#     (2) 重構造成的縮排位移                <- 不該擋（UG-G2-SB9，e2081c0：
+#         --market 分支與 _get() 抽取把程式碼移進更深的區塊，
+#         五處縮排全部是「增加」、零處減少、零處內容變動）
+#     (3) **-w 改變了 diff 的配對結果**     <- 不該擋，且**根本沒有空白變更**
+#         實例：JSON 新增頂層 key 使 `  }` 變成 `  },`（一個逗號）。
+#         -w 忽略行首空白後把 `  }` 與別處 `        }` 配對，
+#         得到 0 個刪除，於是與 raw 產生落差。
+#         （UG-G2-SB9 收尾，1c98e5f，2026-09-02）
+#
+#   **(3) 證明本檢查的推論本身在某些情況下無效** ——
+#   「落差 ⟹ 有空白變更」不成立，因為 -w 改變的不只是比較方式，
+#   還改變了 diff 的配對。
+#
+#   刻意不修正判斷邏輯：能區分三者的判別法需要語意判讀，
+#   寫進 hook 會讓它變成一個難以確認「什麼輸入會讓它 FAIL」的檢查
+#   （CLAUDE.md §9A.1）。一個聰明一點的檢查，很可能變成一個
+#   你無法確認它會不會失敗的檢查。
+#
+#   正確處置是人工判讀 + §12.2 事前揭露 + §12.4 授權，而非讓檢查自己去猜。
+#   **輔助判別**：`git diff --cached --check` 若無輸出，代表沒有尾隨空白／
+#   行尾問題，可作為 (2)(3) 的旁證 —— **但不是充分條件**。
+#
+#   ⚠ 並注意：`--no-verify` **停用全部四項，不只檢查 2**，
+#   其中檢查 3 是秘密檔案偵測。繞過時三項必須手動補跑並附輸出。
+#
+# 刻意不做的事：
+#   - 不執行測試套件。commit 在 Windows host 上進行，
+#     而 GOV-02 已認定 host 的測試結果為降級且無效證據
+#     （sklearn/lightgbm/xgboost/psycopg2 等缺席，走 fallback 或 mock）。
+#     在 hook 裡跑測試會製造「已驗證」的錯覺。測試屬 gate-submit skill，
+#     在 dev container 內執行。見 CLAUDE.md §13.0。
+#   - 不寫入任何檔案、不進行網路操作。
+#
+# 啟用方式（新 clone 或容器重建後必須執行一次）：
+#   git config core.hooksPath .githooks
+#
+# 繞過方式（GOV-12 修訂，2026-09-06。**兩者不等價**，見 CLAUDE.md §12.4）：
+#
+#   【偏好】只跳過檢查 2 —— 具名出口：
+#       SKIP_CHECK2_REASON="情況(2)：註解內縮排 4→8 格，1 行，零內容變動" git commit ...
+#
+#       檢查 1／3／4 **照常執行且照常擋**。跳過時**仍會把落差印出來** ——
+#       **跳過不該把證據一起藏掉。**
+#
+#       ⚠ **理由字串必須指名情況 (2) 或 (3)**（分類見上方「已知限制」）
+#         並附逐行查明的結論。**分類要留在 commit 裡，不是只留在報告裡** ——
+#         報告會被讀一次，git log 會被讀很多次。
+#
+#       **情況 (2)／(3) 不需 PO 事前授權**：§12.2 要求授權的是
+#       「編碼、行尾、縮排或格式化變更」，**而 (2)／(3) 的定義就是沒有那種變更**。
+#       **⚠ 情況 (1)（真的有空白／行尾變更）不得使用具名出口** ——
+#       那要走原本的 §12.2 揭露與授權流程。
+#
+#   【最後手段】停用全部四項：
+#       git commit --no-verify
+#
+#       **僅限 PO 明確授權的例外。**
+#
+#   ⚠ **兩者不等價。** `--no-verify` **連檢查 3（秘密檔案偵測）都停用**。
+#   本 hook 前六次繞過**全部只是為了檢查 2 的誤報**，
+#   卻每次都連秘密偵測一起關掉 —— **那是用一把大得多的鎚子。**
+#
+set -uo pipefail
+
+# Fail closed：輸出被截斷（如 `git commit | head`）時必須以非零退出，不得放行。
+#
+# 已實測：本 hook 在輸出被截斷時 exit=1。
+# 驗證方式：
+#   .githooks/pre-commit | head -1 ; echo ${PIPESTATUS[0]}
+#
+# 背景：無此 trap 時，曾觀察到 commit 在 hook 印出 ABORT 後仍被建立
+#       （orphan commit 8e00b08 "test: should be blocked by check 1"，
+#        GOV-04 受控實驗產物）。
+#       **確切機制未能重現，不在此斷言。**
+#       先前兩版註解各自提出過一種因果解釋，兩版都與實測或標準 wait status
+#       編碼對不上，已移除。此處只記錄可驗證的性質與驗證方式。
+#
+# trap handler 內不寫任何輸出。移除此約束後曾再次觀察到放行；同樣不對機制作斷言。
+#
+# 代價：輸出被截斷時一律 exit 1，即使四項檢查全部通過。
+#       因此**不要使用 `git commit | head`**，會拿到假的 abort。
+trap 'exit 1' PIPE HUP INT TERM
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT" || exit 1
+
+FAIL=0
+echo "════════ GOV-04 pre-commit ════════"
+
+# ---------------------------------------------------------------------------
+# 檢查 1：跨文件契約驗證
+# ---------------------------------------------------------------------------
+echo ""
+echo "[1/4] 跨文件契約驗證 (gate0_contract_check.py)"
+if [ ! -f scripts/verify/gate0_contract_check.py ]; then
+    echo "      SKIP — 腳本不存在（尚未建立或已移動）"
+else
+    CONTRACT_OUT="$(python scripts/verify/gate0_contract_check.py 2>&1)"
+    CONTRACT_RC=$?
+    if [ $CONTRACT_RC -ne 0 ]; then
+        echo "      ABORT — contract-check 失敗 (exit $CONTRACT_RC)"
+        echo ""
+        # 只印失敗與違規行，避免長輸出在被截斷的管道下觸發 SIGPIPE
+        echo "$CONTRACT_OUT" | grep -E "FAIL|VIOLATION|違規 [1-9]" | head -20 | sed 's/^/        /'
+        echo "        （完整輸出請執行：python scripts/verify/gate0_contract_check.py）"
+        FAIL=1
+    else
+        echo "      PASS — $(echo "$CONTRACT_OUT" | grep -E '^Part B:' | tail -1)"
+    fi
+fi
+
+# ---------------------------------------------------------------------------
+# 檢查 2：格式／行尾夾帶偵測
+#   numstat 與 numstat -w 不一致 => 存在純空白／行尾變更
+#   （CLAUDE.md §12.2：格式變更即使內容無損也算 scope，須事前揭露）
+# ---------------------------------------------------------------------------
+echo ""
+echo "[2/4] 格式／行尾夾帶偵測"
+NS_RAW="$(git diff --cached --numstat)"
+NS_NOWS="$(git diff --cached --numstat -w)"
+
+# ---------------------------------------------------------------------------
+# 具名出口（GOV-12）
+#
+#   SKIP_CHECK2_REASON="……" git commit ...
+#
+# **為什麼需要它**：本 hook 上線後檢查 2 觸發六次，**五次是誤報**
+# （重構造成的縮排位移，見上方「已知限制」的 (2)(3)）。
+# 每一次都以 `--no-verify` 繞過，**而那會連檢查 3（秘密檔案偵測）一起停用**。
+#
+#   > **我們每次只需要跳過一項，卻每次都關掉四項。**
+#
+# **設計約束**：
+#   - **只影響檢查 2。** 檢查 1／3／4 照常執行、照常擋。
+#   - **理由字串必填**（未設或空字串 → 照常執行檢查，這是 fail-closed 的方向）。
+#   - **長度下限 10 字元** —— ⚠ 那是**摩擦裝置，不是語意檢查**：
+#     它擋得住 `x`，擋不住 `xxxxxxxxxx`。**本 hook 不判斷理由是否成立**，
+#     那是 PO 的事。寫進註解是為了不讓下一個人以為它驗證過什麼（§9A.1）。
+#   - **只能用環境變數逐次指定**，不讀 git config —— **不得有一個會持續生效的開關**。
+#   - **跳過時仍印出落差與理由**：跳過不該把證據一起藏掉。
+# ---------------------------------------------------------------------------
+SKIP2="${SKIP_CHECK2_REASON:-}"
+if [ "$NS_RAW" != "$NS_NOWS" ] && [ ${#SKIP2} -ge 10 ]; then
+    echo "      SKIPPED — 由 SKIP_CHECK2_REASON 具名跳過（GOV-12）"
+    echo ""
+    echo "      理由（逐字）："
+    echo "        $SKIP2"
+    echo ""
+    echo "      ⚠ 被跳過的落差仍列於下方 —— **跳過不代表沒有落差**："
+    diff <(echo "$NS_RAW") <(echo "$NS_NOWS") | sed 's/^/        /'
+    echo ""
+    echo "      依 CLAUDE.md §12.2／§12.3，本次跳過與上述理由**必須在回報中揭露**，"
+    echo "      不得僅寫在 commit message 中。檢查 1／3／4 未受影響。"
+elif [ "$NS_RAW" != "$NS_NOWS" ]; then
+    echo "      ABORT — 偵測到純空白／行尾變更"
+    echo ""
+    echo "      落差檔案（左：含空白 / 右：忽略空白）："
+    diff <(echo "$NS_RAW") <(echo "$NS_NOWS") | sed 's/^/        /'
+    echo ""
+    echo "      依 CLAUDE.md §12.2，格式／編碼／行尾變更即使內容無損也屬 scope 變更，"
+    echo "      必須事前向 PO 揭露並取得授權，不得夾帶在有實質內容的 commit 裡。"
+    echo ""
+    echo "      若已逐行查明為情況 (2) 縮排位移 或 (3) -w 配對差異（見本 hook 檔頭），"
+    echo "      **請用具名出口，不要用 --no-verify**（情況 (2)/(3) 不需事前授權）："
+    echo "        SKIP_CHECK2_REASON=\"情況(2)：<逐行查明的結論>\" git commit ..."
+    echo "      —— 它只跳過檢查 2；--no-verify 會連秘密檔案偵測一起停用。"
+    echo "      ⚠ 若確為情況 (1)（真的有空白／行尾變更），**不得使用具名出口** —— "
+    echo "        那是 §12.2 的 scope 變更，須事前向 PO 揭露並取得授權。"
+    FAIL=1
+else
+    echo "      PASS — 無格式夾帶"
+fi
+
+# ---------------------------------------------------------------------------
+# 檢查 3：秘密偵測（檔名層 + 內容層）
+#
+#   內容層為 GOV-13（2026-09-10）新增，見
+#   doc/governance/GOV_013_PROPOSAL_secret_content_scan.md。
+#   兩層判準互補，非取代：檔名層看檔案本身是否為秘密檔；
+#   內容層看 staged 新增內容是否帶著看起來像密碼賦值的字面值。
+# ---------------------------------------------------------------------------
+echo ""
+echo "[3/4] 秘密偵測（檔名／內容）"
+STAGED="$(git diff --cached --name-only --diff-filter=ACMR)"
+SECRETS=""
+while IFS= read -r f; do
+    [ -z "$f" ] && continue
+    base="$(basename "$f")"
+    case "$base" in
+        .env.example)              : ;;                      # 明確允許
+        .env|.env.*)               SECRETS="$SECRETS$f"$'\n' ;;
+        settings.local.json)       SECRETS="$SECRETS$f"$'\n' ;;
+        *.pem|*.key)               SECRETS="$SECRETS$f"$'\n' ;;
+        id_rsa*)                   SECRETS="$SECRETS$f"$'\n' ;;
+    esac
+done <<< "$STAGED"
+
+# --- 內容層（GOV-13，GOV-14 追加冒號分隔符）------------------------------
+#
+# 樣式選擇：寬樣式 + -i，不用 PCRE lookbehind 邊界條件——邊界條件版本
+# 經實測會漏 camelCase 賦值形式與 PGPASSWORD／POSTGRES_PASSWORD 本身
+# （本案實際外洩的樣式），見提案文件 §4.1 實測記錄。
+# 寬樣式會誤擋 bypass／compass 等英文字的賦值形狀，但假陽性看得見、一行改
+# <value> 就解；假陰性看不見，下一次事故才知道——寧可誤擋（CLAUDE.md §9A.1）。
+#
+# ⚠ GOV-14（2026-09-22）：原樣式只認 `=`。YAML（`POSTGRES_PASSWORD: <值>`）
+# 與 JSON（`"password": "<值>"`）用冒號分隔，結構上落在偵測範圍外——這正是
+# 已公開的 2 個 commit 使用的兩種寫法，檢查 3 對它們是瞎的。改為 `[:=]`，
+# 同時涵蓋等號與冒號兩種賦值語法。
+#
+# ⚠ 第一版修法（只加 `[:=]`）known-FAIL 實測時自己先漏了兩次，都是在替
+# 這次修法本身跑 known-FAIL 時才發現的，不是理論推演：
+#   (a) JSON 的 `"password": "<值>"` 在欄位名與冒號之間還有一個收尾引號，
+#       `pass(word)?` 後面直接接 `[:=]` 抓不到——改為 `pass(word)?['"]?`
+#       （引號可有可無），JSON／YAML／shell／Python 四種既有寫法一次涵蓋。
+#   (b) 白名單（第 4 段）原樣式要求值緊接著 `<`，但 JSON／單引號寫法的值
+#       外面還包一層引號（`"<值>"` 或 `'<值>'`）——白名單抓不到這層引號，
+#       導致合法佔位符（如本檔多處出現的 `<dev-default>`）被誤判為危險，
+#       會擋下完全合規的 commit。白名單樣式同步加 `['"]?` 吸收這層引號。
+# 見 `GOV_013_PROPOSAL_secret_content_scan.md` 附錄／`GOV-14` 決策記錄。
+#
+# ⚠ GOV-14 第二輪（2026-09-22，複核方回退第一版修法）：
+# 第一版（只加 `[:=]` 與收尾引號）在複核方獨立全 tree 掃描下產生 48 筆假陽性，
+# 全部是本專案自己的合法寫法，不是外部樣式：
+#   - `os.environ["POSTGRES_PASSWORD"]` 讀值（measure_ptt_keyword_coverage_offline.py:94、
+#     database/init_db.py:30 等）：真正原因是舊樣式 `pass(word)?` 的 `(word)?` 可選，
+#     讓單獨「pass」四個字母也算命中，於是 `E3_IS_A_FALSE_PASS`、
+#     `why_not_adjusting_to_pass`、`WHY_NOT_REWRITTEN_AS_PASS` 這類把 PASS 當
+#     子字串的識別字全部誤中——不是 `os.environ[...]` 本身被判成危險。
+#   - 白名單只認值以 `<` 開頭，漏掉 `${VAR}` 展開、`os.environ`／`os.getenv`
+#     呼叫、`%(name)s` 舊式格式化字串——這些是「有值但非字面密碼」的合法寫法。
+#
+# 修法（複核方提出，本檔獨立以 /tmp 拋棄式 repo 重測）：
+#   (a) 鍵名樣式改為必須完整比對 `password` 或 `[A-Z_]*PASSWORD`（-i 下大小寫皆可），
+#       不再接受單獨 `pass`；並加前置邊界 `(^|[^A-Za-z0-9_])`，避免子字串誤中
+#       （`E3_IS_A_FALSE_PASS` 不含 `PASSWORD` 字面因而不中；`POSTGRES_PASSWORD`
+#       靠 `[A-Z_]*` 吸收底線前綴仍可完整比對，`PGPASSWORD` 同理）。
+#   (b) 白名單值前綴由僅 `<` 擴為 `<`／`$`／`os.environ`／`os.getenv`／`%(` 五種
+#       （`WHITELIST_SUFFIX`，與 `PASS_PATTERN` 分開定義，避免兩個 grep 呼叫各自
+#       维護一份白名單樣式而漂移）。
+#   (c) 擴大樣式仍不足以讓全 tree 掃描歸零——剩餘的是測試 fixture、evidence JSON、
+#       `db_writer.py` 的 `required_env` 角色說明字典等既有字面佔位值（欄位名接冒號，
+#       值只是單一短字母，未包 `<>`），這些不是白名單能安全放寬的「合法值形狀」，
+#       而是「本來就該寫成佔位符卻沒寫」的既有債務——依 CLAUDE.md §9A.1
+#       （寧可誤擋，假陽性一行改 `<value>` 就解）的哲學，選擇逐一改寫成佔位符，
+#       而非放寬樣式去遷就它們（放寬到能吸收這些，會重新打開子字串誤判的路）。
+#
+# ⚠ 不得用命令替換 $(...) 包住整條管線再讀 PIPESTATUS——命令替換會讓
+#   PIPESTATUS 只留一個元素（已於提案文件實測驗證），必須先以 `> /dev/null`
+#   （非寫入檔案，不違反本 hook「不寫入任何檔案」的約束）取得逐段
+#   PIPESTATUS，確認乾淨後才用命令替換重跑一次以取得命中內容供顯示。
+#
+# 五段管線：
+#   0. git diff --cached -U0      —— 只看這次 commit 真正新增／變更的內容
+#   1. grep -E  '^\+'             —— 只看新增行
+#   2. grep -vE '^\+\+\+ '        —— 排除 diff 的 `+++ b/<path>` 檔名標頭
+#      （否則檔名恰好含密碼賦值形狀文字的檔案會被誤擋，已實測證實）
+#   3. grep -iE "${PASS_PATTERN}[^[:space:]]+"    —— 鍵名樣式命中（含 `=` 與 `:`，
+#      要求完整 `password` 或 `[A-Z_]*PASSWORD`，不接受單獨 `pass` 子字串）
+#   4. grep -viE "${PASS_PATTERN}${WHITELIST_SUFFIX}" —— 白名單：值以
+#      `<`／`$`／`os.environ`／`os.getenv`／`%(` 開頭者放行（含引號）
+#
+# 只有第 4 段（陣列索引 4）的 0/1 用於判斷 abort／pass；任何一段非 0/1
+# 視為工具鏈本身異常，fail-closed abort（不得視為「未命中」）。
+PASS_PATTERN='(^|[^A-Za-z0-9_])(password|[A-Z_]*PASSWORD)['\''"]?[[:space:]]*[:=][[:space:]]*'
+WHITELIST_SUFFIX='['\''"]?(<|\$|os\.environ|os\.getenv|%\()'
+git diff --cached -U0 \
+    | grep -E  '^\+' \
+    | grep -vE '^\+\+\+ ' \
+    | grep -iE "${PASS_PATTERN}[^[:space:]]+" \
+    | grep -viE "${PASS_PATTERN}${WHITELIST_SUFFIX}" \
+    > /dev/null
+CONTENT_STATUSES=("${PIPESTATUS[@]}")
+CONTENT_RC="${CONTENT_STATUSES[4]}"
+
+CONTENT_HITS=""
+CONTENT_TOOL_ERROR=0
+if [ "${CONTENT_STATUSES[0]}" -gt 1 ] || [ "${CONTENT_STATUSES[1]}" -gt 1 ] \
+   || [ "${CONTENT_STATUSES[2]}" -gt 1 ] || [ "${CONTENT_STATUSES[3]}" -gt 1 ]; then
+    CONTENT_TOOL_ERROR=1
+elif [ "$CONTENT_RC" -eq 0 ]; then
+    CONTENT_HITS="$(git diff --cached -U0 \
+        | grep -E  '^\+' \
+        | grep -vE '^\+\+\+ ' \
+        | grep -iE "${PASS_PATTERN}[^[:space:]]+" \
+        | grep -viE "${PASS_PATTERN}${WHITELIST_SUFFIX}")"
+elif [ "$CONTENT_RC" -ne 1 ]; then
+    CONTENT_TOOL_ERROR=1
+fi
+
+if [ "$CONTENT_TOOL_ERROR" -eq 1 ]; then
+    echo "      ABORT — 內容秘密掃描工具鏈執行異常（PIPESTATUS: ${CONTENT_STATUSES[*]}），fail-closed"
+    FAIL=1
+elif [ -n "$SECRETS" ] || [ -n "$CONTENT_HITS" ]; then
+    if [ -n "$SECRETS" ]; then
+        echo "      ABORT — staged 內容包含疑似秘密檔案（檔名判準）："
+        echo "$SECRETS" | sed '/^$/d;s/^/        /'
+    fi
+    if [ -n "$CONTENT_HITS" ]; then
+        echo "      ABORT — staged 新增內容疑似含字面密碼（內容判準，GOV-13）："
+        # 值本身不得印到終端——四次外洩裡兩次的路徑正是「終端輸出被抄進文件」，
+        # 印出值等於替下一次抄寫備好材料。只印遮罩後的行（欄位名可見，字面值不可見）。
+        echo "$CONTENT_HITS" | sed -E "s/(${PASS_PATTERN})[^[:space:]]+/\1***/I" | sed 's/^/        /'
+        echo ""
+        echo "      值若非真實憑證，改為 <value> 佔位符後重新 commit。"
+    fi
+    echo ""
+    echo "      依 CLAUDE.md §11，不得 commit .env、憑證、金鑰或本機設定檔（含檔案內容）。"
+    echo "      若確認為誤判，請 git restore --staged <file> 後重新 commit。"
+    FAIL=1
+else
+    echo "      PASS — 未偵測到秘密檔案或字面密碼"
+fi
+
+# ---------------------------------------------------------------------------
+# 檢查 4：列印 staged 檔案清單（僅顯示，不擋）
+# ---------------------------------------------------------------------------
+echo ""
+echo "[4/4] Staged 檔案清單"
+if [ -z "$STAGED" ]; then
+    echo "      （無 staged 檔案）"
+else
+    git diff --cached --numstat | sed 's/^/      /'
+    echo ""
+    echo "      提醒：依 CLAUDE.md §12.3，回報時必須主動列出超出授權清單的檔案，"
+    echo "      不得僅寫在 commit message 中。"
+fi
+
+# ---------------------------------------------------------------------------
+echo ""
+if [ $FAIL -ne 0 ]; then
+    echo "════════ COMMIT ABORTED ════════"
+    exit 1
+fi
+echo "════════ 四項檢查通過 ════════"
+exit 0

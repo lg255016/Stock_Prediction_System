@@ -1,0 +1,110 @@
+{
+  "purpose": "UG-G3-SB1 Gate A §11 DoD 第 6 項前置準備——scripts/verify/ug_g3_sb1_write_triple_barrier_labels.py 於拋棄式容器端到端驗證，供 PO binding confirmation 核准後直接對真實庫執行（不需再次修改腳本）。",
+  "date": "2026-09-09",
+  "authorization": "本次驗證對象為拋棄式容器，非真實庫，不需 binding confirmation（比照 DoD 第 2 項）。PO 已預告第 6 項四項執行要求，本檔為其中第 2 項（腳本落成可重跑檔案）的提前完成與驗證。",
+  "method": {
+    "container": "獨立拋棄式容器 ug_g3_sb1_write_script_tmpdb（postgres:18），與 db-1 同 docker network，非 postgres-data 掛載",
+    "schema_setup": "database/init_db.py + database/apply_migrations.py（v1~v9 全部套用成功）",
+    "data_seed": "唯讀讀取真實庫 stock_prices 全部 3,713 列（postgres@localhost:5432，僅 SELECT），複製寫入拋棄式容器的 stock_prices；並為每一列在拋棄式容器建立對應的 daily_ml_features 基底列（trade_date, stock_id 兩欄，其餘留空，模擬真實庫既有狀態）",
+    "script_invocation": [
+      "唯讀模式：python scripts/verify/ug_g3_sb1_write_triple_barrier_labels.py（僅唯讀連線，不執行 UPDATE，只印出統計預覽）",
+      "寫入模式：python scripts/verify/ug_g3_sb1_write_triple_barrier_labels.py --write --backup <path>（對 DB_HOST 指向的目標執行 UPDATE，連線參數全走環境變數；--backup 檔案須存在/非空/24小時內；執行時要求以 stdin 輸入目標資料庫全名二次確認）"
+    ]
+  },
+  "hardening_2026_09_09": {
+    "trigger": "審查方發現原版腳本『UPDATE 完成，實際影響列數：{n}（應等於 stock_prices 讀取列數 {m}）』只印出給人看的訊息，程式從未真的比對，列數不符時仍會照樣 commit——對真實庫的不可逆寫入不能只靠人眼比對數字",
+    "changes": [
+      "1. n_updated != len(df) 時 rollback + sys.exit(1)（原本只印訊息、照樣 commit）",
+      "2. commit 前、同一交易內，讀回 DB 的 (stock_id, label_reason 或 '__LABELED__' 佔位) → COUNT(*) 分布，與記憶體 result 的同款分布逐格比對，任一格不同即 rollback + exit(1)——同時滿足 PO 預告的第 3 項要求（reason 計數逐格對照），且是機器比對非人眼比對",
+      "3. --write 模式強制要求 --backup <path>，腳本檢查該檔存在、非空、mtime 在執行前 24 小時內，否則拒絕執行——把 RISK-013 第二項協議從『記得做』變成『沒做就跑不了』",
+      "4. --write 模式印出 CONN CHECK 後，要求以 stdin 輸入目標資料庫全名（與 current_database() 比對）才繼續，避免環境變數指錯庫時一路跑到底",
+      "5. docstring／print 訊息中「不連線寫入」「未連線寫入」訂正為「僅唯讀連線，不執行 UPDATE」——唯讀模式仍需連線讀 stock_prices，只是不寫"
+    ]
+  },
+  "known_fail_verification_2026_09_09": {
+    "container": "獨立拋棄式容器 ug_g3_sb1_write_script_kf_tmpdb（postgres:18，非 postgres-data 掛載），驗證後已拆除，容器/匿名卷皆確認移除",
+    "case_1_row_count_mismatch": {
+      "setup": "seed daily_ml_features 時刻意跳過 1 筆基底列（2330 @ 2022-08-03），使該表僅 3,712 列而 stock_prices 為完整 3,713 列",
+      "raw_output": "ERROR：UPDATE 實際影響列數 3712 != 讀取列數 3713（差額 1）。rollback，不 commit。",
+      "exit_code": 1,
+      "post_rollback_check": "SELECT COUNT(*) FROM daily_ml_features WHERE target_triple_barrier IS NOT NULL OR label_reason IS NOT NULL → 0（確認 rollback 生效，資料表維持寫入前狀態）"
+    },
+    "case_2_readback_mismatch": {
+      "setup": "修好案例 1 的缺列後（daily_ml_features 恢復 3,713 列），對腳本的一份拋棄式 mutant 副本注入蓄意錯誤——UPDATE 迴圈內第 6 列（stock_id=2330 的某個原本應為正常標籤的列）刻意寫入 (None, 'insufficient_data') 而非 result 實際算出的值，模擬『實際寫入值與記憶體算出值不同』的邏輯/傳輸錯誤；mutant 檔測試後即刪除，未留存於 repo",
+      "raw_output": "UPDATE 影響列數核對通過：3713 == 3713\nERROR：commit 前讀回分布與記憶體預期分布不符。rollback，不 commit。\n  expected 側差異： {('2330', '__LABELED__'): 975, ('2330', 'insufficient_data'): 4}\n  actual   側差異： {('2330', '__LABELED__'): 974, ('2330', 'insufficient_data'): 5}",
+      "exit_code": 1,
+      "post_rollback_check": "SELECT COUNT(*) FROM daily_ml_features WHERE target_triple_barrier IS NOT NULL OR label_reason IS NOT NULL → 0（確認 rollback 生效；此案證明列數核對通過後，讀回分布核對仍能獨立攔下列數對但內容錯的情形）",
+      "significance": "案例 1 只能偵測『少寫/多寫幾列』，案例 2 才能偵測『列數對、內容錯』——兩者是互補而非重複的防線，known-FAIL 必須分別驗證"
+    },
+    "positive_control": {
+      "setup": "同一容器修復完整後，以正確（未修改）腳本重跑 --write，正確輸入資料庫名稱確認",
+      "raw_output": "UPDATE 影響列數核對通過：3713 == 3713\n讀回分布核對通過：與記憶體預期逐格相符。\nCOMMIT 完成。",
+      "exit_code": 0,
+      "post_write_stats_match": "四檔 labeled_true/labeled_false_null 與先前 write_mode_result 完全相同（975/12、941/46、920/65、693/61），NVDA 06-03/06-04 點查同樣符合預期",
+      "significance": "確認前兩項強化不會誤傷正常寫入路徑（無 false positive）"
+    }
+  },
+  "row_level_comparison_hardening_2026_09_09": {
+    "trigger": "審查方發現：讀回比對的鍵是 (stock_id, reason)，正常標籤列一律折成 '__LABELED__'，因此 target_triple_barrier 本身寫錯（如 +1/-1 對調）或日期錯位（分布相同、鍵配對錯誤）兩道防線都看不見——分布快篩只能偵測 reason 或列數層級的錯誤",
+    "change": "新增逐列精確比對（_expected_rows／_actual_rows）：commit 前讀回 (stock_id, trade_date) -> (target_triple_barrier, label_reason) 完整字典，與記憶體 result 逐列轉換後的同款字典做 == 比較；不等則印出前 10 筆差異（key/expected/actual）、rollback、exit(1)。原本的分布比對保留作為第一道快篩，逐列比對才是定案的那道",
+    "container": "獨立拋棄式容器 ug_g3_sb1_write_rowcmp_tmpdb（postgres:18，非 postgres-data 掛載），驗證後已拆除，容器/匿名卷皆確認移除",
+    "case_a_sign_flip": {
+      "setup": "mutant 副本將 UPDATE 迴圈內的 tb_val 由 int(tb_val) 改為 -int(tb_val)（正負號翻轉，label_reason 不動）；mutant 檔測試後即刪除，未留存於 repo",
+      "raw_output": "UPDATE 影響列數核對通過：3713 == 3713\n讀回分布快篩通過：與記憶體預期逐格相符。\nERROR：commit 前逐列讀回與記憶體預期不符（3398 筆），rollback，不 commit。前 10 筆差異：\n  ('2382', datetime.date(2024, 10, 21)): expected=(1, None)  actual=(-1, None)\n  ('2330', datetime.date(2023, 5, 12)): expected=(1, None)  actual=(-1, None)\n  （其餘 8 筆同型態，皆為 target 正負號相反、reason 皆為 None）",
+      "exit_code": 1,
+      "significance": "證明分布快篩（僅看 reason）對 target 值本身寫錯是盲的——本案 3398/3713 列的 target 被翻轉，快篩仍回報「逐格相符」，只有逐列比對抓到"
+    },
+    "case_b_date_shift": {
+      "setup": "mutant 副本改為每列寫入時，把當前列算出的 (target, reason) 寫到『該股票序列中前一列』的 trade_date（首列除外），使同一組值集合仍存在、只是配錯日期；mutant 檔測試後即刪除，未留存於 repo",
+      "raw_output": "UPDATE 影響列數核對通過：3713 == 3713\n讀回分布快篩通過：與記憶體預期逐格相符。\nERROR：commit 前逐列讀回與記憶體預期不符（1594 筆），rollback，不 commit。前 10 筆差異：\n  ('NVDA', datetime.date(2025, 3, 3)): expected=(1, None)  actual=(-1, None)\n  ('2330', datetime.date(2025, 6, 12)): expected=(-1, None)  actual=(1, None)\n  （其餘 8 筆同型態，皆為同一股票序列相鄰列之間的值互換）",
+      "exit_code": 1,
+      "significance": "證明分布快篩對『值集合不變、鍵配對錯誤』完全無感（列數與 reason 分布皆不受影響），逐列比對是唯一能發現日期錯位的機制"
+    },
+    "case_c_reason_mutant_repeat": {
+      "setup": "沿用先前輪次的 reason 突變體（UPDATE 迴圈內第 6 列刻意寫入 (None, 'insufficient_data')），確認新增逐列比對後此案例仍被攔下，且此次是被分布快篩（先於逐列比對執行）攔下，行為與先前輪次一致",
+      "raw_output": "UPDATE 影響列數核對通過：3713 == 3713\nERROR：commit 前讀回分布快篩與記憶體預期不符。rollback，不 commit。\n  expected 側差異： {('2330', '__LABELED__'): 975, ('2330', 'insufficient_data'): 4}\n  actual   側差異： {('2330', '__LABELED__'): 974, ('2330', 'insufficient_data'): 5}",
+      "exit_code": 1,
+      "significance": "確認兩層防線疊加後仍正確攔截既有已知案例，新增的逐列比對不影響快篩層原有能力"
+    },
+    "positive_control": {
+      "setup": "同一容器（已修復完整 3,713 列基底）以正確（未修改）腳本重跑 --write，正確輸入資料庫名稱確認",
+      "raw_output": "UPDATE 影響列數核對通過：3713 == 3713\n讀回分布快篩通過：與記憶體預期逐格相符。\n逐列讀回核對通過：3713 列與記憶體預期完全相符。\nCOMMIT 完成。",
+      "exit_code": 0,
+      "post_write_stats_match": "四檔 labeled_true/labeled_false_null 與先前 write_mode_result 完全相同（975/12、941/46、920/65、693/61），NVDA 06-03/06-04 點查同樣符合預期",
+      "significance": "確認新增的逐列比對不會誤傷正常寫入路徑（無 false positive），且執行成本可忽略（3,713 列的逐列 dict 比對耗時未造成可感知延遲）"
+    }
+  },
+  "path_mapping_confirmed": "審查方確認：app 容器把整個 D:\\Python 掛在 /workspaces，故 D:\\Python\\Database_Backups\\Stock_Prediction_System2\\ 在容器內對應 /workspaces/Database_Backups/Stock_Prediction_System2/ ——真實庫執行時 --backup 直接指此容器內路徑即可，不需先複製到 /tmp",
+  "known_boundary_2026_09_09": "審查方指出（PO 複審記錄）：_expected_rows 與 UPDATE 迴圈共用同一套 NaN→None／int() 轉換邏輯，因此逐列比對驗證的是『實際寫進 DB 的值 == 這次執行打算寫入的值』，不是『實際寫進 DB 的值 == generate_triple_barrier_labels() 理論上應該算出的值』——若轉換邏輯本身有 bug（同時影響寫入與比對兩處），三道核對仍會全部 PASS。此邊界已知且接受：該轉換僅兩行、不含分支判斷，出錯機率低；且 generate_triple_barrier_labels() 本身的正確性已由 tests/test_triple_barrier.py 的 16 項測試獨立覆蓋，不依賴本腳本的讀回比對來驗證",
+  "read_only_mode_result": {
+    "rows_read": 3713,
+    "label_reason_distribution_matches_ambiguous_ratio_report": true,
+    "note": "四檔逐格分布與 UG_G3_SB1_ambiguous_ratio_report.json 完全一致（2330: 975/7/4/1；2382: 941/41/4/1；6488: 920/60/4/1；NVDA: 693/55/4/2，順序為 正常標籤/ambiguous/insufficient/no_entry）"
+  },
+  "write_mode_result": {
+    "rows_updated": 3713,
+    "matches_rows_read": true,
+    "post_write_stats_per_stock": {
+      "2330": {"labeled_true": 975, "labeled_false_null": 12},
+      "2382": {"labeled_true": 941, "labeled_false_null": 46},
+      "6488": {"labeled_true": 920, "labeled_false_null": 65},
+      "NVDA": {"labeled_true": 693, "labeled_false_null": 61}
+    },
+    "cross_check_against_ambiguous_ratio_report": "labeled_true = labeled_samples、labeled_false_null = null_total，四檔逐格與 UG_G3_SB1_ambiguous_ratio_report.json 完全相符"
+  },
+  "nvda_point_check": {
+    "2026-06-03": {"target_triple_barrier": null, "label_reason": "no_entry"},
+    "2026-06-04": {"target_triple_barrier": -1, "label_reason": null},
+    "explanation": "2026-06-03 的 T+1（06-04）open_price 為 NUMERIC NaN（RISK-024），anchor 無法判定 → no_entry；06-04 本身的 remaining 天數足夠、T+1 anchor（06-05 open_price）有效值，正常算出止損標籤 -1。與 874b3bf 修復的 anchor-NaN 路徑預期行為一致"
+  },
+  "real_db_zero_touch_verification": {
+    "connection_check": "postgres@localhost:5432（真實開發庫）",
+    "read_operations": "共 3 次唯讀 SELECT 取 stock_prices 全部欄位（原始 e2e 種子、known-FAIL 測試容器種子、本輪逐列比對測試容器種子各一次），皆為單純 SELECT",
+    "write_operations": 0,
+    "target_triple_barrier_non_null_count_after_test": 0,
+    "conclusion": "全程對真實開發庫零寫入（本輪逐列比對 known-FAIL 驗證後再次確認）"
+  },
+  "teardown_verification": "ug_g3_sb1_write_script_tmpdb（原始 e2e）、ug_g3_sb1_write_script_kf_tmpdb（第一輪 known-FAIL）、ug_g3_sb1_write_rowcmp_tmpdb（本輪逐列比對 known-FAIL）皆已 docker rm -f -v，docker ps -a 對三個名稱過濾皆輸出為空",
+  "readiness_for_real_db_execution": "腳本已完成兩輪硬化（見 hardening_2026_09_09 與 row_level_comparison_hardening_2026_09_09）並在結構相同（相同 schema+migrations+資料）的環境端到端驗證通過，累計五項 known-FAIL（列數不符、reason 分布不符 x2、target 正負號翻轉、日期錯位）與兩項正向對照組。讀寫邏輯、NaN→None 雙欄轉型、CHECK 約束相容性、列數核對、分布快篩、逐列精確核對、統計交叉核對、NVDA 邊界案例點查全部符合預期。備份路徑映射已確認（見 path_mapping_confirmed）。對真實庫執行前仍需完成 RISK-013 三項協議的 pg_dump 備份與還原驗證（另案）——本檔僅涵蓋腳本本身正確性，不構成備份/還原步驟的替代",
+  "note_on_credentials": "本檔不含任何字面 password 值（CHAL-008 教訓），腳本本身連線參數全走環境變數"
+}

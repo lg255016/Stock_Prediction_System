@@ -1,0 +1,473 @@
+{
+  "purpose": "UG-G2-SB6 §6 第 3 項「逐月對號」這項檢查的 **known-FAIL 案例**（`CLAUDE.md` §9A.2）。**證明它有失敗能力，不是一個永遠通過的檢查。**",
+  "date": "2026-09-03",
+  "evidence_label": "`VERIFIED THIS SESSION`（PM 執行；且**本檔本身離線可重現**，見 `HOW_TO_REPRODUCE`）",
+  "WHY_THIS_FILE_EXISTS": "本 known-FAIL 原本只寫在 `G2_SB6_GATE_B_SUBMISSION.md` §8 的表格裡，**八筆只列了三筆、第四欄不是可重跑指令、且沒有任何證據檔記錄那次執行**。複查方 2026-09-03 指出：\n> **一份證明「其他檢查會失敗」的證據，自己不可重跑。**\n**這與本 SB 一路在抓的形狀完全相同，只是這一次落在最上層。**",
+  "WHAT_IS_BEING_TESTED": "被測的檢查是 **§6 第 3 項**：管線寫進 `universe_snapshots` 的逐月候選數，必須逐一等於校準基準。\n**問題**：這個檢查有沒有可能是結構上無法失敗的？\n**答法**：拿一個**已知錯誤**的基準去比對同一份管線輸出。若檢查有失敗能力，它必須 FAIL。",
+  "THE_TWO_BASELINES": {
+    "inclusive": {
+      "name": "含當日窗（**已作廢**）",
+      "window": "`c.rk BETWEEN e.rk - 59 AND e.rk` —— 60 個交易日，**含 `effective_date` 當天**",
+      "origin": "`G2_SB6_union_count_calibration_4y.json` 使用的窗口定義。⚠ **該檔只有分市場的 twse／tpex 兩欄，沒有 `union_all`** —— 本檔補上，故本檔是含當日 `union_all` 的**唯一版控紀錄**。",
+      "why_wrong": "違反 DEC-017（`APPROVED`）「只能使用**生效日前已知**的 60 交易日成交資料」與提案 §5 的 P1 `max(trade_date) < effective_date`。見 DEC-033。"
+    },
+    "exclusive": {
+      "name": "排他窗（**現行**）",
+      "window": "`c.rk BETWEEN e.rk - 60 AND e.rk - 1` —— 60 個交易日，**嚴格早於 `effective_date`**",
+      "origin": "`G2_SB6_union_count_calibration_pit.json` 的 `baseline[].union_all`"
+    }
+  },
+  "sql_verbatim": {
+    "inclusive": "WITH cal AS (\n  SELECT trade_date d, row_number() OVER (ORDER BY trade_date)::int rk\n  FROM (SELECT DISTINCT trade_date FROM candidate_prices) x),\neff AS (\n  SELECT c.rk, c.d FROM cal c\n  JOIN (SELECT min(d) md FROM cal GROUP BY date_trunc('month', d)) m ON m.md = c.d\n  WHERE c.rk >= 61)\nSELECT e.d,\n  count(DISTINCT cp.stock_id) FILTER (WHERE cp.source = 'twse_mi_index'),\n  count(DISTINCT cp.stock_id) FILTER (WHERE cp.source = 'tpex_daily_quotes'),\n  count(DISTINCT cp.stock_id)\nFROM eff e\nJOIN cal c ON c.rk BETWEEN e.rk - 59 AND e.rk\nJOIN candidate_prices cp ON cp.trade_date = c.d\nGROUP BY e.d ORDER BY e.d;",
+    "exclusive": "WITH cal AS (\n  SELECT trade_date d, row_number() OVER (ORDER BY trade_date)::int rk\n  FROM (SELECT DISTINCT trade_date FROM candidate_prices) x),\neff AS (\n  SELECT c.rk, c.d FROM cal c\n  JOIN (SELECT min(d) md FROM cal GROUP BY date_trunc('month', d)) m ON m.md = c.d\n  WHERE c.rk >= 61)\nSELECT e.d,\n  count(DISTINCT cp.stock_id) FILTER (WHERE cp.source = 'twse_mi_index'),\n  count(DISTINCT cp.stock_id) FILTER (WHERE cp.source = 'tpex_daily_quotes'),\n  count(DISTINCT cp.stock_id)\nFROM eff e\nJOIN cal c ON c.rk BETWEEN e.rk - 60 AND e.rk - 1\nJOIN candidate_prices cp ON cp.trade_date = c.d\nGROUP BY e.d ORDER BY e.d;",
+    "pipeline": "-- 管線自己的路徑：從它實際寫入的列去數，**不重跑上面任何一句**\nSELECT effective_date, count(*) AS union_all\nFROM universe_snapshots GROUP BY effective_date ORDER BY effective_date;"
+  },
+  "RESULT": {
+    "vs_exclusive_current_baseline": {
+      "mismatches": 0,
+      "verdict": "**PASS —— 46/46 逐一相等**（這是 §6 第 3 項的正式結果）"
+    },
+    "vs_inclusive_superseded_baseline": {
+      "mismatches": 8,
+      "verdict": "**FAIL —— 8/46 不符**（這是 known-FAIL 案例）",
+      "full_list_not_truncated": [
+        {
+          "effective_date": "2023-03-01",
+          "baseline_inclusive": 1782,
+          "pipeline": 1781,
+          "delta": -1
+        },
+        {
+          "effective_date": "2024-05-02",
+          "baseline_inclusive": 1829,
+          "pipeline": 1830,
+          "delta": 1
+        },
+        {
+          "effective_date": "2024-09-02",
+          "baseline_inclusive": 1848,
+          "pipeline": 1846,
+          "delta": -2
+        },
+        {
+          "effective_date": "2024-10-01",
+          "baseline_inclusive": 1856,
+          "pipeline": 1855,
+          "delta": -1
+        },
+        {
+          "effective_date": "2025-04-01",
+          "baseline_inclusive": 1890,
+          "pipeline": 1891,
+          "delta": 1
+        },
+        {
+          "effective_date": "2025-07-01",
+          "baseline_inclusive": 1902,
+          "pipeline": 1903,
+          "delta": 1
+        },
+        {
+          "effective_date": "2026-02-02",
+          "baseline_inclusive": 1949,
+          "pipeline": 1948,
+          "delta": -1
+        },
+        {
+          "effective_date": "2026-07-01",
+          "baseline_inclusive": 1976,
+          "pipeline": 1977,
+          "delta": 1
+        }
+      ]
+    },
+    "CONCLUSION": "**同一份管線輸出，換一個（錯的）基準就 FAIL 8 次。** 因此 §6 第 3 項**不是**結構上無法失敗的檢查 —— 它區分得出兩種窗口定義。\n⚠ **但要說清楚它區分得出什麼**：它對「窗口邊界差一天」敏感（1~2 檔的差異），**這不等於它對任何一種計算錯誤都敏感**。本案例證明的是**有失敗能力**，不是**能抓到所有錯誤**。"
+  },
+  "comparison_table": [
+    {
+      "effective_date": "2022-11-01",
+      "baseline_inclusive_union_all": 1776,
+      "baseline_exclusive_union_all": 1776,
+      "pipeline_union_all": 1776,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2022-12-01",
+      "baseline_inclusive_union_all": 1780,
+      "baseline_exclusive_union_all": 1780,
+      "pipeline_union_all": 1780,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2023-01-03",
+      "baseline_inclusive_union_all": 1783,
+      "baseline_exclusive_union_all": 1783,
+      "pipeline_union_all": 1783,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2023-02-01",
+      "baseline_inclusive_union_all": 1784,
+      "baseline_exclusive_union_all": 1784,
+      "pipeline_union_all": 1784,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2023-03-01",
+      "baseline_inclusive_union_all": 1782,
+      "baseline_exclusive_union_all": 1781,
+      "pipeline_union_all": 1781,
+      "delta_inclusive_vs_pipeline": -1,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2023-04-06",
+      "baseline_inclusive_union_all": 1790,
+      "baseline_exclusive_union_all": 1790,
+      "pipeline_union_all": 1790,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2023-05-02",
+      "baseline_inclusive_union_all": 1790,
+      "baseline_exclusive_union_all": 1790,
+      "pipeline_union_all": 1790,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2023-06-01",
+      "baseline_inclusive_union_all": 1792,
+      "baseline_exclusive_union_all": 1792,
+      "pipeline_union_all": 1792,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2023-07-03",
+      "baseline_inclusive_union_all": 1797,
+      "baseline_exclusive_union_all": 1797,
+      "pipeline_union_all": 1797,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2023-08-01",
+      "baseline_inclusive_union_all": 1796,
+      "baseline_exclusive_union_all": 1796,
+      "pipeline_union_all": 1796,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2023-09-01",
+      "baseline_inclusive_union_all": 1797,
+      "baseline_exclusive_union_all": 1797,
+      "pipeline_union_all": 1797,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2023-10-02",
+      "baseline_inclusive_union_all": 1800,
+      "baseline_exclusive_union_all": 1800,
+      "pipeline_union_all": 1800,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2023-11-01",
+      "baseline_inclusive_union_all": 1803,
+      "baseline_exclusive_union_all": 1803,
+      "pipeline_union_all": 1803,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2023-12-01",
+      "baseline_inclusive_union_all": 1811,
+      "baseline_exclusive_union_all": 1811,
+      "pipeline_union_all": 1811,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2024-01-02",
+      "baseline_inclusive_union_all": 1819,
+      "baseline_exclusive_union_all": 1819,
+      "pipeline_union_all": 1819,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2024-02-01",
+      "baseline_inclusive_union_all": 1821,
+      "baseline_exclusive_union_all": 1821,
+      "pipeline_union_all": 1821,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2024-03-01",
+      "baseline_inclusive_union_all": 1820,
+      "baseline_exclusive_union_all": 1820,
+      "pipeline_union_all": 1820,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2024-04-01",
+      "baseline_inclusive_union_all": 1829,
+      "baseline_exclusive_union_all": 1829,
+      "pipeline_union_all": 1829,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2024-05-02",
+      "baseline_inclusive_union_all": 1829,
+      "baseline_exclusive_union_all": 1830,
+      "pipeline_union_all": 1830,
+      "delta_inclusive_vs_pipeline": 1,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2024-06-03",
+      "baseline_inclusive_union_all": 1837,
+      "baseline_exclusive_union_all": 1837,
+      "pipeline_union_all": 1837,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2024-07-01",
+      "baseline_inclusive_union_all": 1845,
+      "baseline_exclusive_union_all": 1845,
+      "pipeline_union_all": 1845,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2024-08-01",
+      "baseline_inclusive_union_all": 1844,
+      "baseline_exclusive_union_all": 1844,
+      "pipeline_union_all": 1844,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2024-09-02",
+      "baseline_inclusive_union_all": 1848,
+      "baseline_exclusive_union_all": 1846,
+      "pipeline_union_all": 1846,
+      "delta_inclusive_vs_pipeline": -2,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2024-10-01",
+      "baseline_inclusive_union_all": 1856,
+      "baseline_exclusive_union_all": 1855,
+      "pipeline_union_all": 1855,
+      "delta_inclusive_vs_pipeline": -1,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2024-11-01",
+      "baseline_inclusive_union_all": 1861,
+      "baseline_exclusive_union_all": 1861,
+      "pipeline_union_all": 1861,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2024-12-02",
+      "baseline_inclusive_union_all": 1863,
+      "baseline_exclusive_union_all": 1863,
+      "pipeline_union_all": 1863,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2025-01-02",
+      "baseline_inclusive_union_all": 1874,
+      "baseline_exclusive_union_all": 1874,
+      "pipeline_union_all": 1874,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2025-02-03",
+      "baseline_inclusive_union_all": 1879,
+      "baseline_exclusive_union_all": 1879,
+      "pipeline_union_all": 1879,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2025-03-03",
+      "baseline_inclusive_union_all": 1882,
+      "baseline_exclusive_union_all": 1882,
+      "pipeline_union_all": 1882,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2025-04-01",
+      "baseline_inclusive_union_all": 1890,
+      "baseline_exclusive_union_all": 1891,
+      "pipeline_union_all": 1891,
+      "delta_inclusive_vs_pipeline": 1,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2025-05-02",
+      "baseline_inclusive_union_all": 1892,
+      "baseline_exclusive_union_all": 1892,
+      "pipeline_union_all": 1892,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2025-06-02",
+      "baseline_inclusive_union_all": 1900,
+      "baseline_exclusive_union_all": 1900,
+      "pipeline_union_all": 1900,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2025-07-01",
+      "baseline_inclusive_union_all": 1902,
+      "baseline_exclusive_union_all": 1903,
+      "pipeline_union_all": 1903,
+      "delta_inclusive_vs_pipeline": 1,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2025-08-01",
+      "baseline_inclusive_union_all": 1905,
+      "baseline_exclusive_union_all": 1905,
+      "pipeline_union_all": 1905,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2025-09-01",
+      "baseline_inclusive_union_all": 1909,
+      "baseline_exclusive_union_all": 1909,
+      "pipeline_union_all": 1909,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2025-10-01",
+      "baseline_inclusive_union_all": 1916,
+      "baseline_exclusive_union_all": 1916,
+      "pipeline_union_all": 1916,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2025-11-03",
+      "baseline_inclusive_union_all": 1921,
+      "baseline_exclusive_union_all": 1921,
+      "pipeline_union_all": 1921,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2025-12-01",
+      "baseline_inclusive_union_all": 1929,
+      "baseline_exclusive_union_all": 1929,
+      "pipeline_union_all": 1929,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2026-01-02",
+      "baseline_inclusive_union_all": 1941,
+      "baseline_exclusive_union_all": 1941,
+      "pipeline_union_all": 1941,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2026-02-02",
+      "baseline_inclusive_union_all": 1949,
+      "baseline_exclusive_union_all": 1948,
+      "pipeline_union_all": 1948,
+      "delta_inclusive_vs_pipeline": -1,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2026-03-02",
+      "baseline_inclusive_union_all": 1952,
+      "baseline_exclusive_union_all": 1952,
+      "pipeline_union_all": 1952,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2026-04-01",
+      "baseline_inclusive_union_all": 1956,
+      "baseline_exclusive_union_all": 1956,
+      "pipeline_union_all": 1956,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2026-05-04",
+      "baseline_inclusive_union_all": 1963,
+      "baseline_exclusive_union_all": 1963,
+      "pipeline_union_all": 1963,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2026-06-01",
+      "baseline_inclusive_union_all": 1974,
+      "baseline_exclusive_union_all": 1974,
+      "pipeline_union_all": 1974,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2026-07-01",
+      "baseline_inclusive_union_all": 1976,
+      "baseline_exclusive_union_all": 1977,
+      "pipeline_union_all": 1977,
+      "delta_inclusive_vs_pipeline": 1,
+      "delta_exclusive_vs_pipeline": 0
+    },
+    {
+      "effective_date": "2026-08-03",
+      "baseline_inclusive_union_all": 1979,
+      "baseline_exclusive_union_all": 1979,
+      "pipeline_union_all": 1979,
+      "delta_inclusive_vs_pipeline": 0,
+      "delta_exclusive_vs_pipeline": 0
+    }
+  ],
+  "HOW_TO_REPRODUCE": {
+    "offline_zero_database": [
+      "**本檔自帶三欄完整 46 列**（`comparison_table`），故不需要資料庫、不需要容器、不需要任何人在場即可重驗：",
+      "1. 讀 `comparison_table`，確認 `baseline_exclusive_union_all == pipeline_union_all` 對全部 46 列成立",
+      "2. 確認 `baseline_inclusive_union_all != pipeline_union_all` 恰好在 `RESULT.vs_inclusive_superseded_baseline.full_list_not_truncated` 所列的 8 個日期上成立",
+      "3. 交叉核對：`baseline_exclusive_union_all` 應逐列等於 `G2_SB6_union_count_calibration_pit.json` 的 `baseline[].union_all`",
+      "**第 3 步是關鍵** —— 它讓本檔的數字**不只是自我宣告**，而是與另一份獨立落檔的證據對得上。"
+    ],
+    "from_database": [
+      "需 `candidate_prices`（1,821,870 列）與 `universe_snapshots`（85,641 列）：",
+      "逐句執行 `sql_verbatim` 的三段，再以 `effective_date` 對齊比較。",
+      "資料來源：真實庫 `postgres`@`localhost:5432`，或還原 `..._candidate_prices_twse_tpex_4y_20260903_015900.dump`（69,742,758 bytes）後重跑 `python -m src.transform.universe_builder`。"
+    ]
+  },
+  "KNOWN_LIMIT": "⚠ **本檔的三欄數字由 PM 於同一次工作中產生**，`baseline_exclusive` 與 `pipeline` 兩欄的相等因此不是兩個獨立來源的巧合，而是**兩條不同計算路徑**（一句 SQL vs. `universe_builder` 的 Python 邏輯 + 寫入 + 再讀出）在同一份資料上的一致。**這正是 §6 第 3 項要驗的東西**，但它**不驗**「那份資料本身對不對」—— 那是 `UG-G2-SB9` 與匯入驗證的範圍。",
+  "MECHANISM_FINGERPRINT": "**那八筆的 delta 有 +1 也有 −1、−2，兩個方向都有**（實測：-1、+1、-2、-1、+1、+1、-1、+1）。**這不是雜訊，是機制的直接後果** —— 含當日窗 `rk-59..rk` 與排他窗 `rk-60..rk-1` 相差的是**兩天，不是一天**：**一邊多收 `effective_date` 當天，一邊少收最舊那一天**。若當天有一檔只在那天出現、而最舊那天沒有這種股票，delta 為負；反之為正；兩天各有一檔就互相抵銷（**這解釋了為何 46 列裡有 38 列完全相同**）。\n**因此這八筆是機制的指紋，不是隨機差異** —— 一個真正隨機的計算錯誤沒有理由剛好落在這個形狀上。\n（複查方 2026-09-03 獨立重跑本檔後指出；PM 原本沒有寫這一層。）",
+  "INDEPENDENTLY_REPRODUCED": "**2026-09-03，複查方依 `HOW_TO_REPRODUCE.offline_zero_database` 獨立重跑本檔**，取得含當日 8/46、排他 0/46，與 PM 回報一致；交叉核對（本檔排他欄 vs `calibration_pit.json` 的 `union_all`）**46/46 全覆蓋、不符 0 列**；並確認 `calibration_4y.json` 內 `union_all` 出現次數為 **0**。\n**這是本次合作中第一項複查方能真正獨立重跑的量測** —— 在此之前，容器內的每一項對複查方而言都只能標 `REPORTED, NOT INDEPENDENTLY VERIFIED`，因為那些容器已經拆掉了。"
+}

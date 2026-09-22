@@ -1,0 +1,211 @@
+{
+  "_meta": {
+    "purpose": "PROJECT_STATUS.md §0.5 #20 首次每日 ETL 真實執行——併入「缺口自動追補」小案後的執行計畫與預先登記基線",
+    "created": "2026-09-16",
+    "revised": "2026-09-16（審查方複核後訂正三處，見 revision_log；併入 doc/upgrade/gates/FIRST_DAILY_ETL_GAP_AUTOFILL_GATE_A_PROPOSAL.md）",
+    "stage": "段 A（唯讀＋提案＋紅測設計，尚未執行 run_all_daily_tasks()，未動真實庫，未實作）",
+    "authority": "本文件比照 doc/upgrade/gates/evidence/PRE_G3_*_expectations.json 慣例格式",
+    "work_order_source": "PO 2026-09-16 工作單：首次每日 ETL 真實執行 → 審查方複核衍生「缺口自動追補」小案，PO 2026-09-16 裁決併入",
+    "revision_log": [
+      "item_5：尾端掛點觸及列數由「8 檔 × 6 = 48」訂正為「約 459 檔 × 6 ≈ 2,754」——run_triple_barrier_tail_recompute() 讀的是全部 stock_prices，非僅追蹤 8 檔（審查方發現）",
+      "item_4/item_6#7：daily_ml_features 總列數訂正為「會變」——upsert_ml_features() 對追蹤 8 檔的新交易日執行 INSERT，非停留在 449,263（審查方發現）",
+      "item_6#3：NULL／預設值分類訂正為「W／U 兩類，F 結構上不可能出現」——run_feature_engineering_pipeline() 呼叫 generate_daily_features() 時未傳入 failed_source_keys（審查方發現，本輪不修，登記候補小案）",
+      "item_6#6：「只能靠人工」的答案被 PO 推翻——本案（缺口自動追補）就是要把它變成自動機制"
+    ]
+  },
+
+  "item_1_exec_env": {
+    "container": "stock_prediction_system2_devcontainer-app-1",
+    "identity": "vscode",
+    "python_version": "Python 3.14.6",
+    "git_rev_parse_head_container": "dde7f4e6028389566744ef3ccfea520318c827cf",
+    "git_rev_parse_head_matches_expected": true,
+    "expected_head": "dde7f4e（文件對齊輪最終 commit）",
+    "working_tree_clean_check": {
+      "note": "容器內 `git status --short`（無 -c 選項）顯示 42 個檔案 Modified——經查為容器 git 設定未帶 core.autocrlf，CRLF blob 對 LF 正規化後的假性差異，非真實內容變更",
+      "command": "git -c core.autocrlf=true status --short",
+      "result": "空輸出，exit 0",
+      "verdict": "PASS（工作樹實質乾淨）"
+    },
+    "hooks_path": {
+      "command": "git config --get core.hooksPath",
+      "result": ".githooks",
+      "verdict": "PASS"
+    },
+    "scheduler_not_running": {
+      "command": "ps aux | grep -i scheduler",
+      "result": "無匹配行",
+      "verdict": "確認 scheduler.py 未在背景執行，本次僅手動觸發一次 run_all_daily_tasks()"
+    },
+    "instrumentation_plan": {
+      "constraint": "不得修改 main_etl_pipeline.py 原始碼",
+      "method": "以獨立 harness 腳本（段 1 執行前另建，不屬本次 commit 範圍）在執行前對 pipeline 物件的 7 個階段對應方法做 runtime monkeypatch（functools.wraps 保留原行為，僅加 time.time() 前後量測），不修改任何已提交檔案",
+      "seven_stages_mapping": [
+        {"stage": "1_批次取價", "method": "pipeline.run_price_batch", "timing": "直接量測（wrap）"},
+        {"stage": "2_逐股", "method": "（run_all_daily_tasks 內聯迴圈，非獨立方法）", "timing": "間接推算＝階段3開始時刻－階段1結束時刻，已於本文件揭露為間接量測，非直接 wrap"},
+        {"stage": "3_AI熱門詞", "method": "pipeline.trend_discover.run_discovery", "timing": "直接量測（wrap）"},
+        {"stage": "4_PTT", "method": "pipeline.run_ptt_board_pipeline", "timing": "直接量測（wrap）"},
+        {"stage": "5_NLP", "method": "pipeline.run_nlp_sentiment_pipeline", "timing": "直接量測（wrap）"},
+        {"stage": "6_特徵工程", "method": "pipeline.run_feature_engineering_pipeline", "timing": "直接量測（wrap）"},
+        {"stage": "7_TB尾端", "method": "pipeline.run_triple_barrier_tail_recompute", "timing": "直接量測（wrap）"}
+      ]
+    }
+  },
+
+  "item_2_connection_target": {
+    "query": "SELECT current_database() AS db, current_user AS usr, inet_server_port() AS port;",
+    "result": {"db": "postgres", "usr": "postgres", "port": 5432},
+    "verdict": "確認刻意指向真實開發庫（非臨時／拋棄式容器）；.env 內容全程未讀出、未顯示",
+    "evidence_label": "VERIFIED THIS SESSION（容器內唯讀查詢，2026-09-16）"
+  },
+
+  "item_3_tracked_universe": {
+    "query": "SELECT DISTINCT em.stock_id, em.market FROM entity_mapping em JOIN tracking_keywords tk ON em.keyword = tk.keyword WHERE tk.is_active = TRUE ORDER BY em.market, em.stock_id;",
+    "result": [
+      {"stock_id": "2059", "market": "TWSE"},
+      {"stock_id": "2330", "market": "TWSE"},
+      {"stock_id": "2382", "market": "TWSE"},
+      {"stock_id": "2454", "market": "TWSE"},
+      {"stock_id": "3008", "market": "TWSE"},
+      {"stock_id": "6488", "market": "TPEX"},
+      {"stock_id": "8069", "market": "TPEX"},
+      {"stock_id": "NVDA", "market": "US"}
+    ],
+    "tracked_count": 8,
+    "note_re_risk005": "RISK-005 應對措施欄已改綁本次執行；追蹤宇宙實際為 8 檔，不是原登記語意的 150 檔——RISK-005 計時結論將照實際 8 檔規模撰寫，不得外推或延用『150 檔』字面",
+    "active_keywords_count": 26,
+    "active_keywords": ["AI伺服器","AI晶片與ASIC","ASIC/AI晶片","ASIC/IC設計","CoWoS","元太","光學鏡頭","凌巨","加密貨幣概念","台積電","大立光","川湖","廣達","散熱模組","環球晶","生技醫療","矽光子","美債","聯發科","記憶體","輝達","降息","電子紙","電子紙應用","電子紙與電子標籤","非農"],
+    "evidence_label": "VERIFIED THIS SESSION"
+  },
+
+  "item_4_pre_write_baseline": {
+    "disclosure": "本節數字為 2026-09-16 段 0 直接查詢真實庫所得，非抄錄 UG_G3_SB2a_GATE_B_SUBMISSION.md 的舊值。標籤／labels 兩欄的數字恰與 SB2a 文件記載相同（410,443／38,820），經查為 RISK-027／RISK-023 之後的段 2 重跑只動情緒／留言欄，未動 target_triple_barrier／label_reason 兩欄，故該巧合是機制性的，非未重新查證。",
+    "row_counts": {
+      "stock_prices": 449263,
+      "candidate_prices": 1841594,
+      "market_articles": 1330,
+      "article_comments": 136185,
+      "daily_ml_features": 449263,
+      "etl_run_log": 57,
+      "sentiment_cache": 36
+    },
+    "target_triple_barrier_counts": {"-1": 226956, "0": 21199, "1": 162288, "null_(尚未計算或屬 label_reason 類)": 38820},
+    "label_reason_counts": {"null_(已正常計算為三態之一)": 410443, "ambiguous_dual_barrier": 36388, "insufficient_data": 1892, "no_entry": 540},
+    "candidate_prices_last15_trading_days": [
+      {"trade_date": "2026-09-04", "n": 1972}, {"trade_date": "2026-09-03", "n": 1972},
+      {"trade_date": "2026-09-02", "n": 1972}, {"trade_date": "2026-09-01", "n": 1973},
+      {"trade_date": "2026-08-31", "n": 1973}, {"trade_date": "2026-08-28", "n": 1972},
+      {"trade_date": "2026-08-27", "n": 1972}, {"trade_date": "2026-08-26", "n": 1973},
+      {"trade_date": "2026-08-25", "n": 1973}, {"trade_date": "2026-08-24", "n": 1972},
+      {"trade_date": "2026-08-21", "n": 1972}, {"trade_date": "2026-08-20", "n": 1972},
+      {"trade_date": "2026-08-19", "n": 1974}, {"trade_date": "2026-08-18", "n": 1975},
+      {"trade_date": "2026-08-17", "n": 1976}
+    ],
+    "stock_prices_tracked_universe_last15_trading_days": "全部 15 個交易日皆為 8/8 檔，無缺口",
+    "stock_prices_max_date": "2026-09-04",
+    "candidate_prices_max_date": "2026-09-04",
+    "source_status_counts": {"SUCCESS_EMPTY": 448480, "SUCCESS": 783},
+    "critical_finding_gap_2026_09_05_to_present": {
+      "finding": "candidate_prices／stock_prices 最新日期皆停在 2026-09-04；今日 2026-09-16 執行時 previous_business_day() 會取 2026-09-15（昨日，週二），批次階段只抓『這一天』，不會回補 09-05～09-12 之間的既有缺口（約 6～8 個交易日，確切天數依 TWSE 假日曆而定）",
+      "cause": "自 UG-G3-SB2a／RISK-023 一系列一次性回補腳本結束後（最後一筆 etl_run_log 落地時間為 2026-09-11），本專案從未真正執行過一次 run_all_daily_tasks()——這正是本工作單存在的原因",
+      "disposition": "此缺口非本次執行造成，回補（若需要）屬另案，不在本工作單範圍。執行後第 10 項『缺口偵測』查詢會把這段既有缺口印出來，報告中必須明確標示為『已知缺口、非本次執行造成』，不得誤判為本次執行失敗或 FAIL",
+      "flagged_by": "PM 段 0 唯讀查詢主動發現，非 PO 或審查方原提示"
+    },
+    "evidence_label": "VERIFIED THIS SESSION"
+  },
+
+  "item_5_tail_hook_status": {
+    "call_site": "main_etl_pipeline.py:793，`self.run_triple_barrier_tail_recompute()`，在 `run_all_daily_tasks()` 第 5 步、`run_feature_engineering_pipeline()`（第 4 步，line 786）之後，無條件呼叫（無 if 判斷、無額外閘門）",
+    "default_holding_period": 5,
+    "expected_rows_touched_CORRECTED": "訂正（審查方發現，2026-09-16）：`run_triple_barrier_tail_recompute()` 讀的是 `SELECT ... FROM stock_prices`**全表**（459 檔），非僅追蹤 8 檔；`recompute_tail_labels()` 用 `groupby(\"stock_id\").tail(holding_period+1)`，故實際觸及約 459 × 6 ≈ 2,754 列。原文『至多 8 檔 × 6 = 48 列』錯誤，成因是把『追蹤宇宙』與『stock_prices 現存全部股票』兩個不同集合混為一談",
+    "expected_value_change_scope": "2,754 列中，只有追蹤 8 檔的值會真的改變（有新資料可用）；其餘 451 檔理論上應逐位不變（冪等）——此為 md5 對帳需驗證的斷言，不能假設",
+    "write_semantics": "UPDATE daily_ml_features 既有列的 target_triple_barrier／label_reason 兩欄，非 INSERT",
+    "tail_window_design_note": "本案（缺口自動追補）將 `recompute_tail_labels()` 新增 `tail_window` 參數，令一次追補 n 個新交易日時尾端重算範圍隨之加寬為 `holding_period+n`，同時保持 Triple-Barrier 本身的持有期窗口（`holding_period=5`）不變。詳見 `FIRST_DAILY_ETL_GAP_AUTOFILL_GATE_A_PROPOSAL.md` §3.6",
+    "binding_confirmation_reference": "2026-09-10 PO binding confirmation 已授權此掛點『接線』本身；本次是授權範圍外的下一層——『啟用執行』（即 run_all_daily_tasks() 整體被真正呼叫）"
+  },
+
+  "item_6_ten_item_checklist": [
+    {
+      "n": 1,
+      "item": "161 篇孤兒文章是否歸屬到 2059／2454／3008／8069 的 direct_count",
+      "measurement": "執行前後對比 daily_ml_features 對這 4 檔的 article_count 加總；執行前基線（本次段 0 唯讀查得）：2059=13、2454=99、3008=20、8069=20（993 列/檔）。執行後若當日有相關新文章，對應股票 article_count 應增加；entity_mapping 路由已確認存在（2059→川湖／2454→聯發科／3008→大立光／8069→元太）",
+      "expected": "無新增孤兒（未路由）文章；若當日恰有相關文章，對應 4 檔 article_count 較基線增加，增量與 market_articles 當日新文章數一致"
+    },
+    {
+      "n": 2,
+      "item": "4 檔新追蹤股票寫入 stock_prices 的 source 應全為 twse_mi_index／tpex_daily_quotes，零 yfinance_auto_adjusted",
+      "measurement": "SELECT DISTINCT source FROM stock_prices WHERE stock_id IN ('2059','2454','3008','8069') AND trade_date = <本次批次日 2026-09-15（若執行日不變）>;",
+      "expected": "僅 twse_mi_index（TWSE 三檔）／tpex_daily_quotes（8069），完全不出現 yfinance_auto_adjusted"
+    },
+    {
+      "n": 3,
+      "item": "新股票暖機期滾動特徵的 NULL／預設值只能落在 W／F／U 三類，不得出現未分類情形",
+      "measurement": "依 FEATURE_REGISTRY.md §5A.1~5A.3 權威對照表（成因 W=暖機期、F=SOURCE_FAILED、U=保持NULL的合法情形），對 2059/2454/3008/8069 執行後新寫入列逐欄核對 NULL／預設值是否均可歸類；比照 UG-G3-SB2a 段 2 的『80 列 NULL 對照』手法",
+      "expected_CORRECTED": "訂正（審查方發現，2026-09-16）：`run_feature_engineering_pipeline()` 呼叫 `generate_daily_features()` 時未傳入 `failed_source_keys`（main_etl_pipeline.py:550-553），該參數在每日排程路徑上恆為 None，故成因 F（SOURCE_FAILED）**結構上不可能出現**。預期只會落在 W／U 兩類；若出現 F 分類，代表判讀方式本身有誤，不是資料異常。F 的接線缺口本輪不修，登記為候補小案（不在缺口自動追補案範圍內）",
+      "expected_CORRECTED_2": "**二次訂正（拋棄式容器演練實證，2026-09-16，審查方要求提升為本項標題級結論，不得埋在表格裡）**：演練當日 PTT（ptt.cc）對 `/bbs/Stock/index.html` 回 HTTP 500，26 個關鍵字全部 `FETCH_FAILED`；追蹤 8 檔本次新交易日的 `daily_ml_features` 仍全數寫成 `source_status='SUCCESS_EMPTY'`（`SUCCESS'2`／`SUCCESS_EMPTY'26`，實測 28 列，0 落在其他值域）——**這不是『符合成因 U 故 PASS』，是成因 F 接線缺口第一次在真實輸入上被實證發生**：PTT 來源確實失敗了，但因為 `failed_source_keys` 沒有接線，特徵層完全看不出來，把『來源掛了』與『當天真的沒人討論』寫成同一個值。本項驗收結論改為：W／U 分類正確、無未分類情形（技術面成立），但**同時明確記錄本次 PTT 失敗未被特徵層反映，成因 F 接線小案的必要性由本次演練證實，且已提升為真實首跑後的第一個候補小案（排在雙時點排程小案之前）**。真實首跑報告的本項不得再套用『符合成因 U』字面過關，須沿用本段措辭。"
+    },
+    {
+      "n": 4,
+      "item": "批次階段請求數與耗時，對照全市場約 2,024 檔既有基準，無 rate limit",
+      "measurement": "比對 etl_run_log 本次 batch_key 的 http_attempts 加總與階段 1 耗時；detail 欄逐筆檢查有無 429／rate limit 相關字樣",
+      "expected": "http_attempts 與耗時量級與既有全市場基準相符（本次僅 1 個邏輯請求/市場，非逐股請求，見 main_etl_pipeline.py:613-620 UG-G2-SB7 批次設計），無任何 rate-limit 訊號"
+    },
+    {
+      "n": 5,
+      "item": "2330／2382 於 2026-09-01／09-02 能否從 candidate_prices 正常取得",
+      "measurement": "SELECT stock_id, trade_date, source, close_price FROM candidate_prices WHERE stock_id IN ('2330','2382') AND trade_date IN ('2026-09-01','2026-09-02');",
+      "result_already_confirmed_2026_09_16_readonly": [
+        {"stock_id": "2330", "trade_date": "2026-09-01", "source": "twse_mi_index", "close_price": "2440.0000"},
+        {"stock_id": "2330", "trade_date": "2026-09-02", "source": "twse_mi_index", "close_price": "2385.0000"},
+        {"stock_id": "2382", "trade_date": "2026-09-01", "source": "twse_mi_index", "close_price": "342.0000"},
+        {"stock_id": "2382", "trade_date": "2026-09-02", "source": "twse_mi_index", "close_price": "337.0000"}
+      ],
+      "verdict": "PASS（本項與今日執行無關，屬歷史性查驗，段 0 已可確認，不受本次執行影響，段 2 報告沿用本結果即可，不必重查）"
+    },
+    {
+      "n": 6,
+      "item": "批次階段與逐股階段的銜接：批次中斷或延後時，缺口是否會被自動偵測，還是只能靠人工查",
+      "measurement": "執行後檢視本次是否確實從 candidate_prices 的既有 max(trade_date) 次日起自動逐日追補到 previous_business_day()，而非只處理單日",
+      "expected_answer_CORRECTED": "原答案『只能靠人工查』已被 PO 推翻（2026-09-16）——本次執行本身即為『缺口自動追補』小案的首次真跑，預期答案應改為『機制存在，會自動偵測 candidate_prices 的 max(trade_date) 缺口並逐日追補，上界 30 個平日，超過才需人工介入』。若本次執行仍只處理單日，代表小案尚未實作完成，不得執行真實庫寫入"
+    },
+    {
+      "n": 7,
+      "item": "CHAL-010 迴歸：target_triple_barrier／label_reason 計數 = 基線 + 尾端掛點改動；差一列就是回歸",
+      "measurement_CORRECTED": "訂正（審查方發現，2026-09-16，兩項連動修正）：(a) daily_ml_features 總列數**會變**——upsert_ml_features() 對追蹤 8 檔本次新增的 n 個交易日執行 INSERT（總列數 = 449,263 + n×有價格的追蹤檔數，以執行後實際 INSERT 列數為準，不預先假設 n 或檔數）；(b) 特徵階段對全部 449,263 列既有列執行 DO UPDATE（27 欄，排除僅 target_triple_barrier／label_reason），故 09-04 以前、全部 459 檔『不該變』的列，必須比照 UG-G3-SB2a 段 3 手法對 25 個特徵欄算 md5，寫入前後相同才算 PASS，不同即為回歸——不能只假設『同一套程式碼重算應該相同』",
+      "measurement_CORRECTED_2": "**md5 範圍三次訂正（拋棄式容器演練實證＋PO 裁決，2026-09-16）**：演練發現 NVDA 有 57 列（範圍恰為執行日往前 3 個月）md5 不同，成因是 `run_us_stock_pipeline(period='3mo')`——**本案完全沒動過的既有機制**，yfinance 每次重抓都會覆蓋近 3 個月，調整後收盤價本身會隨時間微幅回溯修正，連帶影響 `close_price`／`return_1d`／`rsi_14`／`volatility_*`／`amplitude_ratio`／`ma5_bias_ratio`／`ma20_bias_ratio`／`volume_ratio_5d` 這些價格衍生欄；情緒／留言衍生欄（RISK-027/023 關心的欄位）0 差異，未發生覆寫。**PO 裁決（2026-09-16）：只排除 NVDA，不登記新風險**——md5 驗收範圍改為『09-04 以前、458 檔台股（排除 NVDA）、25 個特徵欄』，NVDA 本身因既有 `period=3mo` 機制本來就會變，不在『不該變的列』範圍內。",
+      "expected": "① daily_ml_features 總列數 = 基線 449,263 + 本次新增交易日 × 有價格的追蹤檔數；② 09-04 以前、**458 檔台股（不含 NVDA）**的 25 個特徵欄 md5 寫入前後相同，NVDA 本身的變動屬既有 `period=3mo` 機制之預期行為，不算回歸；③ 標籤兩欄計數差異只出現在尾端掛點觸及的約 2,754 列中、且只有追蹤 8 檔的值真的改變（見 item_5）"
+    },
+    {
+      "n": 8,
+      "item": "RISK-027 可預期流失：若執行日落在台股假期前後，article_count 少算，不得誤讀為爬蟲失敗",
+      "measurement": "確認本次 batch_date（previous_business_day() 推算值）是否鄰近台股假期",
+      "current_assessment": "若今日（2026-09-16 週三）執行，batch_date=2026-09-15（週二），非假期前後，本項預期不觸發；若實際執行日不同，須重新核對台股假日曆",
+      "expected": "若非假期前後，article_count 無異常流失；若鄰近假期，流失屬已知限制，不算 FAIL"
+    },
+    {
+      "n": 9,
+      "item": "RISK-028：etl_run_log 逐市場 outcome 必列；TPEX FETCH_FAILED 要走 --dates／--markets 重試流程並回報，不得靜默接受",
+      "measurement": "SELECT * FROM etl_run_log WHERE batch_key = <本次批次日> ORDER BY source, item_key;",
+      "expected": "TWSE／TPEX 皆有明確 outcome；若 TPEX 因 RISK-028（間歇性 SSL 憑證驗證失敗）出現 FETCH_FAILED，必須實際執行重試（--dates/--markets）並在報告中記錄重試結果，不得略過。**重申：禁止關閉憑證驗證繞過**"
+    },
+    {
+      "n": 10,
+      "item": "缺口偵測常設化：執行後重跑 candidate_prices 逐日全市場列數、stock_prices 追蹤宇宙逐日覆蓋，並列印",
+      "measurement": "重跑 item_4 的兩條逐日查詢（LIMIT 放寬至涵蓋 2026-08-17～執行日，以完整顯示本文件已登記的已知缺口）",
+      "expected": "會顯示 2026-09-05～09-14（或執行日前一交易日）之間全市場零列的已知缺口——**此為本文件段 0 已預先登記、非本次執行造成，報告中列印時必須引用本文件本節，明確標示為已知缺口，不得誤判為 FAIL 或本次執行的新缺陷**"
+    }
+  ],
+
+  "item_7_execution_timing": {
+    "current_time_taipei": "2026-09-16 11:01（週三）",
+    "recommendation_in_work_order": "建議台北時間 16:00 後跑（交易所日報表盤後才有）",
+    "code_level_finding": "previous_business_day() 恆抓『昨日』（跳過週末），本次 batch_date 預期為 2026-09-15（週二）——該日報表已於昨晚發布完畢，故現在（09-16 上午）執行理論上不受『今日報表未出』限制。此點與工作單原文的一般性提醒略有出入，已如實記錄供 PO／審查方判斷，不自行認定可提前執行",
+    "disposition": "段 0 本身不執行任何寫入；段 1 實際執行時點仍依 PO 綁定確認時給出的指示為準（可能仍選擆晚間以維持與未來排程時段一致的量測基準）",
+    "ptt_reachability_precondition": "**新增前置條件（PO 裁決，2026-09-16，拋棄式容器演練期間 PTT 對 https://www.ptt.cc/bbs/Stock/index.html 回 HTTP 500，複核時仍為 500）**：真實首跑執行前，PM 必須對該 URL 探測一次，回 200 才准執行；仍非 200 就等，並在回報中記錄探測時間與狀態碼。這是本項『執行時點』判準之外、獨立新增的必要條件，兩者都要滿足。"
+  },
+
+  "item_8_failure_disposition": {
+    "rule": "任一階段拋錯或任一觀察項不符預期：停、留 log、回報、等待 PO／審查方授權，不得自行修正後重跑（TEAM_PLAYBOOK A12，SB7 案例首次真正套用）",
+    "refused_exception_note": "main_etl_pipeline.py:796-798，REFUSED（ServiceRefusedError）设计上會在所有階段跑完後才 raise，這是既有設計行為，不算失敗，但必須在報告中與其他失敗分開列出並說明是哪個上游服務拒絕"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "purpose": "UG-G3-SB2 entity_mapping 路由補齊腳本（scripts/verify/ug_g3_sb2_backfill_entity_mapping.py）的紅色測試原始輸出與 known-FAIL 案例彙整。補記 dcac0fe 提交時未留存的原始 RED 輸出（PO 2026-09-09 複審發現流程偏差：紅綠合成一個 commit，要求把先紅的證據補進本檔）。",
+  "date": "2026-09-09",
+  "process_deviation_note": {
+    "finding": "PO 2026-09-09 要求的是「紅色測試先行、單獨 commit」，commit dcac0fe 卻是紅＋綠一次進——PO 裁定：接受、不改寫歷史（CLAUDE.md §11A），但先紅的證據要補進本檔；若已不可得則標 NOT VERIFIED 並說明原因。",
+    "recoverability": "commit dcac0fe 之前執行 `python -m unittest tests.test_entity_mapping_backfill` 的原始輸出仍在本次會話（session）的工具呼叫紀錄中，可完整取出，故標為 VERIFIED THIS SESSION（見下方 initial_red_evidence），非 NOT VERIFIED。",
+    "corrective_action": "本次（第二輪缺陷修正）改為真正兩階段：紅色測試單獨 commit d61549c（execute_write_and_verify 尚不存在，ImportError），綠色實作單獨 commit a2d7641。"
+  },
+  "initial_red_evidence": {
+    "label": "VERIFIED THIS SESSION",
+    "context": "dcac0fe 提交前，scripts/verify/ug_g3_sb2_backfill_entity_mapping.py 尚未建立，tests/test_entity_mapping_backfill.py 已先寫好，於容器內執行取得的原始輸出。",
+    "command": "docker exec -u vscode -w /workspaces/Stock_Prediction_System2 stock_prediction_system2_devcontainer-app-1 python -m unittest tests.test_entity_mapping_backfill -v",
+    "raw_output": "ERROR: test_entity_mapping_backfill (unittest.loader._FailedTest.test_entity_mapping_backfill)\n----------------------------------------------------------------------\nImportError: Failed to import test module: test_entity_mapping_backfill\nTraceback (most recent call last):\n  File \"/usr/local/lib/python3.14/unittest/loader.py\", line 137, in loadTestsFromName\n    module = __import__(module_name)\n  File \"/workspaces/Stock_Prediction_System2/tests/test_entity_mapping_backfill.py\", line 48, in <module>\n    from scripts.verify.ug_g3_sb2_backfill_entity_mapping import (\n    ...<8 lines>...\n    )\nModuleNotFoundError: No module named 'scripts.verify.ug_g3_sb2_backfill_entity_mapping'\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (errors=1)"
+  },
+  "dcac0fe_known_fail_cases": [
+    {
+      "mutation": "market 取分組第一列（idxmin）而非最新列（idxmax）",
+      "target_test": "ComputeRoutingRowsTests.test_uses_latest_trade_date_row_for_market_not_first_row",
+      "raw_output": "AssertionError: 'TPEX' != 'TWSE'\n- TPEX\n+ TWSE",
+      "restored": true
+    },
+    {
+      "mutation": "clean_keyword 只 strip 尾端 `*`（name[:-1] if name.endswith('*') else name）",
+      "target_test": "CleanKeywordTests.test_clean_keyword_strips_asterisk_anywhere",
+      "raw_output": "AssertionError: '矽力*-KY' != '矽力-KY'\n- 矽力*-KY\n?   -\n+ 矽力-KY",
+      "restored": true
+    },
+    {
+      "mutation": "clean_keyword 額外剝除 -KY／-DR 尾綴",
+      "target_test": "CleanKeywordTests.test_clean_keyword_preserves_ky_and_dr_suffix",
+      "raw_output": "AssertionError: '世芯' != '世芯-KY'\n- 世芯\n+ 世芯-KY",
+      "restored": true
+    },
+    {
+      "mutation": "對照組（獨立示範，非測試套件）：INSERT ... ON CONFLICT (keyword) DO NOTHING 取代純 INSERT + check_keyword_collisions 前置檢查",
+      "target_test": "N/A（一次性示範腳本，已刪除）",
+      "raw_output": "現行設計：check_keyword_collisions() 在寫入前先擋\nraise ValueError（符合預期）：新增路由列彼此撞名（同一 keyword 對到不同 stock_id）：['重複名']\n\n對照組：若改用 INSERT...ON CONFLICT (keyword) DO NOTHING，略過機械檢查直接寫\nON CONFLICT DO NOTHING 版本：n_inserted=1，len(df)=2\n沒有拋出任何例外——呼叫端要等到後面的『n_inserted != len(df)』數量比對才會發現異常，且訊息只會是『2 != 1』這種數字落差，看不出是哪個 keyword 撞名、撞到誰。",
+      "restored": "N/A（示範腳本本身即為拋棄式，未修改任何已提交檔案）"
+    }
+  ],
+  "second_round_defects": {
+    "trigger": "PO 2026-09-09 對 dcac0fe 的獨立拋棄式庫端到端驗證（review_route_tmpdb），第二次 --write（所有股票已路由，0 筆新增）時發現。",
+    "defect_1_zero_new_rows_false_error": {
+      "symptom": "0 筆新增時，main() 用 .equals() 比較 df_new_rows（dict-list 建構，dtype=object）與 df_after 篩出的空表（帶 pd.read_sql 型別資訊，dtype 可能不同），誤判不相符，rollback + exit 1——INSERT 0 筆全部成功，卻回報失敗。",
+      "red_commit": "d61549c（execute_write_and_verify 尚不存在，ImportError，見 initial_red_evidence 同型態，本檔不重複貼——見 git show d61549c）",
+      "green_commit": "a2d7641",
+      "known_fail_reproduction": {
+        "label": "VERIFIED THIS SESSION",
+        "method": "忠實重現 dcac0fe 版本 main() 的原始邏輯（非本次新函式的 mutant）：構造 df_new_rows（dict-list 建構，dtype=object）與模擬 df_after 篩出的空表（.astype('string')，模擬 read_sql 型別資訊），對兩者呼叫 .equals()，比對與 PO 複審報告描述是否一致。",
+        "raw_output": "df_new_rows dtypes（dict-list 建構）：\nkeyword        object\nstock_id       object\nmarket         object\ndescription    object\ndtype: object\n\ndf_after 篩出的空表 dtypes（read_sql 型別資訊）：\nkeyword        string\nstock_id       string\nmarket         string\ndescription    string\ndtype: object\n\ndf_new_expected.equals(df_new_after) = False\nERROR：commit 前逐列讀回新增列與記憶體預期不符。rollback，不 commit。",
+        "conclusion": "與 PO 複審報告的錯誤訊息逐字相同，確認根因為 dtype 不一致下的 .equals() 誤判，非臆測。修法：(a) 0 筆時提前 return，不進入比較；(b) 既有列／新增列核對一律先 astype(str) 正規化再比較，修掉 dtype 不一致這一類問題的根因，不只是繞開 0 筆這個特例。"
+      }
+    },
+    "defect_2_missing_total_count_check": {
+      "symptom": "既有列核對＋新增列核對皆通過時，看不出「entity_mapping 多了一列不在既有也不在新增集合內」的情形。",
+      "red_commit": "d61549c",
+      "green_commit": "a2d7641",
+      "regression_test": "ExecuteWriteAndVerifyTests.test_raises_and_rolls_back_when_total_count_does_not_match_existing_plus_new",
+      "note": "此檢查修正前不存在，known-FAIL 即「修正前的程式碼裡沒有這道檢查」本身——測試在 a2d7641 之前的版本會因為缺少對應邏輯而無法通過（函式不存在，ImportError），修正後對應此情境的核對邏輯正確 raise。"
+    }
+  },
+  "post_fix_verification": {
+    "label": "VERIFIED THIS SESSION",
+    "environment": "container stock_prediction_system2_devcontainer-app-1, Python 3.14.6",
+    "commands_and_results": {
+      "tests.test_entity_mapping_backfill": "Ran 27 tests ... OK",
+      "full_suite": "Ran 556 tests ... OK",
+      "gate0_contract_check.py": "exit 0, Part B: 13/13 PASS",
+      "readonly_dry_run_against_real_db": "457 筆待新增路由列（455 檔），撞名檢查三查皆 0，exit 0，與修正前行為一致（未觸及真實庫寫入）"
+    }
+  },
+  "not_yet_verified": {
+    "real_db_write": "尚未對 postgres@localhost:5432 執行 --write。PO 2026-09-09 已就本檔兩項缺陷修完為前提給出 binding confirmation（RISK-013 三項協議），待本檔複核通過後執行，另行產出獨立證據文件記錄備份路徑、寫入後查證、還原驗證與惰性驗證結果。"
+  }
+}

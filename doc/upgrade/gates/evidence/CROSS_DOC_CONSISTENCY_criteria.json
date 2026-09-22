@@ -1,0 +1,72 @@
+{
+  "purpose": "跨文件狀態一致性稽核（第 6 案）—— Gate B 判準先寫死，執行前 commit。",
+  "date": "2026-09-08",
+  "authorization": "PO 2026-09-08 Gate A 核准（CROSS_DOC_CONSISTENCY_GATE_A_PROPOSAL.md，commit 7b789b3）：獨立腳本（不塞 gate0_contract_check.py，執行時機綁事件寫入 gate-submit skill 產出 9）+ R5 四欄格式。",
+
+  "SCOPE_FILES": {
+    "PROJECT_STATUS": "doc/governance/PROJECT_STATUS.md",
+    "CLOSED_DIR": "doc/upgrade/gates/closed/",
+    "DECISIONS": "doc/evidence/DECISIONS.md",
+    "TRACEABILITY": "doc/evidence/TRACEABILITY.md",
+    "REMAINING_RISKS": "doc/upgrade/contracts/REMAINING_RISKS.md"
+  },
+
+  "R1": {
+    "direction": "PROJECT_STATUS.md → gates/closed/",
+    "method": "逐行掃描 PROJECT_STATUS.md；含 '**CLOSED**' 字樣的行，以正則 `` `(doc/upgrade/gates/closed/[^`]+\\.md)` `` 擷取該行內全部路徑引用",
+    "check": "每個擷取到的路徑，os.path.exists() 是否為真",
+    "verdict": "合規／不合規（不合規者列出行摘要與路徑）"
+  },
+
+  "R2": {
+    "direction": "gates/closed/ → PROJECT_STATUS.md",
+    "method": "os.listdir(CLOSED_DIR) 取得全部 *.md 檔名（不含路徑）",
+    "check": "每個檔名（純文字子字串）是否出現在 PROJECT_STATUS.md 全文（不限 §0.2，含 §0.5）",
+    "verdict": "合規／孤兒（未被引用者列為孤兒，附檔名）"
+  },
+
+  "R3": {
+    "direction": "PROJECT_STATUS.md 引用的 ADR → DECISIONS.md 狀態",
+    "method": "以正則 `DEC-\\d{3,}` 掃描 PROJECT_STATUS.md 全文取得被引用的 ADR 編號集合；於 DECISIONS.md 以 `^## (DEC-\\d+)` 定位區塊、`^- 狀態：` 取狀態行（沿用 gate0_contract_check.py B13 的既有解析慣例，不另創一套）",
+    "exempt": "DEC-001~004（前一團隊描述性狀態，沿用 B13 既有豁免集合，不重新裁定）",
+    "check": "非豁免的 ADR，狀態欄字首 token（正則 `^`?([A-Za-z]+)`?`）是否等於 APPROVED",
+    "verdict": "合規／不合規（不合規者列出 ADR 編號與實際狀態）"
+  },
+
+  "R4": {
+    "direction": "DECISIONS.md（APPROVED 狀態）→ TRACEABILITY.md §3.2",
+    "method": "同 R3 方式解析 DECISIONS.md，篩出狀態為 APPROVED（含豁免集合以外者）的 ADR 編號集合",
+    "check": "每個 ADR 編號（純文字子字串，含反引號或粗體標記皆可能，故以子字串匹配而非精確格式）是否出現在 TRACEABILITY.md 全文中的 §3 起始章節（`^### 3\\.` 之後的內容，涵蓋 §3.2 與 §3A／§3A.1，範圍稍寬於提案原文的『僅 §3.2』，理由：ADR 索引與交付物矩陣皆屬『被追溯到』的合法形式，過窄反而重演本案奠基實例的錯誤）",
+    "verdict": "合規／不合規（不合規者列出 ADR 編號）"
+  },
+
+  "R5": {
+    "direction": "REMAINING_RISKS.md 解決性宣稱 → PROJECT_STATUS.md／DECISIONS.md",
+    "trigger": "狀態欄含 MITIGATED、VERIFIED、或 VERIFIED（部分）字樣的風險列",
+    "table_format_LOCKED_BY_PO": [
+      "宣稱原文（逐字引用，不改寫）",
+      "引用之證據位置（檔案:行號或 hash）",
+      "判定（三態：成立／矛盾／無法判定）",
+      "性質（機械可驗／人工判讀，人工者附判讀理由一句）"
+    ],
+    "mechanical_part": "若宣稱文字含具體 commit hash（正則 `` `[0-9a-f]{7,40}` ``）或 SB/PRE-G3 識別碼（正則 `(UG-G[0-9]-[A-Z0-9]+|PRE-G3-\\d{2}|G[0-9]_SB[0-9]+)`），機械檢查該識別碼是否確實存在於 git 歷史（`git cat-file -e <hash>`）或 PROJECT_STATUS.md 全文（SB 識別碼）——此部分性質欄填『機械可驗』",
+    "manual_part": "宣稱的解決方式是否與 PROJECT_STATUS.md 對應列的描述語意矛盾——需人工讀過兩處原文比對，性質欄填『人工判讀』，判定欄三態必須擇一，不得留空或僅寫『待查』"
+  },
+
+  "KNOWN_FAIL_R1_TO_R4": {
+    "execution_environment": "git worktree（拋棄式，不在主工作目錄操作），沿用 stub 稽核已驗證可行的隔離機制",
+    "R1": "於拋棄式副本，把某一 CLOSED 列的路徑改成不存在的檔名，確認腳本回報缺失",
+    "R2": "於拋棄式副本，在 closed/ 新增一份未被任何文件引用的檔案，確認腳本回報孤兒",
+    "R3": "於拋棄式副本，把某個被引用 ADR 的狀態改回 Proposed，確認腳本回報不一致",
+    "R4": "於拋棄式副本，把某個 APPROVED ADR 從 TRACEABILITY.md §3 起始章節中移除，確認腳本回報缺失",
+    "requirement": "四項皆需實際執行，貼出原始 FAIL 輸出，構造變更不落地到主工作目錄"
+  },
+
+  "OUTPUT_FORMAT": {
+    "script_location": "scripts/verify/cross_doc_consistency_check.py（Gate B 核准後建立，本次執行的產物）",
+    "result_json": "doc/upgrade/gates/evidence/CROSS_DOC_CONSISTENCY_result.json",
+    "content": "R1~R4 各自的合規/不合規清單 + R5 四欄表格 + known-FAIL 四案的實際執行記錄"
+  },
+
+  "OUT_OF_SCOPE_REMINDER": "不修改任何被稽核文件的內容；R1~R4 發現的不合規案例只記錄，不在本案內順手修（同 stub 稽核原則）；R5 矛盾案例同樣只記錄"
+}

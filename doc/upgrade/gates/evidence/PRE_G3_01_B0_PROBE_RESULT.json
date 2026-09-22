@@ -1,0 +1,358 @@
+{
+  "criteria_file": "PRE_G3_01_B0_PROBE_CRITERIA.json（commit 9104e8d，觸網前寫死）",
+  "probed_at_taipei": "2026-09-06 18:31:58.584996",
+  "budget": 8,
+  "http_requests": 8,
+  "probes": [
+    {
+      "N": 10365,
+      "status": 200,
+      "articles_total": 5,
+      "articles_with_link": 5,
+      "articles_matching": 0,
+      "sample_titles": [],
+      "first_ts": "2026-01-21 02:46:39",
+      "last_ts": "2026-09-06 18:13:42",
+      "structure": {
+        "div.r-ent": 5,
+        "div.title": 5,
+        "div.nrec": 5,
+        "btn-group btn-group-paging": true
+      },
+      "note": "index.html（最新頁）"
+    },
+    {
+      "N": 5182,
+      "status": 200,
+      "articles_total": 20,
+      "articles_with_link": 20,
+      "articles_matching": 0,
+      "sample_titles": [],
+      "first_ts": "2022-06-28 14:21:49",
+      "last_ts": "2022-06-28 17:02:06",
+      "structure": {
+        "div.r-ent": 20,
+        "div.title": 20,
+        "div.nrec": 20,
+        "btn-group btn-group-paging": true
+      }
+    },
+    {
+      "N": 2591,
+      "status": 200,
+      "articles_total": 20,
+      "articles_with_link": 20,
+      "articles_matching": 0,
+      "sample_titles": [],
+      "first_ts": "2021-02-01 15:19:30",
+      "last_ts": "2021-02-01 18:51:03",
+      "structure": {
+        "div.r-ent": 20,
+        "div.title": 20,
+        "div.nrec": 20,
+        "btn-group btn-group-paging": true
+      }
+    },
+    {
+      "N": 1296,
+      "status": 200,
+      "articles_total": 20,
+      "articles_with_link": 20,
+      "articles_matching": 0,
+      "sample_titles": [],
+      "first_ts": "2020-03-21 23:33:32",
+      "last_ts": "2020-03-22 00:07:35",
+      "structure": {
+        "div.r-ent": 20,
+        "div.title": 20,
+        "div.nrec": 20,
+        "btn-group btn-group-paging": true
+      }
+    },
+    {
+      "N": 648,
+      "status": 200,
+      "articles_total": 20,
+      "articles_with_link": 20,
+      "articles_matching": 1,
+      "sample_titles": [
+        {
+          "title": "[新聞] 川普：聯準會繼續降息 貿易戰必勝",
+          "matched": [
+            "降息"
+          ]
+        }
+      ],
+      "first_ts": "2019-08-07 16:29:34",
+      "last_ts": "2019-08-07 22:35:08",
+      "structure": {
+        "div.r-ent": 20,
+        "div.title": 20,
+        "div.nrec": 20,
+        "btn-group btn-group-paging": true
+      }
+    },
+    {
+      "N": 324,
+      "status": 200,
+      "articles_total": 20,
+      "articles_with_link": 20,
+      "articles_matching": 0,
+      "sample_titles": [],
+      "first_ts": "2019-04-09 10:27:13",
+      "last_ts": "2019-04-09 18:12:27",
+      "structure": {
+        "div.r-ent": 20,
+        "div.title": 20,
+        "div.nrec": 20,
+        "btn-group btn-group-paging": true
+      }
+    },
+    {
+      "N": 162,
+      "status": 200,
+      "articles_total": 20,
+      "articles_with_link": 20,
+      "articles_matching": 0,
+      "sample_titles": [],
+      "first_ts": "2017-07-12 22:27:46",
+      "last_ts": "2017-08-03 21:02:13",
+      "structure": {
+        "div.r-ent": 20,
+        "div.title": 20,
+        "div.nrec": 20,
+        "btn-group btn-group-paging": true
+      }
+    },
+    {
+      "N": 81,
+      "status": 200,
+      "articles_total": 20,
+      "articles_with_link": 20,
+      "articles_matching": 0,
+      "sample_titles": [],
+      "first_ts": "2015-01-09 12:09:48",
+      "last_ts": "2015-01-18 13:39:02",
+      "structure": {
+        "div.r-ent": 20,
+        "div.title": 20,
+        "div.nrec": 20,
+        "btn-group btn-group-paging": true
+      }
+    }
+  ],
+  "CRITERIA_AMBIGUITY_DISCLOSED": {
+    "issue": "判準的 `REQUEST_BUDGET.rule` 寫「任一次失敗即停止並回報」，**但沒有區分「404 = 該頁不存在（正是二分要量的信號）」與「403／429／5xx = 真的失敗」**。",
+    "reading_taken": "**404 視為「不可存取」（量測結果，繼續二分）；403／429／5xx／傳輸層一律停止並回報。**",
+    "why": "**一個把「不可存取」當成停止條件的二分搜尋，永遠不會完成** —— 那個讀法會讓判準結構上無法執行。",
+    "honesty": "⚠ **這是我的判準寫得不夠精確，不是探測時改判準。** 採用的讀法在此明文記錄，供複查。"
+  },
+  "tracking_keywords_count": 26,
+  "E1": {
+    "criterion": "index.html 可解析出 Nmax",
+    "Nmax": 10364,
+    "verdict": "PASS"
+  },
+  "accessible_N": [
+    81,
+    162,
+    324,
+    648,
+    1296,
+    2591,
+    5182,
+    10365
+  ],
+  "inaccessible_N": [],
+  "INTERVAL": {
+    "min_known_accessible": 81,
+    "max_known_inaccessible": null,
+    "note": "⚠ 這是**區間**，不是精確的最小頁碼（判準 LIMIT 已載明）"
+  },
+  "MONOTONICITY_CHECK": {
+    "assertion": "min(可存取的 N) > max(不可存取的 N)",
+    "min_accessible": 81,
+    "max_inaccessible": null,
+    "verdict": "PASS"
+  },
+  "E2": {
+    "criterion": "最舊可存取頁的文章時間戳",
+    "N": 81,
+    "first_ts": "2015-01-09 12:09:48",
+    "last_ts": "2015-01-18 13:39:02"
+  },
+  "E3": {
+    "criterion": "深度是否 >= 3 年",
+    "depth_years": 11.66,
+    "verdict": "PASS",
+    "REMINDER": "⚠ **E3 PASS 不等於「有三年的資料」** —— 它量的是看板頁面往回存在多久；§3.3 要的是每一檔標的的每日特徵連續涵蓋多久。見判準檔。"
+  },
+  "E4": {
+    "criterion": "每頁文章數",
+    "articles_total_per_page": [
+      5,
+      20,
+      20,
+      20,
+      20,
+      20,
+      20,
+      20
+    ]
+  },
+  "E5": {
+    "criterion": "舊頁結構與新頁是否相同",
+    "structures": [
+      {
+        "N": 10365,
+        "div.r-ent": 5,
+        "div.title": 5,
+        "div.nrec": 5,
+        "btn-group btn-group-paging": true
+      },
+      {
+        "N": 5182,
+        "div.r-ent": 20,
+        "div.title": 20,
+        "div.nrec": 20,
+        "btn-group btn-group-paging": true
+      },
+      {
+        "N": 2591,
+        "div.r-ent": 20,
+        "div.title": 20,
+        "div.nrec": 20,
+        "btn-group btn-group-paging": true
+      },
+      {
+        "N": 1296,
+        "div.r-ent": 20,
+        "div.title": 20,
+        "div.nrec": 20,
+        "btn-group btn-group-paging": true
+      },
+      {
+        "N": 648,
+        "div.r-ent": 20,
+        "div.title": 20,
+        "div.nrec": 20,
+        "btn-group btn-group-paging": true
+      },
+      {
+        "N": 324,
+        "div.r-ent": 20,
+        "div.title": 20,
+        "div.nrec": 20,
+        "btn-group btn-group-paging": true
+      },
+      {
+        "N": 162,
+        "div.r-ent": 20,
+        "div.title": 20,
+        "div.nrec": 20,
+        "btn-group btn-group-paging": true
+      },
+      {
+        "N": 81,
+        "div.r-ent": 20,
+        "div.title": 20,
+        "div.nrec": 20,
+        "btn-group btn-group-paging": true
+      }
+    ]
+  },
+  "E6": {
+    "criterion": "每頁符合追蹤關鍵字的文章數",
+    "per_page": [
+      {
+        "N": 10365,
+        "total": 5,
+        "matching": 0,
+        "first_ts": "2026-01-21 02:46:39"
+      },
+      {
+        "N": 5182,
+        "total": 20,
+        "matching": 0,
+        "first_ts": "2022-06-28 14:21:49"
+      },
+      {
+        "N": 2591,
+        "total": 20,
+        "matching": 0,
+        "first_ts": "2021-02-01 15:19:30"
+      },
+      {
+        "N": 1296,
+        "total": 20,
+        "matching": 0,
+        "first_ts": "2020-03-21 23:33:32"
+      },
+      {
+        "N": 648,
+        "total": 20,
+        "matching": 1,
+        "first_ts": "2019-08-07 16:29:34"
+      },
+      {
+        "N": 324,
+        "total": 20,
+        "matching": 0,
+        "first_ts": "2019-04-09 10:27:13"
+      },
+      {
+        "N": 162,
+        "total": 20,
+        "matching": 0,
+        "first_ts": "2017-07-12 22:27:46"
+      },
+      {
+        "N": 81,
+        "total": 20,
+        "matching": 0,
+        "first_ts": "2015-01-09 12:09:48"
+      }
+    ],
+    "LABEL": "⚠ **n = 8 的抽樣，不得寫成覆蓋率結論。**"
+  },
+  "RAW_CAPTURE": {
+    "N": 81,
+    "note": "最舊可存取頁的前 3 個 div.r-ent 完整 HTML",
+    "first_3_r_ent_html": [
+      "<div class=\"r-ent\">\n<div class=\"nrec\"><span class=\"hl f3\">71</span></div>\n<div class=\"title\">\n<a href=\"/bbs/Stock/M.1420776588.A.CE7.html\">[標的] 上證50(空)</a>\n</div>\n<div class=\"meta\">\n<div class=\"author\">lovecutes</div>\n<div class=\"article-menu\">\n<div class=\"trigger\">⋯</div>\n<div class=\"dropdown\">\n<div class=\"item\"><a href=\"/bbs/Stock/search?q=thread%3A%5B%E6%A8%99%E7%9A%84%5D+%E4%B8%8A%E8%AD%8950%28%E7%A9%BA%29\">搜尋同標題文章</a></div>\n<div class=\"item\"><a href=\"/bbs/Stock/search?q=author%3Alovecutes\">搜尋看板內 lovecutes 的文章</a></div>\n</div>\n</div>\n<div class=\"date\"> 1/09</div>\n<div class=\"mark\">M</div>\n</div>\n</div>",
+      "<div class=\"r-ent\">\n<div class=\"nrec\"></div>\n<div class=\"title\">\n<a href=\"/bbs/Stock/M.1420781739.A.B47.html\">[公告] tonyrao水桶一週</a>\n</div>\n<div class=\"meta\">\n<div class=\"author\">IanLi</div>\n<div class=\"article-menu\">\n<div class=\"trigger\">⋯</div>\n<div class=\"dropdown\">\n<div class=\"item\"><a href=\"/bbs/Stock/search?q=thread%3A%5B%E5%85%AC%E5%91%8A%5D+tonyrao%E6%B0%B4%E6%A1%B6%E4%B8%80%E9%80%B1\">搜尋同標題文章</a></div>\n<div class=\"item\"><a href=\"/bbs/Stock/search?q=author%3AIanLi\">搜尋看板內 IanLi 的文章</a></div>\n</div>\n</div>\n<div class=\"date\"> 1/09</div>\n<div class=\"mark\">!</div>\n</div>\n</div>",
+      "<div class=\"r-ent\">\n<div class=\"nrec\"></div>\n<div class=\"title\">\n<a href=\"/bbs/Stock/M.1420782065.A.A61.html\">[公告] morix警告一次</a>\n</div>\n<div class=\"meta\">\n<div class=\"author\">IanLi</div>\n<div class=\"article-menu\">\n<div class=\"trigger\">⋯</div>\n<div class=\"dropdown\">\n<div class=\"item\"><a href=\"/bbs/Stock/search?q=thread%3A%5B%E5%85%AC%E5%91%8A%5D+morix%E8%AD%A6%E5%91%8A%E4%B8%80%E6%AC%A1\">搜尋同標題文章</a></div>\n<div class=\"item\"><a href=\"/bbs/Stock/search?q=author%3AIanLi\">搜尋看板內 IanLi 的文章</a></div>\n</div>\n</div>\n<div class=\"date\"> 1/09</div>\n<div class=\"mark\">!</div>\n</div>\n</div>"
+    ],
+    "paging_html": "<div class=\"btn-group btn-group-paging\">\n<a class=\"btn wide\" href=\"/bbs/Stock/index1.html\">最舊</a>\n<a class=\"btn wide\" href=\"/bbs/Stock/index80.html\">‹ 上頁</a>\n<a class=\"btn wide\" href=\"/bbs/Stock/index82.html\">下頁 ›</a>\n<a class=\"btn wide\" href=\"/bbs/Stock/index.html\">最新</a>\n</div>"
+  },
+  "outcome": "OK",
+  "ANALYSIS": {
+    "E1": "PASS —— `Nmax = 10364`。",
+    "WHAT_THE_BINARY_SEARCH_ACTUALLY_FOUND": {
+      "fact": "**8 次探測全部 HTTP 200，一次 404 都沒有。** 二分一路對半下到 `N = 81` 就用完預算。",
+      "consequence": "**它沒有找到下界。** `lo` 從頭到尾都是 1 —— 我們知道的是「`N >= 81` 可存取」，**對 `N < 81` 一無所知**。",
+      "interval_reading": "`INTERVAL.max_known_inaccessible = None` 不是「沒有不可存取的頁」，**是「我們沒有找到任何一頁不可存取」**。⚠ **那兩件事不一樣，而 `None` 這個值同時長得像兩者。**",
+      "depth_is_a_lower_bound": "**因此 E2／E3 給的是下界，不是深度本身。** 真正的最舊頁在 `[1, 81]` 之間，**可能還更舊**。"
+    },
+    "MONOTONICITY_CHECK_IS_VACUOUS": {
+      "verdict_recorded": "PASS",
+      "but": "⚠⚠ **那是一個空洞的 PASS。** 斷言是 `min(可存取) > max(不可存取)`，而 `不可存取` 是**空集合** —— **沒有任何輸入去測試它。**",
+      "why_this_matters": "**它與一個真正驗證過單調性的 PASS，在輸出上完全一樣。** 那正是 §9A.1 的形狀，**而這次發生在我自己寫的一致性檢查上**。",
+      "honest_statement": "**單調性假設在本次探測中未被檢驗** —— 不是成立，是沒被測到。`ASSUMPTION` 標籤維持。"
+    },
+    "E4": "**每頁 20 則**（`index.html` 本身 5 則，因為它是尚未填滿的最新頁）。**與 PTT 慣例相符 —— 但這是實測的 20，不是引用的 20。**",
+    "E5": {
+      "verdict": "**跨 2015～2026 八頁，結構完全相同** —— `div.r-ent` 20／`div.title` 20／`div.nrec` 20／`btn-group btn-group-paging` 皆存在。",
+      "significance": "⚠ **這是一個有意義的負面結果。** `UG-G2-SB9` 在 TPEx 上撞過同一端點跨年份改欄位標籤（千股→張數），**所以這個問題必須問** —— 而 PTT 的答案是「沒有漂移」。**`scrape_ptt_board_pages` 對 2015 年的頁面同樣適用。**"
+    },
+    "E6_THE_NUMBER_B1_NEEDS": {
+      "measured": "**1 命中 / 145 篇 = 0.7%**（8 頁抽樣）",
+      "why_it_matters": "**B1 的預算換算是 `總請求數 ≈ 頁數 + 需要內頁的文章數`。** 0.7% 與一個天真的 10% 假設差 **14 倍** —— **那正是 E6 存在的理由。**",
+      "worked_example": "若回補 10,000 頁：頁面請求 10,000 + 內頁請求 ≈ 200,000 × 0.7% ≈ **1,400**，合計約 **11,400**。若照 10% 估則是 **30,000** —— **差 2.6 倍，而預算是要送審的東西。**",
+      "CONFOUND_MUST_BE_STATED": "⚠⚠ **0.7% 這個數字有一個明顯的混淆因子**：抽樣的 8 頁有 7 頁在 2022 年以前，**而現行 25 個追蹤關鍵字裡有「CoWoS」「矽光子」「生技醫療」「AI伺服器」等在那些年份根本還不是話題**。**用今天的關鍵字去量 2015 年的頁面，命中率必然偏低。**",
+      "what_this_means_for_B1": "**0.7% 是「用現行關鍵字回補歷史」的密度，不是「歷史上有多少相關討論」的密度。** 兩者的差別會直接影響回補的價值判斷 —— **而那是 `PRE-G3-02`（RISK-015）的題目，不是 B0 的。**",
+      "LABEL": "`n = 8 頁 / 145 篇` 的抽樣。**不得寫成覆蓋率結論。**"
+    },
+    "E3_REMINDER_RESTATED": "⚠ **E3 的 11.66 年是「看板頁面往回存在多久」的下界，不是「有 11.66 年的可用訓練資料」。** 以 0.7% 的密度計，145 篇裡只有 1 篇命中 —— **深度與密度是兩件事，而 §3.3 要的是後者。**"
+  }
+}

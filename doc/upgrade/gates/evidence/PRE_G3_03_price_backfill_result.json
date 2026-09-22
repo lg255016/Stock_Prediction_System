@@ -1,0 +1,83 @@
+{
+  "purpose": "台股價格回補與 NVDA 取數的**結果**。逐項對 `PRE_G3_03_price_backfill_expectations.json`（commit `0043441`，**寫入之前寫死**）比對。",
+  "date": "2026-09-07",
+  "outcome": "**B1~B6、B8 全部 PASS，未回滾。⚠ B7 的『恰 1 個 yfinance 請求』未達成（實際 2 個）。**",
+
+  "RISK_013": {
+    "1_binding": "`postgres` / port `5432`（寫入前與寫入中各確認一次；`assert` 於腳本內，不符即中止）",
+    "2_dump": {
+      "file": "stock_prediction_system2_PRE_g3_price_backfill_20260907_120840.dump",
+      "bytes": 70692159,
+      "location": "**`D:\\Python\\Database_Backups\\Stock_Prediction_System2\\`**（`TEAM_PLAYBOOK.md` §7A.1）",
+      "note": "⚠ **本次已依 §7A.2 從容器 `/tmp` 複製出來** —— 這是 §7A 上線後的第一次執行，慣例已恢復。"
+    },
+    "3_restore_verification": "**本次未重做**，理由見預期檔（同一套流程數小時前剛完整驗證、本操作為純 additive、回滾有 manifest 精確鍵集、既有列受 B3 指紋保護）。⚠⚠ **「這次沒做」不得被讀成「以後不用做」。**"
+  },
+
+  "EXPECTATION_RESULTS": [
+    {
+      "id": "B1", "verdict": "PASS",
+      "detail": "2330 插入 **969**、2382 插入 **969**、6488 插入 **959**（各與預期精確相符）；NVDA 插入 **679**。`stock_prices` 由 **137 → 3,713** 列。",
+      "per_stock_after": {"2330": 987, "2382": 987, "6488": 985, "NVDA": 754}
+    },
+    {
+      "id": "B2", "verdict": "PASS",
+      "source_distribution": {
+        "(NULL)": 137, "twse_mi_index": 1938,
+        "tpex_daily_quotes": 959, "yfinance_auto_adjusted": 679
+      },
+      "detail": "台股新增列的 `source` **由 `candidate_prices` 原值帶過來**，不是常數 —— 基準由原始報表決定，不由中繼表決定。"
+    },
+    {
+      "id": "B3", "verdict": "PASS",
+      "detail": "`source IS NULL` 的列數恰 **137**，指紋維持 `e6d775e64e98bd86ddd3a69fa4d03b6d`",
+      "SIGNIFICANCE": "**這是「只插缺日」的機械證明** —— 任何 `DO UPDATE` 洩漏都會改變此指紋。",
+      "how_it_was_guaranteed": "寫入用**反連接**（`NOT EXISTS`），**不是 `ON CONFLICT DO NOTHING`** —— 後者仍會把既有鍵送進語句，而本輪的判準是「既有列不得出現在寫入路徑上」，不是「寫了但沒生效」。**未使用 `upsert_to_stock_prices`**（該函式為 `DO UPDATE`）。"
+    },
+    {
+      "id": "B4", "verdict": "PASS",
+      "detail": "6488 @ `2026-08-21`：`close_price = 935.00`、`low_price = 933.00`、`volume = 5732166` —— **未解差異照舊掛著。**"
+    },
+    {"id": "B5", "verdict": "PASS", "detail": "manifest **3,576** 筆精確鍵集，見 `PRE_G3_03_price_backfill_manifest.json`"},
+    {
+      "id": "B6", "verdict": "PASS",
+      "detail": "`daily_ml_features` 指紋 `4fc208b95dbc6ea9d7c4b381d6ba97b5`，137 列",
+      "EXPECTED_INCONSISTENCY": "⚠ **`stock_prices` 現有 3,713 列而 `daily_ml_features` 仍 137 列 —— 這是預期狀態，不是缺陷。** 特徵重算是 Gate 3 阻斷項，尚未執行。**指紋不變只代表沒有人重跑。**"
+    },
+    {
+      "id": "B7",
+      "verdict": "⚠ **部分未達成**",
+      "invariant": "PASS —— 回傳 754 = 插入 679 + 交集 75",
+      "request_count": {"criterion": 1, "actual": 2, "verdict": "**未達成**"},
+      "WHAT_HAPPENED": "第一次執行時，插入語句用 `psycopg2.extras.execute_values(...)` 搭配 `RETURNING`，隨後以 `cursor.fetchall()` 取回。**`execute_values` 預設 `page_size=100`，分頁執行，而 `fetchall()` 只取得最後一頁的 `RETURNING`** —— 679 mod 100 = **79**。我的斷言 `len(got) == len(rows)` 因此判為 79 != 679 而**整批 `ROLLBACK`**。",
+      "WAS_DATA_WRITTEN": "**否。** ROLLBACK 後即刻查證：NVDA 仍 75 列、`source` 全 NULL。第二次以 `execute_values(..., fetch=True)` 重新取數並寫入。",
+      "HONEST_READING": "⚠⚠ **這是判準未達成，不是判準誤報。** 斷言擋下的是一個**我自己寫錯的驗證方式**，不是資料問題 —— **但代價是真的多打了一個請求，而判準寫的是「恰 1 個」。不改判準、不重寫理由。**",
+      "WHAT_THE_ASSERTION_DID_RIGHT": "**它讓一次不完整的驗證變成 ROLLBACK，而不是一次「看起來成功」的寫入。** 若當時沒有那個斷言，679 列會寫進去、而我會以為只寫了 79 列 —— **那個狀態比多一個請求糟得多。**"
+    },
+    {"id": "B8", "verdict": "PASS", "detail": "其餘十一張表列數全部不變（含 `schema_version` 9 列）"}
+  ],
+
+  "SEAM_RECORDED": {
+    "what": "`stock_prices.volume` 於 6488 出現粒度接縫：`2026-07-20 ~ 2026-08-21` 的 25 列為 **yfinance 股數粒度**（`source IS NULL`），其餘 959 列為 **`tpex_daily_quotes` 張數粒度**。",
+    "authority": "PO 2026-09-07 裁決 **C2 = (a) 接受並記載**；登記於 `REMAINING_RISKS.md` RISK-022 面向（三）（commit `6c24ed1`）。",
+    "magnitude": "跨接縫相對差幅上限 **0.3469%**（平均 0.1323%）",
+    "how_to_locate": "`WHERE stock_id='6488' AND source IS NULL` —— **粒度邊界與 `source` 邊界重合**。",
+    "WHY_REPEATED_HERE": "**免得下一個人把它當成新缺陷。**"
+  },
+
+  "FINAL_STATE": {
+    "stock_prices": {"rows": 3713, "by_source": {"(NULL)": 137, "twse_mi_index": 1938, "tpex_daily_quotes": 959, "yfinance_auto_adjusted": 679}},
+    "daily_ml_features": 137,
+    "schema_version": 9,
+    "rollback_used": "**否**（NVDA 第一次嘗試的交易內 ROLLBACK 不計 —— 該次無資料落地）",
+    "rollback_available": "manifest 3,576 筆精確鍵集 + 備份檔（見 `RISK_013.2_dump`）"
+  },
+
+  "PANEL_DEPTH_NOW": {
+    "note": "回補後各檔可用價格日數（`PRE_G3_02` D2 的兩個門檻：120 交易日 = 實驗可跑、3 年 ≈ 756 = 結論可立）",
+    "2330": 987, "2382": 987, "6488": 985, "NVDA": 754,
+    "verdict": "⚠ **四檔皆已跨過 120 交易日的算術下界，亦皆達 3 年量級** —— **但那是價格深度，不是情緒覆蓋深度。** `PRE-G3-03` 的 PTT 段 A（150 交易日）尚未執行，且 `daily_ml_features` 尚未重算。**兩者都完成之前，不得宣稱面板已達可實驗狀態。**"
+  },
+
+  "NEXT": "PTT 段 A（150 交易日、8 段、段硬上限 400、七＋一項判準觸網前 commit）→ 匯入 → 全量重算（D5 語意一次到位）"
+}

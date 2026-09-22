@@ -1,0 +1,622 @@
+# -*- coding: utf-8 -*-
+"""
+RISK-023／DEC-039 真實庫寫入：留言三欄（`comment_volume_ratio`／
+`comment_polarization`／`net_push_momentum`）改依逐則時間戳重算後，
+只更新受影響的 (stock_id, trade_date) 鍵，不做全表 upsert。
+
+比照 `scripts/verify/ug_g3_sb2a_stage2_rerun_risk027.py`（RISK-027 段 2
+重跑）同一套機制：預期影響集用「舊版 vs 新版程式碼」機械算出，不用手抄；
+只 UPDATE 差異鍵；單一交易、commit 前讀回；段級全表重算相等。
+
+================================================================================
+與 RISK-027 段 2 重跑的差異
+================================================================================
+1. 比對對象是「commit 66114c2（RED 測試 commit，`feature_aggregator.py`
+   內容與 DEC-039 修法前完全相同）vs 現行程式碼」，不是 RISK-027 的
+   `0da87d9`。
+2. 舊版 `generate_daily_features()` 簽名沒有 `df_comments` 參數，呼叫時
+   不傳；新版必須傳。
+3. 寫入範圍只有 3 欄（留言三欄），不是 12 欄——DEC-039 不動情緒欄與
+   `source_status`。
+4. 新增兩項前置守衛（PO 2026-09-14 複核要求）：`suspect` 篇數與落界則數
+   各自獨立重算一次（不透過 `_aggregate_direct_comment_counts()` 內部
+   狀態），核對與全庫實測數字（`suspect`=2、落界=13）相符，寫入證據，
+   讓「守衛真的作用在真實資料上」可稽核，不是只看程式碼邏輯正確就假設
+   生產資料也如預期。
+
+================================================================================
+核心機制：預期影響集用「舊版 vs 新版」機械算出
+================================================================================
+1. `git show 66114c2:src/transform/feature_aggregator.py`（RED 測試 commit）
+   在記憶體中載入舊版 `FeatureAggregator`——不落地、不動 `sys.path`。
+2. 同一份真實庫輸入（全量 `stock_prices`／`market_articles`／
+   `entity_mapping`／`theme_stock_mapping`／`article_comments`），分別跑
+   舊版（不傳 `df_comments`）與新版（傳 `df_comments`）
+   `generate_daily_features()`，逐欄比對 3 個留言欄——分岔的
+   `(stock_id, trade_date)` 集合即為機械算出的預期影響集。
+3. 另外獨立算一次「新版重算 vs 現有 `daily_ml_features`」的實際差異集。
+4. 斷言兩者相等（鍵集合＋逐鍵分岔欄位子集）。任一不等，代表庫裡的差異
+   不能完全歸因於本次修法，拒絕寫入。
+
+================================================================================
+前置守衛（任一不符 → 拒絕，唯讀預覽與 `--write` 皆拒絕）
+================================================================================
+1. `daily_ml_features` 總列數 = 449,263；標籤現況 `(410443, 38820)`。
+2. 價格衍生 13 欄、其餘情緒／`source_status` 9 欄（合計 22 欄，
+   `GUARD_ZERO_DIFF_COLUMNS`）新版重算 vs 庫零差異——DEC-039 只動留言
+   三欄，這 22 欄不應變化。
+3. `compare_columns()` 的 `__right_only__`／`__left_only__` 皆須為空。
+4. **`suspect` 篇數獨立重算＝2、落界則數獨立重算＝13**——與診斷及
+   `DECISIONS.md` DEC-039 記載的真實庫實測數字相符；不符代表資料庫內容
+   自本次診斷後已變動，需要重新走一次診斷，不得逕行沿用舊數字寫入。
+
+================================================================================
+寫入範圍
+================================================================================
+只寫 `comment_volume_ratio`／`comment_polarization`／`net_push_momentum`
+（`COMMENT_WRITE_COLUMNS`）；只寫預期影響集內的鍵；單一交易，
+`execute_values` + `RETURNING`（不用 `cur.rowcount`，理由同段 2 重跑：
+分頁時 `rowcount` 只反映最後一頁）。不碰任何其他欄位。
+
+================================================================================
+不做的事
+================================================================================
+- 不動 `stock_prices`（`--write` 前後各量一次列數＋內容雜湊供外部稽核）。
+- 不動標籤欄、不動其餘 9 個情緒欄與 `source_status`。
+- 不對 `article_comments`／`market_articles` 做任何寫入——本腳本只讀
+  這兩張表，寫入目標僅 `daily_ml_features`。
+
+================================================================================
+⚠ known-FAIL／乾跑一律使用拋棄式容器（2026-09-14 PO 複核訂正）
+================================================================================
+不得在真實 server（`.devcontainer/postgres-data/` bind-mount cluster）上
+建立任何臨時資料庫，即使事後刪除。乾跑程序：獨立 `postgres:18` 容器
+（隨機密碼、獨立網段、`--memory=2g --cpus=0.5`，用完即拆）還原
+`D:\\Python\\Database_Backups\\Stock_Prediction_System2\\
+stock_prediction_system2_POST_g3_sb2a_stage2_rerun_risk027_20260912_121252.dump`，
+對該容器執行 `--write`；真實 server 全程只做唯讀查詢。
+"""
+import argparse
+import importlib.util
+import os
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+import pandas as pd
+import psycopg2
+from psycopg2.extras import execute_values
+
+from scripts.verify.ug_g3_sb2a_stage2_baseline_comparison import (
+    COMPARE_COLUMNS,
+    compare_columns,
+    fetch_all_prices,
+    fetch_full_articles_and_mappings,
+)
+
+REQUIRED_ENV = ("POSTGRES_DB", "POSTGRES_USER", "POSTGRES_PASSWORD")
+
+TOTAL_ROWS_EXPECTED = 449263
+EXISTING_LABEL_COUNTS = (410443, 38820)  # (count(target_triple_barrier), count(label_reason))
+
+# DEC-039 只動這 3 欄。其餘 22 欄（13 價格衍生 + 8 情緒 + source_status）
+# 必須零差異——用明確欄名列舉，不用切片索引，避免 COMPARE_COLUMNS 未來
+# 調整順序時本腳本悄悄切錯範圍。
+COMMENT_WRITE_COLUMNS = ("comment_volume_ratio", "comment_polarization", "net_push_momentum")
+PRICE_DERIVED_COLUMNS = (
+    "close_price", "volume", "return_1d", "rsi_14",
+    "volatility_5d", "volatility_20d", "amplitude_ratio",
+    "ma5_bias_ratio", "ma20_bias_ratio", "volume_ratio_5d",
+    "target_next_close", "target_return_1d", "target_up_down",
+)
+OTHER_SENTIMENT_COLUMNS = (
+    "article_count", "sentiment_mean", "sentiment_3d_ma", "sentiment_5d_ma",
+    "sentiment_lag_1", "sentiment_lag_2", "bullishness_index",
+    "agreement_index", "source_status",
+)
+GUARD_ZERO_DIFF_COLUMNS = PRICE_DERIVED_COLUMNS + OTHER_SENTIMENT_COLUMNS
+
+assert len(COMMENT_WRITE_COLUMNS) == 3
+assert len(PRICE_DERIVED_COLUMNS) == 13
+assert len(OTHER_SENTIMENT_COLUMNS) == 9
+assert len(GUARD_ZERO_DIFF_COLUMNS) == 22
+assert set(COMMENT_WRITE_COLUMNS) | set(GUARD_ZERO_DIFF_COLUMNS) | {"trade_date", "stock_id"} \
+    == set(COMPARE_COLUMNS) | {"trade_date", "stock_id"}
+
+# RED 測試 commit——`feature_aggregator.py` 內容於此 commit 與 DEC-039
+# 修法前完全相同（該 commit 只新增測試檔與文件，未觸碰生產程式碼本身的
+# 行為，僅新增函式簽名尚未接線；見該 commit 的 known-FAIL 測試結果）。
+OLD_FEATURE_AGGREGATOR_COMMIT = "66114c2"
+
+# 診斷與 DECISIONS.md DEC-039 記載的真實庫實測數字（見「前置守衛」第 4 點）。
+EXPECTED_SUSPECT_COUNT = 2
+EXPECTED_OUT_OF_BOUNDS_COUNT = 13
+
+_MAX_BACKUP_AGE_SECONDS = 24 * 3600
+
+
+def _load_db_config() -> dict:
+    missing = [name for name in REQUIRED_ENV if not os.getenv(name)]
+    if missing:
+        raise RuntimeError("缺少必要資料庫環境變數：" + ", ".join(missing))
+    return {
+        "host": os.getenv("DB_HOST", "localhost"),
+        "port": int(os.getenv("DB_PORT", "5432")),
+        "dbname": os.environ["POSTGRES_DB"],
+        "user": os.environ["POSTGRES_USER"],
+        "password": os.environ["POSTGRES_PASSWORD"],
+    }
+
+
+def _check_backup_or_exit(backup_path: str) -> None:
+    from scripts.verify.ug_g3_sb2a_backfill_candidate_prices_gap import (
+        _check_backup_or_exit as _impl,
+    )
+    _impl(backup_path)
+
+
+# ==============================================================================
+# 舊版 FeatureAggregator 的記憶體載入（不落地、不動 sys.path 上的正式模組）
+# ==============================================================================
+
+def load_old_feature_aggregator_class(commit: str = OLD_FEATURE_AGGREGATOR_COMMIT,
+                                       repo_root: Path = None):
+    """用 `git show <commit>:src/transform/feature_aggregator.py` 把 DEC-039
+    修法前的 `FeatureAggregator` 載入成一個獨立、不落地的模組物件，回傳其
+    `FeatureAggregator` 類別。做法與理由同
+    `ug_g3_sb2a_stage2_rerun_risk027.py::load_old_feature_aggregator_class()`。
+    """
+    if repo_root is None:
+        repo_root = Path(__file__).resolve().parents[2]
+
+    result = subprocess.run(
+        ["git", "-c", f"safe.directory={repo_root}",
+         "show", f"{commit}:src/transform/feature_aggregator.py"],
+        cwd=str(repo_root), capture_output=True, text=True,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(
+            f"`git show {commit}:src/transform/feature_aggregator.py` 失敗："
+            f"{result.stderr}")
+    src = result.stdout
+    if "class FeatureAggregator" not in src:
+        raise RuntimeError(
+            f"commit {commit} 的 feature_aggregator.py 內容看起來不對"
+            "（找不到 FeatureAggregator 類別定義），拒絕使用。")
+    if "df_comments" in src:
+        raise RuntimeError(
+            f"commit {commit} 的 feature_aggregator.py 已經含有 df_comments"
+            "——這應該是 DEC-039 修法前的版本，不該有新簽名，拒絕使用"
+            "（代表 OLD_FEATURE_AGGREGATOR_COMMIT 指到了錯誤的 commit）。")
+
+    module_name = f"_risk023_old_feature_aggregator_{commit}"
+    spec = importlib.util.spec_from_loader(module_name, loader=None)
+    old_module = importlib.util.module_from_spec(spec)
+    exec(compile(src, f"<git show {commit}:feature_aggregator.py>", "exec"),
+         old_module.__dict__)
+    return old_module.FeatureAggregator
+
+
+# ==============================================================================
+# 差異集計算（鍵 + 分岔欄位子集）——與段 2 重跑同一設計
+# ==============================================================================
+
+def diff_keys_and_columns(diffs: dict, columns) -> dict:
+    result = {}
+    for col in columns:
+        df = diffs.get(col)
+        if df is None or df.empty:
+            continue
+        for sid, td in zip(df["stock_id"], df["trade_date"]):
+            result.setdefault((sid, td), set()).add(col)
+    return {k: frozenset(v) for k, v in result.items()}
+
+
+def assert_expected_equals_actual(expected_diffs: dict, actual_diffs: dict):
+    expected_keys = set(expected_diffs.keys())
+    actual_keys = set(actual_diffs.keys())
+    only_expected = expected_keys - actual_keys
+    only_actual = actual_keys - expected_keys
+    common = expected_keys & actual_keys
+    column_mismatches = {
+        k: (expected_diffs[k], actual_diffs[k])
+        for k in common if expected_diffs[k] != actual_diffs[k]
+    }
+    ok = not only_expected and not only_actual and not column_mismatches
+    return ok, {
+        "only_in_expected": only_expected,
+        "only_in_actual": only_actual,
+        "column_mismatches": column_mismatches,
+    }
+
+
+# ==============================================================================
+# 前置守衛
+# ==============================================================================
+
+def check_total_row_count(conn, expected=TOTAL_ROWS_EXPECTED):
+    with conn.cursor() as cur:
+        cur.execute("SELECT count(*) FROM daily_ml_features;")
+        n = cur.fetchone()[0]
+    return n == expected, n
+
+
+def check_label_counts(conn, expected=EXISTING_LABEL_COUNTS):
+    with conn.cursor() as cur:
+        cur.execute(
+            "SELECT count(target_triple_barrier), count(label_reason) "
+            "FROM daily_ml_features;")
+        counts = tuple(cur.fetchone())
+    return counts == tuple(expected), counts
+
+
+def fetch_existing_features_full(conn, columns) -> pd.DataFrame:
+    cols = ["trade_date", "stock_id"] + list(columns)
+    df = pd.read_sql(
+        "SELECT %s FROM daily_ml_features;" % ", ".join(cols), conn)
+    df["trade_date"] = pd.to_datetime(df["trade_date"]).dt.date
+    return df
+
+
+def compute_stock_prices_fingerprint(conn):
+    with conn.cursor() as cur:
+        cur.execute("SELECT count(*) FROM stock_prices;")
+        n = cur.fetchone()[0]
+        cur.execute(
+            "SELECT md5(string_agg(t::text, '' ORDER BY stock_id, trade_date)) "
+            "FROM stock_prices t;")
+        checksum = cur.fetchone()[0]
+    return n, checksum
+
+
+def select_by_keys(df: pd.DataFrame, keys: set) -> pd.DataFrame:
+    mask = pd.Series(list(zip(df["stock_id"], df["trade_date"])), index=df.index).isin(keys)
+    return df.loc[mask]
+
+
+def compute_suspect_and_out_of_bounds_counts(df_articles: pd.DataFrame,
+                                              df_comments: pd.DataFrame) -> tuple:
+    """獨立於 `_aggregate_direct_comment_counts()` 內部實作，重新計算全庫
+    的 `suspect` 篇數與落界則數，供前置守衛核對「這兩項機制真的作用在
+    真實資料上」，不是只驗證程式邏輯正確就假設生產資料如預期
+    （2026-09-14 PO 複核要求）。逐篇（不是逐 (article, stock) 列）計算，
+    因為 `is_time_reset()`／`validate_comment_bounds()` 只依賴文章本身的
+    留言與時間戳，與該文章對到幾檔股票無關。
+    """
+    from src.transform.comment_timeline import is_time_reset, validate_comment_bounds
+
+    fetched = df_articles[df_articles["total_comments"].notna()]
+    meta_by_article = fetched.set_index("article_id")[
+        ["post_time", "comments_scraped_at"]].to_dict("index")
+
+    suspect_articles = []
+    out_of_bounds_total = 0
+    if df_comments is not None and not df_comments.empty:
+        sorted_comments = df_comments.sort_values("comment_seq")
+        for article_id, group in sorted_comments.groupby("article_id"):
+            meta = meta_by_article.get(article_id)
+            if meta is None:
+                continue
+            comments = [
+                {"seq": r.comment_seq, "tag": r.comment_tag, "comment_time": r.comment_time,
+                 "raw_time": None}
+                for r in group.itertuples()
+            ]
+            if is_time_reset(comments):
+                suspect_articles.append(article_id)
+                continue
+            bad = validate_comment_bounds(
+                comments, meta["post_time"], meta["comments_scraped_at"])
+            out_of_bounds_total += len(bad)
+
+    return sorted(suspect_articles), out_of_bounds_total
+
+
+# ==============================================================================
+# 核心計算：預期影響集（機械算出）＋實際差異集，兩者斷言相等
+# ==============================================================================
+
+def compute_new_full_recompute(df_prices, df_articles, df_mapping, df_theme_mapping, df_comments):
+    """新版（現行、DEC-039 已接線）`FeatureAggregator` 對全量輸入重算。
+    `df_comments` 為必要參數——新簽名不接受省略。"""
+    from src.transform.feature_aggregator import FeatureAggregator
+    agg = FeatureAggregator()
+    df = agg.generate_daily_features(
+        df_prices, df_articles, df_mapping, df_theme_mapping=df_theme_mapping,
+        df_comments=df_comments)
+    df = df.copy()
+    df["trade_date"] = pd.to_datetime(df["trade_date"]).dt.date
+    return df
+
+
+def compute_old_full_recompute(df_prices, df_articles, df_mapping, df_theme_mapping,
+                                old_commit=OLD_FEATURE_AGGREGATOR_COMMIT):
+    """舊版（DEC-039 修法前）對全量輸入重算。**不傳 `df_comments`**——
+    舊版簽名沒有這個參數，傳了會是 `TypeError`。"""
+    OldFeatureAggregator = load_old_feature_aggregator_class(old_commit)
+    agg = OldFeatureAggregator()
+    df = agg.generate_daily_features(
+        df_prices, df_articles, df_mapping, df_theme_mapping=df_theme_mapping)
+    df = df.copy()
+    df["trade_date"] = pd.to_datetime(df["trade_date"]).dt.date
+    return df
+
+
+def compute_expected_impact(df_new: pd.DataFrame, df_old: pd.DataFrame) -> dict:
+    diffs = compare_columns(df_new, df_old, COMMENT_WRITE_COLUMNS)
+    if "__left_only__" in diffs or "__right_only__" in diffs:
+        raise AssertionError(
+            "舊版與新版對同一份輸入產生的 (stock_id, trade_date) 鍵集合不一致"
+            "——兩版程式碼理應對同一份 stock_prices 產生完全相同的鍵集合"
+            "（DEC-039 是留言計算邏輯修法，不改變哪些列存在）。"
+            f" left_only={len(diffs.get('__left_only__', []))}，"
+            f" right_only={len(diffs.get('__right_only__', []))}")
+    return diff_keys_and_columns(diffs, COMMENT_WRITE_COLUMNS)
+
+
+def compute_actual_diff(df_new: pd.DataFrame, df_existing: pd.DataFrame) -> dict:
+    diffs = compare_columns(df_new, df_existing, COMMENT_WRITE_COLUMNS)
+    return diff_keys_and_columns(diffs, COMMENT_WRITE_COLUMNS)
+
+
+# ==============================================================================
+# 寫入
+# ==============================================================================
+
+_WRITE_TEMPLATE = "(%s, %s::date, %s::numeric, %s::numeric, %s::numeric)"
+
+
+def build_write_records(df_new: pd.DataFrame, impact_keys: set) -> list:
+    subset = select_by_keys(df_new, impact_keys)
+    cols = ["stock_id", "trade_date"] + list(COMMENT_WRITE_COLUMNS)
+    records = []
+    for row in subset[cols].itertuples(index=False, name=None):
+        stock_id, trade_date, *values = row
+        vals = [None if pd.isna(v) else v for v in values]
+        records.append((stock_id, trade_date, *vals))
+    return records
+
+
+def write_impact_rows(conn, records: list) -> list:
+    set_clause = ",\n            ".join(
+        f"{c} = v.{c}" for c in COMMENT_WRITE_COLUMNS)
+    value_cols = ", ".join(COMMENT_WRITE_COLUMNS)
+    query = f"""
+        UPDATE daily_ml_features AS d
+        SET {set_clause}
+        FROM (VALUES %s) AS v(stock_id, trade_date, {value_cols})
+        WHERE d.stock_id = v.stock_id AND d.trade_date = v.trade_date
+        RETURNING d.stock_id, d.trade_date;
+    """
+    with conn.cursor() as cur:
+        returned = execute_values(
+            cur, query, records, template=_WRITE_TEMPLATE, fetch=True)
+    return [(sid, td) for sid, td in returned]
+
+
+# ==============================================================================
+# 揭露性輸出
+# ==============================================================================
+
+def print_impact_preview(df_new: pd.DataFrame, impact_keys: set) -> None:
+    print(f"\n=== 預期影響集逐列舊→新值（共 {len(impact_keys)} 鍵）===")
+    cols = ["stock_id", "trade_date"] + list(COMMENT_WRITE_COLUMNS)
+    subset = select_by_keys(df_new, impact_keys)[cols].sort_values(["stock_id", "trade_date"])
+    print(subset.to_string(index=False))
+
+
+def print_stock_breakdown(impact_keys: set) -> None:
+    by_stock = {}
+    for sid, _ in impact_keys:
+        by_stock[sid] = by_stock.get(sid, 0) + 1
+    print(f"\n=== 影響集逐股票列數（{len(by_stock)} 檔）===")
+    for sid, n in sorted(by_stock.items(), key=lambda kv: (-kv[1], kv[0])):
+        print(f"  {sid}: {n}")
+
+
+# ==============================================================================
+# main
+# ==============================================================================
+
+def main(write: bool, backup_path: str) -> None:
+    if write and not backup_path:
+        print("ERROR：--write 必須同時提供 --backup <path>（RISK-013 第二項協議機械化檢查）")
+        sys.exit(1)
+    if write:
+        _check_backup_or_exit(backup_path)
+
+    db_config = _load_db_config()
+    conn = psycopg2.connect(**db_config)
+    cur = conn.cursor()
+    cur.execute("SELECT current_database(), current_user, inet_server_port();")
+    conn_info = cur.fetchone()
+    current_db = conn_info[0]
+    print("CONN CHECK:", conn_info)
+
+    print("\n=== 前置守衛 ===")
+    ok_rows, actual_rows = check_total_row_count(conn)
+    ok_labels, actual_labels = check_label_counts(conn)
+    print(f"daily_ml_features 總列數：{actual_rows}（預期 {TOTAL_ROWS_EXPECTED}）"
+          f"[{'PASS' if ok_rows else 'FAIL'}]")
+    print(f"標籤現況：{actual_labels}（預期 {EXISTING_LABEL_COUNTS}）"
+          f"[{'PASS' if ok_labels else 'FAIL'}]")
+    if not (ok_rows and ok_labels):
+        print("ERROR：真實庫現況與常數不符——拒絕執行（唯讀預覽與 --write 皆拒絕）。")
+        conn.close()
+        sys.exit(1)
+
+    print("\n讀取全量 stock_prices／market_articles／entity_mapping／"
+          "theme_stock_mapping／article_comments...")
+    df_prices = fetch_all_prices(conn)
+    df_articles, df_mapping, df_theme_mapping, df_comments = fetch_full_articles_and_mappings(conn)
+
+    suspect_articles, out_of_bounds_count = compute_suspect_and_out_of_bounds_counts(
+        df_articles, df_comments)
+    print(f"\nsuspect 篇數（獨立重算）：{len(suspect_articles)}（預期 {EXPECTED_SUSPECT_COUNT}）"
+          f"article_id={suspect_articles} "
+          f"[{'PASS' if len(suspect_articles) == EXPECTED_SUSPECT_COUNT else 'FAIL'}]")
+    print(f"落界則數（獨立重算）：{out_of_bounds_count}（預期 {EXPECTED_OUT_OF_BOUNDS_COUNT}）"
+          f"[{'PASS' if out_of_bounds_count == EXPECTED_OUT_OF_BOUNDS_COUNT else 'FAIL'}]")
+    if len(suspect_articles) != EXPECTED_SUSPECT_COUNT or out_of_bounds_count != EXPECTED_OUT_OF_BOUNDS_COUNT:
+        print("ERROR：suspect 篇數或落界則數與診斷記載不符——資料庫內容自本次診斷後"
+              "已變動，拒絕執行，需重新走一次診斷。")
+        conn.close()
+        sys.exit(1)
+
+    t0 = time.time()
+    df_new = compute_new_full_recompute(df_prices, df_articles, df_mapping, df_theme_mapping,
+                                         df_comments)
+    t_new = time.time() - t0
+    print(f"\n新版（現行）全量重算耗時：{t_new:.2f} 秒（{df_new['stock_id'].nunique()} 檔、"
+          f"{len(df_new)} 列）")
+
+    t0 = time.time()
+    df_old = compute_old_full_recompute(df_prices, df_articles, df_mapping, df_theme_mapping)
+    t_old = time.time() - t0
+    print(f"舊版（commit {OLD_FEATURE_AGGREGATOR_COMMIT}）全量重算耗時：{t_old:.2f} 秒")
+
+    expected_diffs = compute_expected_impact(df_new, df_old)
+    print(f"\n預期影響集（舊版 vs 新版，機械算出）：{len(expected_diffs)} 鍵")
+
+    df_existing = fetch_existing_features_full(conn, COMPARE_COLUMNS)
+    all_diffs = compare_columns(df_new, df_existing, COMPARE_COLUMNS)
+
+    if "__right_only__" in all_diffs:
+        print(f"\nERROR：daily_ml_features 有 {len(all_diffs['__right_only__'])} 列孤兒列"
+              "（重算生不出對應列）——拒絕執行。")
+        conn.close()
+        sys.exit(1)
+    if "__left_only__" in all_diffs:
+        print(f"\nERROR：重算多出 {len(all_diffs['__left_only__'])} 個未預期的鍵"
+              "——拒絕執行。")
+        conn.close()
+        sys.exit(1)
+
+    guard_violations = {c: all_diffs[c] for c in GUARD_ZERO_DIFF_COLUMNS if c in all_diffs}
+    if guard_violations:
+        print("\nERROR：DEC-039 不應觸及的欄位（價格衍生 13 欄＋其餘情緒／source_status "
+              "9 欄）新版重算 vs 庫出現差異——拒絕執行：")
+        for c, df in guard_violations.items():
+            print(f"  {c}: {len(df)} 列")
+        conn.close()
+        sys.exit(1)
+
+    actual_diffs = compute_actual_diff(df_new, df_existing)
+    ok, detail = assert_expected_equals_actual(expected_diffs, actual_diffs)
+    print(f"\n預期影響集 vs 實際差異集（新版 vs 庫）相等：{'是' if ok else '否'}"
+          f"[{'PASS' if ok else 'FAIL'}]")
+    if not ok:
+        print("ERROR：預期影響集與實際差異集不相等——拒絕執行。")
+        if detail["only_in_expected"]:
+            print(f"  只在預期集：{sorted(detail['only_in_expected'])[:20]}")
+        if detail["only_in_actual"]:
+            print(f"  只在實際差異集（庫裡有本修法以外的漂移）："
+                  f"{sorted(detail['only_in_actual'])[:20]}")
+        if detail["column_mismatches"]:
+            print(f"  逐鍵欄位集合不符（{len(detail['column_mismatches'])} 鍵）："
+                  f"{list(detail['column_mismatches'].items())[:10]}")
+        conn.close()
+        sys.exit(1)
+
+    impact_keys = set(actual_diffs.keys())
+
+    print_stock_breakdown(impact_keys)
+    print_impact_preview(df_new, impact_keys)
+
+    if not write:
+        print("\n【唯讀模式】僅計算與唯讀查詢，不執行任何 UPDATE。"
+              "加 --write --backup <path> 執行實際回補。")
+        conn.close()
+        return
+
+    n_before, checksum_before = compute_stock_prices_fingerprint(conn)
+    print(f"\nstock_prices 寫入前指紋：{n_before} 列，md5={checksum_before}")
+
+    typed = input(
+        f"即將對資料庫 '{current_db}' 執行 {len(impact_keys)} 列 UPDATE"
+        f"（3 個留言欄）。請輸入資料庫名稱以確認：")
+    if typed != current_db:
+        print(f"ERROR：輸入 '{typed}' 與目標資料庫 '{current_db}' 不符，拒絕執行。")
+        conn.close()
+        sys.exit(1)
+
+    records = build_write_records(df_new, impact_keys)
+    returned_keys = set(write_impact_rows(conn, records))
+
+    print("\n=== commit 前核對 ===")
+    all_ok = True
+
+    ok_a = returned_keys == impact_keys
+    print(f"(a) RETURNING 鍵集合＝預期影響集：{'PASS' if ok_a else 'FAIL'}"
+          f"（RETURNING {len(returned_keys)} 鍵，預期 {len(impact_keys)} 鍵）")
+    all_ok = all_ok and ok_a
+
+    df_readback = pd.read_sql(
+        "SELECT stock_id, trade_date, %s FROM daily_ml_features "
+        "WHERE stock_id = ANY(%%(ids)s);" % ", ".join(COMMENT_WRITE_COLUMNS),
+        conn, params={"ids": list({sid for sid, _ in impact_keys})})
+    df_readback["trade_date"] = pd.to_datetime(df_readback["trade_date"]).dt.date
+    df_readback_impacted = select_by_keys(df_readback, impact_keys)
+    readback_diffs = compare_columns(df_new, df_readback_impacted, COMMENT_WRITE_COLUMNS)
+    readback_mismatches = {c: readback_diffs[c] for c in COMMENT_WRITE_COLUMNS
+                            if c in readback_diffs}
+    ok_b = not readback_mismatches
+    print(f"(b) 逐列讀回與記憶體 df_new 相等（交易內）：{'PASS' if ok_b else 'FAIL'}")
+    if not ok_b:
+        for c, df in readback_mismatches.items():
+            print(f"    {c}: {len(df)} 列不符")
+    all_ok = all_ok and ok_b
+
+    ok_c, labels_after_write = check_label_counts(conn)
+    print(f"(c) 標籤欄計數未變：{labels_after_write}（預期 {EXISTING_LABEL_COUNTS}）"
+          f"[{'PASS' if ok_c else 'FAIL'}]")
+    all_ok = all_ok and ok_c
+
+    if not all_ok:
+        conn.rollback()
+        print("\nFAIL：commit 前核對未通過——已 rollback，未寫入任何資料。")
+        conn.close()
+        sys.exit(1)
+
+    conn.commit()
+    print("\ncommit 完成。")
+
+    print("\n=== 段級核對（commit 後）===")
+    seg_ok = True
+
+    df_existing_after = fetch_existing_features_full(conn, COMPARE_COLUMNS)
+    final_diffs = compare_columns(df_new, df_existing_after, COMPARE_COLUMNS)
+    remaining = {c: final_diffs[c] for c in COMPARE_COLUMNS if c in final_diffs}
+    ok_d = not remaining and "__left_only__" not in final_diffs and "__right_only__" not in final_diffs
+    print(f"1. 全表 25 欄重算 vs 庫：{'PASS' if ok_d else 'FAIL'}"
+          f"（不符欄位：{list(remaining.keys())}）")
+    seg_ok = seg_ok and ok_d
+
+    ok_e, labels_final = check_label_counts(conn)
+    print(f"2. 標籤欄計數：{labels_final}（預期 {EXISTING_LABEL_COUNTS}）"
+          f"[{'PASS' if ok_e else 'FAIL'}]")
+    seg_ok = seg_ok and ok_e
+
+    n_after, checksum_after = compute_stock_prices_fingerprint(conn)
+    ok_f = (n_after, checksum_after) == (n_before, checksum_before)
+    print(f"3. stock_prices 未變：{n_after} 列，md5={checksum_after}"
+          f"（寫入前 {n_before} 列，md5={checksum_before}）[{'PASS' if ok_f else 'FAIL'}]")
+    seg_ok = seg_ok and ok_f
+
+    conn.close()
+
+    if not seg_ok:
+        print("\nFAIL：段級核對未通過——資料已 commit，須人工排查，不得自動回滾已提交的資料。")
+        sys.exit(1)
+    print("\n全部核對通過。")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--write", action="store_true")
+    parser.add_argument("--backup", default=None)
+    args = parser.parse_args()
+    main(write=args.write, backup_path=args.backup)

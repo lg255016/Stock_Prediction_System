@@ -1,0 +1,67 @@
+{
+  "purpose": "測試 Stub 稽核 —— Gate B 執行前判準與方法鎖定。本檔於執行前 commit；執行後只做比對，不修改本檔。",
+  "date": "2026-09-08",
+  "authorization": "PO 2026-09-08 Gate A 核准：三點確認（拋棄式副本、雙層網路攔截、形狀 B 只記錄不修）+ 一項追加防護（拆 stub 前先武裝網路攔截 + 綁定拋棄式臨時 DB + 全程零連線真實庫）。",
+
+  "STEP_0_RESULT": {
+    "question": "G2_SB7_GATE_B_SUBMISSION.md §7 項目 5 記載「九個測試檔」，今日重新掃描為 11 個，落差成因？",
+    "method": "git ls-tree 4c6e3f6 tests/ 取得 G2_SB7 結案當下的檔案清單，逐檔以同一 grep 條件重新核對",
+    "finding": "全部 11 個檔案在 4c6e3f6（G2_SB7 結案 commit）當下即已存在且符合 stub 條件式形態，非後續新增。",
+    "conclusion": "「九個」為撰寫 G2_SB7_GATE_B_SUBMISSION.md §7 當時的計算誤植，非歷史真實為 9、後增至 11。與 CLAUDE.md §9A.1／PROJECT_STATUS.md §0.5 多處「數字寫死後與現況脫鉤」同型，非本案首見。",
+    "file_list_at_4c6e3f6": [
+      "tests/test_canonical_stock_id.py",
+      "tests/test_comment_features.py",
+      "tests/test_db_read_semantics.py",
+      "tests/test_feature_aggregator_alignment.py",
+      "tests/test_market_articles_contract.py",
+      "tests/test_ml_feature_store_contract.py",
+      "tests/test_ptt_comments.py",
+      "tests/test_research_features.py",
+      "tests/test_stationarity_features.py",
+      "tests/test_time_alignment.py",
+      "tests/test_tracking_keyword_integrity.py"
+    ]
+  },
+
+  "CANDIDATE_FILES_TODAY": [
+    "tests/test_db_read_semantics.py",
+    "tests/test_canonical_stock_id.py",
+    "tests/test_stationarity_features.py",
+    "tests/test_time_alignment.py",
+    "tests/test_feature_aggregator_alignment.py",
+    "tests/test_research_features.py",
+    "tests/test_comment_features.py",
+    "tests/test_market_articles_contract.py",
+    "tests/test_ptt_comments.py",
+    "tests/test_ml_feature_store_contract.py",
+    "tests/test_tracking_keyword_integrity.py"
+  ],
+
+  "EXECUTION_ENVIRONMENT": {
+    "isolation": "git worktree（獨立於主工作目錄，不在其上暫改後還原）——依 PO 裁示：「在真實 repo 上製造測試狀態，本身就是 §11A 要防的那種操作」",
+    "db_binding": "worktree 內執行時 DB_HOST/DB_PORT 一律指向拋棄式臨時 postgres 容器（非 postgres-data 掛載），執行前綁定確認 current_database()/inet_server_port()",
+    "network_interception_order": "**先武裝、後拆 stub，順序不可反**——網路攔截（見下）必須在移除任何 @patch 之前就位，避免『拆了才裝，中間裸奔』",
+    "network_interception_targets": [
+      "socket.getaddrinfo（DNS 解析，先於 TCP 連線發生，PO 指出原提案只攔 create_connection 會漏掉這一步）",
+      "socket.create_connection（TCP 撥出）"
+    ],
+    "network_interception_semantics": "任一目標被呼叫即記為『會觸網』，攔截本身只計數/拋出受控例外，不放行真正的連線",
+    "real_db_zero_touch": "真實開發資料庫（postgres@localhost:5432）在稽核全程零連線；稽核結束時以列數快照佐證（前後一致）",
+    "teardown": "worktree 與拋棄式臨時 DB 容器皆於稽核完成後拆除"
+  },
+
+  "METHOD": {
+    "step_1_shape_classification": "對每個候選檔案，在 worktree 內以呼叫計數器包裝『§3.1 第三欄攔截目標』與『其下最近一層真實套件函式』，執行該檔全部測試，記錄真實函式是否被呼叫（≥1 次 = 形狀 A/C；0 次且仍 PASS = 形狀 B 候選）",
+    "step_2_shape_b_diff": "形狀 B 候選：先武裝雙層網路攔截，再移除該 @patch，重跑該檔測試。若攔截記錄到嘗試觸網，該測試記為『無法判定（會觸網）』，不強行放行連線；若未觸網，記錄移除前後裁決（PASS/FAIL）是否改變",
+    "step_3_severity": "裁決改變者依方向分級：假 PASS→FAIL（先前一直測假貨）列為較高關注；假 FAIL→PASS（先前誤報）列為次要——只記錄，不在本案修復（『本案只負責把數字量出來，不負責讓它變好看』）",
+    "step_4_known_fail": "於一個已知形狀 B 檔案（test_canonical_stock_id.py）人工把某個 @patch 的回傳值改成明顯錯誤資料，確認稽核方法的『移除攔截層重跑』步驟如實回報『移除前後裁決不同』；此構造案例僅於 worktree 內執行，不影響主線"
+  },
+
+  "OUTPUT_FORMAT": {
+    "per_file_shape_table": "11 檔各自的形狀分類（A/B/C）+ 判定依據（呼叫計數是否 >0）",
+    "per_test_decision_table_for_shape_b": "檔案｜測試名稱｜移除前裁決｜移除後裁決（或『會觸網，無法判定』）｜是否改變｜嚴重度方向",
+    "known_fail_confirmation": "構造案例的執行記錄與確認方法可偵測"
+  },
+
+  "OUT_OF_SCOPE_REMINDER": "不修改任何測試檔或程式碼；不修復任何發現的裁決改變案例（只記錄）；不處理 PROJECT_STATUS.md §0.5 #17（run_all_daily_tasks 編排耦合）本身"
+}

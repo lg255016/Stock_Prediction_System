@@ -1,0 +1,279 @@
+{
+  "purpose": "UG-G2-SB6 §6 第 3 項：候選聯集數的**逐月對號**基準（延伸回補後重新校準）。",
+  "date": "2026-09-03",
+  "SUPERSEDES": "本檔取代 `G2_SB6_union_count_calibration.json` 的 33 列基準。**那 33 列不是錯的，是過時的** —— 延伸回補 +243 交易日後，`effective_date` 序列變長、60 日暖機起點前移，**基準必然改變**。舊檔保留，因為它記錄了判準由門檻式演進到逐月對號的過程。",
+  "evidence_label": "`VERIFIED THIS SESSION`（PM 於拋棄式容器 `sb6_ext` 執行）。⚠ **未經獨立複核**：複查方需先還原下方 dump。",
+  "source_dump": "stock_prediction_system2_candidate_prices_twse_tpex_4y_20260903_015900.dump（69,742,758 bytes；1,821,870 列；CHECK 2 個，已驗證）",
+  "dataset": {
+    "trading_days": 983,
+    "span": "2022-08-03 ~ 2026-08-21",
+    "years": 4.05,
+    "twse": {
+      "rows": 1003070,
+      "stocks": 1104
+    },
+    "tpex": {
+      "rows": 818800,
+      "stocks": 919
+    },
+    "panel_after_60d_warmup": {
+      "trading_days": 923,
+      "years": 3.79,
+      "note": "§3.3 要求 >= 3 年。延伸前面板為 680 交易日 = 2.79 年，**不足**。"
+    }
+  },
+  "USAGE": "⚠⚠ **管線必須走自己的路徑去數，不得重跑本檔的 SQL。** 正確作法：從管線實際寫進 `universe_snapshots` 的列去數（每個 `effective_date` 的相異 `stock_id`，`included` 兩種都算），再與下表比對。**若管線直接重用本 SQL，這個檢查就是拿自己比自己、永遠通過** —— 那正是 §9A.1。",
+  "sql_verbatim": "CREATE TABLE cal AS SELECT trade_date d, row_number() OVER (ORDER BY trade_date)::int rk\n  FROM (SELECT DISTINCT trade_date FROM candidate_prices) x;\n\nCREATE TABLE eff AS SELECT c.rk, c.d FROM cal c\n  JOIN (SELECT min(d) md FROM cal GROUP BY date_trunc('month',d)) m ON m.md=c.d\n  WHERE c.rk >= 61;\n\nSELECT e.d AS effective_date,\n  count(DISTINCT cp.stock_id) FILTER (WHERE cp.source='twse_mi_index')     AS twse,\n  count(DISTINCT cp.stock_id) FILTER (WHERE cp.source='tpex_daily_quotes') AS tpex\nFROM eff e JOIN cal c ON c.rk BETWEEN e.rk-59 AND e.rk\nJOIN candidate_prices cp ON cp.trade_date=c.d\nGROUP BY e.d ORDER BY e.d;",
+  "effective_dates": 46,
+  "baseline": [
+    {
+      "effective_date": "2022-11-01",
+      "twse": 975,
+      "tpex": 802
+    },
+    {
+      "effective_date": "2022-12-01",
+      "twse": 975,
+      "tpex": 806
+    },
+    {
+      "effective_date": "2023-01-03",
+      "twse": 974,
+      "tpex": 809
+    },
+    {
+      "effective_date": "2023-02-01",
+      "twse": 974,
+      "tpex": 810
+    },
+    {
+      "effective_date": "2023-03-01",
+      "twse": 973,
+      "tpex": 809
+    },
+    {
+      "effective_date": "2023-04-06",
+      "twse": 980,
+      "tpex": 810
+    },
+    {
+      "effective_date": "2023-05-02",
+      "twse": 980,
+      "tpex": 810
+    },
+    {
+      "effective_date": "2023-06-01",
+      "twse": 981,
+      "tpex": 811
+    },
+    {
+      "effective_date": "2023-07-03",
+      "twse": 984,
+      "tpex": 813
+    },
+    {
+      "effective_date": "2023-08-01",
+      "twse": 984,
+      "tpex": 812
+    },
+    {
+      "effective_date": "2023-09-01",
+      "twse": 985,
+      "tpex": 812
+    },
+    {
+      "effective_date": "2023-10-02",
+      "twse": 987,
+      "tpex": 813
+    },
+    {
+      "effective_date": "2023-11-01",
+      "twse": 990,
+      "tpex": 814
+    },
+    {
+      "effective_date": "2023-12-01",
+      "twse": 995,
+      "tpex": 817
+    },
+    {
+      "effective_date": "2024-01-02",
+      "twse": 1002,
+      "tpex": 820
+    },
+    {
+      "effective_date": "2024-02-01",
+      "twse": 1006,
+      "tpex": 818
+    },
+    {
+      "effective_date": "2024-03-01",
+      "twse": 1006,
+      "tpex": 817
+    },
+    {
+      "effective_date": "2024-04-01",
+      "twse": 1010,
+      "tpex": 820
+    },
+    {
+      "effective_date": "2024-05-02",
+      "twse": 1010,
+      "tpex": 819
+    },
+    {
+      "effective_date": "2024-06-03",
+      "twse": 1017,
+      "tpex": 820
+    },
+    {
+      "effective_date": "2024-07-01",
+      "twse": 1022,
+      "tpex": 823
+    },
+    {
+      "effective_date": "2024-08-01",
+      "twse": 1020,
+      "tpex": 824
+    },
+    {
+      "effective_date": "2024-09-02",
+      "twse": 1023,
+      "tpex": 825
+    },
+    {
+      "effective_date": "2024-10-01",
+      "twse": 1025,
+      "tpex": 831
+    },
+    {
+      "effective_date": "2024-11-01",
+      "twse": 1029,
+      "tpex": 832
+    },
+    {
+      "effective_date": "2024-12-02",
+      "twse": 1030,
+      "tpex": 833
+    },
+    {
+      "effective_date": "2025-01-02",
+      "twse": 1035,
+      "tpex": 839
+    },
+    {
+      "effective_date": "2025-02-03",
+      "twse": 1038,
+      "tpex": 841
+    },
+    {
+      "effective_date": "2025-03-03",
+      "twse": 1038,
+      "tpex": 844
+    },
+    {
+      "effective_date": "2025-04-01",
+      "twse": 1043,
+      "tpex": 847
+    },
+    {
+      "effective_date": "2025-05-02",
+      "twse": 1044,
+      "tpex": 848
+    },
+    {
+      "effective_date": "2025-06-02",
+      "twse": 1046,
+      "tpex": 854
+    },
+    {
+      "effective_date": "2025-07-01",
+      "twse": 1049,
+      "tpex": 853
+    },
+    {
+      "effective_date": "2025-08-01",
+      "twse": 1051,
+      "tpex": 855
+    },
+    {
+      "effective_date": "2025-09-01",
+      "twse": 1053,
+      "tpex": 857
+    },
+    {
+      "effective_date": "2025-10-01",
+      "twse": 1060,
+      "tpex": 857
+    },
+    {
+      "effective_date": "2025-11-03",
+      "twse": 1060,
+      "tpex": 861
+    },
+    {
+      "effective_date": "2025-12-01",
+      "twse": 1066,
+      "tpex": 863
+    },
+    {
+      "effective_date": "2026-01-02",
+      "twse": 1067,
+      "tpex": 874
+    },
+    {
+      "effective_date": "2026-02-02",
+      "twse": 1072,
+      "tpex": 878
+    },
+    {
+      "effective_date": "2026-03-02",
+      "twse": 1073,
+      "tpex": 880
+    },
+    {
+      "effective_date": "2026-04-01",
+      "twse": 1076,
+      "tpex": 881
+    },
+    {
+      "effective_date": "2026-05-04",
+      "twse": 1079,
+      "tpex": 884
+    },
+    {
+      "effective_date": "2026-06-01",
+      "twse": 1085,
+      "tpex": 889
+    },
+    {
+      "effective_date": "2026-07-01",
+      "twse": 1083,
+      "tpex": 893
+    },
+    {
+      "effective_date": "2026-08-03",
+      "twse": 1087,
+      "tpex": 893
+    }
+  ],
+  "summary": {
+    "twse": {
+      "min": 973,
+      "max": 1087,
+      "max_mom_pct": 0.719
+    },
+    "tpex": {
+      "min": 802,
+      "max": 893,
+      "max_mom_pct": 1.275
+    },
+    "note": "**延伸段（2022-08 ~ 2023-08）幾乎是平的**：TPEx 802 -> 810（+1.0%）、TWSE 975 -> 984（+0.9%）；而 SB9 那三年 TPEx +10%、TWSE +9%。**上櫃與上市家數的成長都集中在 2023 之後。** 這使逐月對號在延伸段更為敏感 —— 基準本身變化小，任何偏離都顯眼。"
+  },
+  "COMPARISON_TO_PREVIOUS": {
+    "previous_effective_dates": 33,
+    "previous_range": "2023-12-01 ~ 2026-08-03",
+    "current_range": "2022-11-01 ~ 2026-08-03",
+    "note": "33 -> 46（+13 個月度快照）。暖機起點由 2023-12-01 前移至 2022-11-01。"
+  }
+}

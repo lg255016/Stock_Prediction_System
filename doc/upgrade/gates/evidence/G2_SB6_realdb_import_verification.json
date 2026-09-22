@@ -1,0 +1,124 @@
+{
+  "purpose": "UG-G2-SB6 決策點 2：候選池價格資料**匯入真實開發資料庫**的執行紀錄與驗證。",
+  "date": "2026-09-03",
+  "evidence_label": "`VERIFIED THIS SESSION`（PM 執行，指令與原始輸出見下）",
+  "authorization": {
+    "granted_by": "PO，2026-09-03（延伸後**重新授權**）",
+    "why_reauthorized": "原授權點名 **1,389,890 列**，而延伸使實際為 **1,821,870 列**。**授權的範圍是用那個數字界定的，所以它需要重新給，不是自動延伸。**",
+    "scope_verbatim": {
+      "target": "postgres @ localhost:5432",
+      "actions": [
+        "套用 migration 005（schema_version 4 -> 5）",
+        "pg_restore --data-only -t candidate_prices"
+      ],
+      "data": "1,821,870 列 / 983 交易日 / 兩來源（2022-08 ~ 2026-08，含 +1 年延伸）",
+      "boundary": [
+        "僅 candidate_prices 一表",
+        "僅此一次",
+        "daily_ml_features 與 stock_prices 必須維持 117 / 117 不變"
+      ]
+    },
+    "SCHEMA_VERSION_QUESTION": "PM 曾就「`schema_version` 4→5 是否在授權內」停下來詢問。**PO 裁示：授權原文明文寫著「套用 migration 005」，schema_version 推進是套用 migration 的機械後果，不是額外動作 —— 涵蓋。** 並附帶指示：**「但你停下來問是對的做法，不要因為這次答案是『涵蓋』就下次不問。」**",
+    "YEAR_FIGURE_NOTE": "⚠ 授權文字寫「3.99 年」，本檔他處寫「4.05 年」。**兩者不是矛盾，是兩種數法**：983 交易日 ÷ 246 交易日/年 ≈ **4.00**；日曆跨度 2022-08-03 ~ 2026-08-21 = **4.05**。**授權真正界定範圍的是列數與交易日數，兩者皆逐字相符**，故不影響授權效力。記於此以免日後有人把兩個數字讀成不一致。"
+  },
+  "PRE_EXECUTION_BINDING_CONFIRMATION": {
+    "note": "**執行前即時查詢，非事後補寫。**",
+    "current_database": "postgres",
+    "port": "5432",
+    "current_user": "postgres",
+    "schema_version_before": 4,
+    "to_regclass_candidate_prices_before": null,
+    "daily_ml_features_before": 117,
+    "stock_prices_before": 117
+  },
+  "PRE_BACKUP": {
+    "file": "stock_prediction_system2_PRE_sb6_candidate_prices_import_20260903_023103.dump",
+    "dir": "D:\\Python\\Database_Backups\\Stock_Prediction_System2\\",
+    "bytes": 50414,
+    "restore_tested": true,
+    "restore_result": "拋棄式容器 `prebk_check`：schema_version 4、daily_ml_features 117、stock_prices 117、market_articles 331、tracking_keywords 26、candidate_prices 不存在 —— 與來源逐項相同。容器已拆除。",
+    "RESTORE_ERRORS_EXPLAINED": "`pg_restore` 報 **9 個錯誤**，逐條看過：**9 條全部是 `ALTER TABLE ... OWNER TO postgres`**，失敗原因是拋棄式容器裡沒有 `postgres` 這個 role（測試用戶為 `bk`）。**這是測試容器的產物，不是 dump 的缺陷**；還原回真實庫（owner 即 `postgres`）不會發生。**資料本體零錯誤。** ⚠ **「忽略了 9 個錯誤」不能寫成「還原成功」** —— 必須逐條歸因才算看過。"
+  },
+  "EXECUTION": [
+    {
+      "step": 1,
+      "action": "套用 `database/migrations/005_candidate_prices.sql`",
+      "command": "psql -U $POSTGRES_USER -d $POSTGRES_DB -v ON_ERROR_STOP=1 -f /tmp/005.sql",
+      "result": {
+        "schema_version": 5,
+        "candidate_prices_rows": 0,
+        "check_constraints": [
+          "chk_candidate_prices_nonneg",
+          "chk_candidate_prices_ohlc_consistency"
+        ]
+      },
+      "note": "**建表後、灌資料前先量：0 列 / 2 個 CHECK。** 與 dump 還原驗證同一個道理 —— CHECK 先於資料存在，**代表那 182 萬列是在 constraint 生效的情況下寫進去的**。"
+    },
+    {
+      "step": 2,
+      "action": "匯入資料",
+      "command": "pg_restore -U $POSTGRES_USER -d $POSTGRES_DB --data-only -t candidate_prices /tmp/cp4y.dump",
+      "dump_bytes_in_container": 69742758,
+      "dump_bytes_on_host": 69742758,
+      "exit_code": 0,
+      "errors": 0,
+      "note": "**零錯誤、零警告** —— 與前置備份還原時的 9 個 OWNER 錯誤不同（真實庫的 owner 就是 postgres）。"
+    }
+  ],
+  "POST_IMPORT_VERIFICATION": {
+    "1_row_counts": {
+      "total_rows": 1821870,
+      "distinct_trade_dates": 983,
+      "first": "2022-08-03",
+      "last": "2026-08-21",
+      "by_source": [
+        {
+          "source": "tpex_daily_quotes",
+          "rows": 818800,
+          "stocks": 919,
+          "days": 983
+        },
+        {
+          "source": "twse_mi_index",
+          "rows": 1003070,
+          "stocks": 1104,
+          "days": 983
+        }
+      ],
+      "verdict": "PASS"
+    },
+    "2_check_constraints": {
+      "names": [
+        "chk_candidate_prices_nonneg",
+        "chk_candidate_prices_ohlc_consistency"
+      ],
+      "verdict": "PASS（且 1,821,870 列全數通過，違反則 pg_restore 會失敗）"
+    },
+    "3_schema_version": {
+      "value": 5,
+      "verdict": "PASS"
+    },
+    "4_untouched_tables": {
+      "daily_ml_features": 117,
+      "stock_prices": 117,
+      "verdict": "PASS —— 與匯入前相同，本 SB 不動這兩張"
+    },
+    "5_monthly_reconciliation": {
+      "note": "複查方 2026-09-03：**「那是對『匯入是否忠實』最細的一次驗證，比列數總計強得多」**。列數總計相同，仍可能有列跑到錯的日期或錯的來源；**46 個 60 日窗的分市場相異股票數逐一相等，那種錯誤過不了。**",
+      "baseline_file": "G2_SB6_union_count_calibration_4y.json",
+      "effective_dates_expected": 46,
+      "effective_dates_actual": 46,
+      "mismatches": 0,
+      "verdict": "**PASS —— 46/46 逐一相等，零不符**",
+      "sql_verbatim": "WITH cal AS (\n  SELECT trade_date d, row_number() OVER (ORDER BY trade_date)::int rk\n  FROM (SELECT DISTINCT trade_date FROM candidate_prices) x),\neff AS (\n  SELECT c.rk, c.d FROM cal c\n  JOIN (SELECT min(d) md FROM cal GROUP BY date_trunc('month', d)) m ON m.md = c.d\n  WHERE c.rk >= 61)\nSELECT e.d,\n  count(DISTINCT cp.stock_id) FILTER (WHERE cp.source = 'twse_mi_index'),\n  count(DISTINCT cp.stock_id) FILTER (WHERE cp.source = 'tpex_daily_quotes')\nFROM eff e\nJOIN cal c ON c.rk BETWEEN e.rk - 59 AND e.rk\nJOIN candidate_prices cp ON cp.trade_date = c.d\nGROUP BY e.d ORDER BY e.d;",
+      "IMPORTANT_LIMIT": "⚠ **這次比對用的是同一句 SQL 跑在兩個資料庫上** —— 它驗證的是**匯入是否忠實**（真實庫 vs 校準時的臨時庫），**不是管線算得對不對**。§6 第 3 項那個檢查是另一件事：**管線必須從它實際寫進 `universe_snapshots` 的列去數，不得重跑這句 SQL**，否則就是拿自己比自己（§9A.1）。**兩者不可混為一談。**"
+    },
+    "6_tpex_write_guards": {
+      "pe_ratio_not_null": 0,
+      "best_bid_volume_not_null": 0,
+      "best_ask_volume_not_null": 0,
+      "verdict": "PASS（非複查方指定，PM 追加：守衛必須在匯入的另一端也成立）"
+    }
+  },
+  "REMAINING_RISK": "**dump 仍是唯一的離線副本，無版控、無校驗碼**（§0.5 #15）。匯入真實庫使資料多了一份，**但真實庫的實體資料檔同樣不是可攜式備份**（CLAUDE.md §3）。**還原成功證明的是這一次能還原，不是這個檔案不會遺失或損壞。**"
+}

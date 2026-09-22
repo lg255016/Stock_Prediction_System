@@ -1,0 +1,84 @@
+{
+  "purpose": "PRE-G3-04（D5）落地後，daily_ml_features 全量重算之預期。本檔於寫入之前 commit；寫入後只做比對，不修改本檔。",
+  "date": "2026-09-08",
+  "authorization": "PO 2026-09-08：照 Gate A 條件（PRE_G3_04_D5_GATE_A_PROPOSAL.md §8）+ 一項零成本交叉核對（覆蓋天數 vs PRE-G3-02 量測）。",
+
+  "SCOPE_VERBATIM": {
+    "in_scope": [
+      "重跑 main_etl_pipeline.py:544-557 run_feature_engineering_pipeline() 邏輯：fetch_all_for_features → generate_daily_features → generate_target_labels → upsert_ml_features",
+      "全量重算 daily_ml_features 全部 3,713 列（含既有 137 列所在鍵，此次為刻意覆寫，非 PRE-G3-03 的『既有列不碰』情境）"
+    ],
+    "NOT_authorized": [
+      "任何其他資料表的變更",
+      "重跑 stock_prices 或 market_articles 的擷取／回補"
+    ],
+    "why_do_update_here_is_intended": "本次為全量重算全部 3,713 列，範圍含蓋既有 137 列所在的 (stock_id, trade_date)——重算目的正是用 D5 語意（U 分支）取代這 137 列既有的、含填補 0.5 的舊值。PRE-G3-03 的『既有列不碰』原則適用於價格回補（新舊資料代表同一份事實，覆寫等於銷毀證據）；本次不同：新值本來就是要取代舊值的正確版本，覆寫是目的本身。"
+  },
+
+  "PRE_STATE": {
+    "binding": {"current_database": "postgres", "current_user": "postgres", "port": 5432},
+    "stock_prices": {
+      "rows": 3713,
+      "per_stock": {"2330": 987, "2382": 987, "6488": 985, "NVDA": 754}
+    },
+    "daily_ml_features": {
+      "rows": 137,
+      "fingerprint_method": "SELECT md5(string_agg(t,'|' ORDER BY t)), count(*) FROM (SELECT concat_ws(',', <每一欄，來自 information_schema.columns，coalesce 為 '~'>) AS t FROM daily_ml_features) s",
+      "fingerprint": "4fc208b95dbc6ea9d7c4b381d6ba97b5",
+      "NOTE_ON_METHOD": "⚠ 本次重新確認時，第一次誤用 Python 側 hashlib.md5(repr(rows)) 搭配 ORDER BY trade_date, stock_id 計算，得到不同值（40ed8548a15f9fdb754c471bbfb82c9f）——這不是資料變動，是方法本身與既有記錄的 SQL 側 concat_ws/md5 方法不同（不同的列序、不同的序列化、不同的 NULL 表示）。改用本檔記載的既有方法後，得到與歷次記錄完全相同的 4fc208b9...，確認自 PRE-G3-01 tz row fix 以來 daily_ml_features 從未被觸碰。此為第二次同型的自我更正（第一次見 PRE_G3_03_import_result.json 手寫欄位清單事件），故在此完整記錄方法本身，避免第三次。"
+    }
+  },
+
+  "EXPECTATIONS": [
+    {
+      "id": "R1",
+      "criterion": "重算後 daily_ml_features 列數精確為 3,713（取代舊 137 列，非疊加）",
+      "per_stock": {"2330": 987, "2382": 987, "6488": 985, "NVDA": 754},
+      "derivation": "generate_daily_features 以 LEFT JOIN 建立在 df_prices_clean 之上，daily_sentiment／daily_theme 皆經 groupby(['trade_date','stock_id']) 保證每組至多一列，不會產生笛卡爾積增列；generate_target_labels 只做 shift(-1) 賦值，不刪除任何列。逐檔分佈 = stock_prices 逐檔列數（已知）。",
+      "if_mismatch": "停止，不 upsert 到真實庫以外的驗證用途；回滾（見下）"
+    },
+    {
+      "id": "R2",
+      "criterion": "交叉核對（零成本，PO 指定）：sentiment_mean IS NOT NULL 的列數，逐檔恰等於 PRE-G3-02 量測的覆蓋天數",
+      "values": {"2330": 126, "2382": 33, "6488": 12, "NVDA": 91},
+      "why_must_equal": "覆蓋率量測（PRE_G3_02_coverage_measurement.json，covered_days 定義 = article_count > 0）與本次重算用的是同一條生產函式（generate_daily_features）、同一批資料（未變動）。D5 之後 sentiment_mean IS NOT NULL 恰等價於 article_count > 0（U 分支：article_count==0 時 sentiment_mean 保持 NULL；本次呼叫同量測一樣不傳 failed_source_keys，故不產生 SOURCE_FAILED，article_count 不會因 F 分支而額外變 NULL）。兩個分別算出來的數字必須相等——不等就代表量測與重算之間有東西變了，是必須先查明的資訊，不得逕行採信任一邊。",
+      "scope_note": "2026-01-17 之前的交易日在量測窗口外，該期間無文章資料屬 U，不計入本比對（與 PRE_G3_02 量測窗口 2026-01-17~2026-09-06 一致）",
+      "if_mismatch": "停止並查明差異來源，不得逕行採信重算或量測任一邊的數字"
+    },
+    {
+      "id": "R3",
+      "criterion": "source_status 只產出 SUCCESS／SUCCESS_EMPTY 兩態，無 SOURCE_FAILED",
+      "why": "呼叫路徑（main_etl_pipeline.py:544-557）未傳 failed_source_keys，預設 None，與 PRE-G3-02 量測同一限制（歷史回補資料無對應 etl_run_log）",
+      "derived_values": "SUCCESS 逐檔列數應與 R2 的覆蓋天數相同；SUCCESS_EMPTY = 該檔總列數 − SUCCESS 列數",
+      "if_mismatch": "停止查明（若出現 SOURCE_FAILED 代表呼叫路徑與預期不符）"
+    },
+    {
+      "id": "R4",
+      "criterion": "既有 137 列已被 D5 語意取代（非仍為舊值）：抽樣舊 137 列鍵集合中，任一 SUCCESS_EMPTY 列的 sentiment_mean 現為 NULL（而非舊值 0.5）",
+      "sampling_note": "至少各檔抽 1 列且該列原為 SUCCESS_EMPTY，執行後回報前後對照",
+      "if_mismatch": "停止查明（代表 D5 未真正生效於這批既有列）"
+    },
+    {
+      "id": "R5",
+      "criterion": "sentiment_mean 的 NULL 佔比（U 語意上線後的第一張誠實快照，PO 要求回報）",
+      "how": "逐檔統計 sentiment_mean IS NULL 的列數與佔比；全庫合計",
+      "if_mismatch": "不適用（本項為報告項，非通過/失敗判準）"
+    },
+    {
+      "id": "R6",
+      "criterion": "其餘十二張表列數不變（本次操作僅寫 daily_ml_features）",
+      "if_mismatch": "回滾"
+    }
+  ],
+
+  "RISK_013": {
+    "1_binding": "寫入前確認 current_database()／current_user／inet_server_port()——已於本檔 PRE_STATE 完成，執行當下重新確認一次",
+    "2_dump": "新鮮 pg_dump，直接落 D:\\Python\\Database_Backups\\Stock_Prediction_System2\\，命名 stock_prediction_system2_PRE_g3_04_recalc_<ts>.dump（TEAM_PLAYBOOK.md §7A）",
+    "3_restore_verification": "拋棄式容器實測還原（非拿到備份檔就算）：還原後以本檔記載的 SQL 側 concat_ws/md5 方法重新計算 daily_ml_features 指紋，須與還原前一致；同時核對其餘十二張表列數"
+  },
+
+  "ROLLBACK_PLAN": {
+    "mechanism": "本次為刻意全量覆寫（DO UPDATE），非增量插入，故不存在『刪除新增列』的回滾路徑——任一判準 FAIL 時，以 RISK_013.2 的新鮮 dump 執行 pg_restore 還原至寫入前狀態",
+    "explicitly_not": "不使用 manifest/DELETE 機制（該機制僅適用於純增量插入，本次不是）"
+  }
+}

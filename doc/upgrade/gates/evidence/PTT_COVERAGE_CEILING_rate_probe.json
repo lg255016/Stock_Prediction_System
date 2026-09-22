@@ -1,0 +1,89 @@
+{
+  "generated_at": "2026-09-21T11:16:54.660134+00:00",
+  "script": "scripts/verify/measure_ptt_board_page_rate_probe.py",
+  "gate_a_proposal": "doc/upgrade/gates/PTT_COVERAGE_CEILING_MEASUREMENT_GATE_A_PROPOSAL.md",
+  "read_only": true,
+  "writes_to_any_table_or_panel": false,
+  "page_budget": 30,
+  "fetch_path": "PttScraper()._fetch_page only (self-built pagination, scrape_ptt_board_pages() not called)",
+  "request_rate": {
+    "pages_fetched": 30,
+    "total_wall_seconds": 72.06,
+    "pages_per_second": 0.4163,
+    "pages_per_day_extrapolated": 2.31,
+    "pages_needed_for_2026_01_01": 576.9,
+    "note": "etl_run_log.http_attempts 對 PTT 全為 NULL，不可依賴；本欄為腳本自己計數的頁數，是段 B2 page_budget 推算的唯一依據。"
+  },
+  "date_range": {
+    "oldest_post_time": "2026-09-08T21:58:32",
+    "newest_post_time": "2026-09-21T18:23:55",
+    "reached_2026_01_01": false,
+    "n_records_via_url_timestamp": 591,
+    "n_records_via_fallback_mm_dd": 0,
+    "note": "日期一律經 parse_ptt_post_time(url, date_str) 推導，優先取網址內嵌unix 時間戳，MM/DD 索引頁日期欄僅作回退；回退路徑筆數獨立列出，不與網址時間戳可靠推導出的記錄混在一起計入。oldest/newest 已排除pinned_posts_excluded 列出的置底／離群項目。"
+  },
+  "pinned_posts_excluded": [
+    {
+      "page_index": 0,
+      "title": "[公告] 交易軟體、APP異常回報區",
+      "url": "https://www.ptt.cc/bbs/Stock/M.1779384745.A.647.html",
+      "post_time": "2026-05-22T01:32:25"
+    },
+    {
+      "page_index": 0,
+      "title": "[公告] 股票板板規 v4.9",
+      "url": "https://www.ptt.cc/bbs/Stock/M.1786082047.A.EA9.html",
+      "post_time": "2026-08-07T13:54:07"
+    },
+    {
+      "page_index": 0,
+      "title": "[公告] 4-6-1罰則將在1/22開始到年底加重至30天",
+      "url": "https://www.ptt.cc/bbs/Stock/M.1768934799.A.0E1.html",
+      "post_time": "2026-01-21T02:46:39"
+    }
+  ],
+  "per_page_title_counts": [
+    17,
+    20,
+    19,
+    16,
+    19,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20
+  ],
+  "n_titles_total": 591,
+  "n_distinct_titles": 532,
+  "n_distinct_urls": 590,
+  "n_deleted_articles_skipped": 8,
+  "stop_reason": "page_budget_exhausted",
+  "exception_message": null,
+  "boundary_determination": {
+    "determined": false,
+    "conclusion": "INSUFFICIENT_BUDGET",
+    "note": "本段預算不足以判定，留待段 B2。"
+  },
+  "revision_note": "v1（本次複核前）用 min(全部條目的時間戳) 當「最舊文章」，被置底公告（板規／異常回報區等，只出現在最新一頁、時間戳卻很舊）污染，pages_per_day 因此低估約 20 倍（0.12 vs 訂正後約 2.3）。v2 改為逐頁排除離群值（PINNED_POST_OUTLIER_DAYS=7），與 ptt_scraper.py E3 修正（2026-09-05 受控執行、V13 測試）同一個坑，此為第三次出現，已補測試防第四次（tests/test_measure_ptt_board_page_rate_probe.py）。"
+}

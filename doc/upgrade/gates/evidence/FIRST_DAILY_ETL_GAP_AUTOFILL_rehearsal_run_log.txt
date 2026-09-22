@@ -1,0 +1,362 @@
+/workspaces/Stock_Prediction_System2/src/extractors/trend_discover.py:7: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+[HARNESS] connection_target: [{'current_database': 'postgres', 'inet_server_port': 59991}]
+Building prefix dict from the default dictionary ...
+Dumping model to file cache /tmp/jieba.cache
+Loading model cost 0.562 seconds.
+Prefix dict has been built successfully.
+[NLPProcessor] 已成功初始化 Gemini 混合管線 (gemini-flash-latest)
+[FeatureAggregator] 已初始化 ML 特徵聚合器 (支援雙模式時間對齊、研究指標與題材情緒溢出)
+
+========== UG-G2-SB7 全市場批次取價 ==========
+  [2026-09-07] tpex OK｜列數 887｜HTTP 嘗試 1
+  [2026-09-07] twse OK｜列數 1087｜HTTP 嘗試 1
+[Batch] tpex_daily_quotes 2026-09-07｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+[Batch] twse_mi_index 2026-09-07｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+  [2026-09-08] tpex OK｜列數 887｜HTTP 嘗試 1
+  [2026-09-08] twse OK｜列數 1087｜HTTP 嘗試 1
+[Batch] tpex_daily_quotes 2026-09-08｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+[Batch] twse_mi_index 2026-09-08｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+  [2026-09-09] tpex OK｜列數 888｜HTTP 嘗試 1
+  [2026-09-09] twse OK｜列數 1087｜HTTP 嘗試 1
+[Batch] tpex_daily_quotes 2026-09-09｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+[Batch] twse_mi_index 2026-09-09｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+  [2026-09-10] tpex OK｜列數 886｜HTTP 嘗試 1
+  [2026-09-10] twse OK｜列數 1084｜HTTP 嘗試 1
+[Batch] tpex_daily_quotes 2026-09-10｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+[Batch] twse_mi_index 2026-09-10｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+  [2026-09-11] tpex OK｜列數 886｜HTTP 嘗試 1
+  [2026-09-11] twse OK｜列數 1084｜HTTP 嘗試 1
+[Batch] tpex_daily_quotes 2026-09-11｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+[Batch] twse_mi_index 2026-09-11｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+  [2026-09-14] tpex OK｜列數 887｜HTTP 嘗試 1
+  [2026-09-14] twse OK｜列數 1084｜HTTP 嘗試 1
+[Batch] tpex_daily_quotes 2026-09-14｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+[Batch] twse_mi_index 2026-09-14｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+  [2026-09-15] tpex OK｜列數 887｜HTTP 嘗試 1
+  [2026-09-15] twse OK｜列數 1084｜HTTP 嘗試 1
+[Batch] tpex_daily_quotes 2026-09-15｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+[Batch] twse_mi_index 2026-09-15｜OK 1／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 1
+
+========== 正在載入追蹤股票標的清單 ==========
+[INFO] 取得 8 檔啟用標的: ['2330', '8069', '6488', 'NVDA', '3008', '2059', '2454', '2382']
+
+========== 逐股標的由 candidate_prices 供應 [2330 2026-09-07] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2330 2026-09-08] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2330 2026-09-09] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2330 2026-09-10] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2330 2026-09-11] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2330 2026-09-14] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2330 2026-09-15] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [8069 2026-09-07] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [8069 2026-09-08] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [8069 2026-09-09] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [8069 2026-09-10] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [8069 2026-09-11] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [8069 2026-09-14] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [8069 2026-09-15] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [6488 2026-09-07] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [6488 2026-09-08] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [6488 2026-09-09] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [6488 2026-09-10] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [6488 2026-09-11] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [6488 2026-09-14] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [6488 2026-09-15] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 開始執行美股 ETL 管線 [NVDA] ==========
+
+[Extract] 正在透過 yfinance 抓取 NVDA 的資料...
+✅ [Extract] NVDA 原始資料抓取成功！
+
+[Transform] 開始清洗 NVDA 的股價資料...
+[Transform] NVDA 股價資料清洗完成！
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 64 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [3008 2026-09-07] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [3008 2026-09-08] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [3008 2026-09-09] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [3008 2026-09-10] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [3008 2026-09-11] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [3008 2026-09-14] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [3008 2026-09-15] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2059 2026-09-07] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2059 2026-09-08] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2059 2026-09-09] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2059 2026-09-10] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2059 2026-09-11] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2059 2026-09-14] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2059 2026-09-15] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2454 2026-09-07] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2454 2026-09-08] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2454 2026-09-09] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2454 2026-09-10] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2454 2026-09-11] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2454 2026-09-14] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2454 2026-09-15] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2382 2026-09-07] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2382 2026-09-08] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2382 2026-09-09] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2382 2026-09-10] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2382 2026-09-11] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2382 2026-09-14] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+
+========== 逐股標的由 candidate_prices 供應 [2382 2026-09-15] ==========
+
+[Load] 準備寫入股票價格至 PostgreSQL...
+[Load] 成功執行資料庫作業。已處理 1 筆資料。
+[Batch] tracked_stocks_daily 2026-09-15｜OK 50／NO_DATA 0／FETCH_FAILED 0／REFUSED 0｜合計 50
+
+========== 啟動 AI 熱門趨勢探索 ==========
+[Discover] 正在掃描 PTT 股板最新 3 頁尋找熱門話題...
+[Discover][WARNING] 掃描時發生錯誤: 500 Server Error: Internal Server Error for url: https://www.ptt.cc/bbs/Stock/index.html
+[Discover][ERROR] PTT 熱門標題擷取失敗，本次探索未寫入資料庫。
+
+========== 正在載入追蹤關鍵字清單 ==========
+[INFO] 取得 26 個追蹤關鍵字：['環球晶', '廣達', '台積電', '輝達', '降息', '非農', 'AI伺服器', '矽光子', '凌巨', '記憶體', '川湖', '聯發科', '美債', '元太', '大立光', 'ASIC/AI晶片', '電子紙應用', '光學鏡頭', '散熱模組', 'CoWoS', 'AI晶片與ASIC', '電子紙與電子標籤', 'ASIC/IC設計', '加密貨幣概念', '電子紙', '生技醫療']
+
+[Extract] 看板頁面模式：26 個關鍵字，預算 25 頁，回溯至 1789394563.5283165
+[Extract] 第一頁即抓取失敗，視為來源不可達：500 Server Error: Internal Server Error for url: https://www.ptt.cc/bbs/Stock/index.html
+  [2026-09-16] 看板批次 FETCH_FAILED（26 個關鍵字全部受影響）：PTT 看板不可達（URL：https://www.ptt.cc/bbs/Stock/index.html）：500 Server Error: Internal Server Error for url: https://www.ptt.cc/bbs/Stock/index.html
+[Batch] ptt 2026-09-16｜OK 0／NO_DATA 0／FETCH_FAILED 26／REFUSED 0｜合計 26
+
+========== 開始執行 NLP 情緒運算管線 (Batch Checkpointing 模式) ==========
+🎉 所有文章情緒分數計算完畢！本次總共處理了 0 筆資料。
+
+========== 啟動 ML 特徵工程管線 ==========
+[INFO] [Feature] 開始聚合特徵：股價 449319 筆, 文章 1250 筆 (Cutoff: 15:30:00)
+[INFO] [Feature] 特徵表聚合完成！
+
+[Load] 準備寫入 449319 筆特徵數據至 daily_ml_features...
+[Load] 成功執行資料庫作業。已處理 449319 筆資料。
+
+========== UG-G3-SB2 每日尾端重算掛點 ==========
+
+[Load] 準備更新 5508 筆 Triple-Barrier 尾端重算標籤...
+[Load] Triple-Barrier 尾端重算完成，實際影響 5508 列（預期 5508 列）。
+
+========== 所有 ETL 任務執行完畢 ==========
+
+[HARNESS] ===== 逐段計時（秒） =====
+  1_batch: 61.56
+  2_per_stock_inferred: 2.87
+  3_ai_trend: 0.07
+  4_ptt: 4.30
+  5_nlp: 0.00
+  6_feature_engineering: 48.89
+  7_tail_recompute: 5.66
+  _total: 123.37
+
+[HARNESS] ===== 結果 =====
+error: None
+{
+  "timings": {
+    "1_batch": 61.56410598754883,
+    "3_ai_trend": 0.07315349578857422,
+    "4_ptt": 4.299008131027222,
+    "5_nlp": 0.004059314727783203,
+    "6_feature_engineering": 48.894646406173706,
+    "7_tail_recompute": 5.661548137664795,
+    "2_per_stock_inferred": 2.8729944229125977,
+    "_total": 123.3695158958435
+  },
+  "error": null
+}

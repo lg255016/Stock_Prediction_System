@@ -1,0 +1,75 @@
+{
+  "connection_target": {
+    "db": "postgres",
+    "port": 5432
+  },
+  "row_counts_after": {
+    "stock_prices": 449326,
+    "candidate_prices": 1857371,
+    "market_articles": 1346,
+    "article_comments": 137267,
+    "daily_ml_features": 449326,
+    "etl_run_log": 190,
+    "sentiment_cache": 42,
+    "theme_stock_mapping": 63
+  },
+  "target_triple_barrier_counts_after": [
+    {
+      "target_triple_barrier": -1.0,
+      "n": 226990
+    },
+    {
+      "target_triple_barrier": 0.0,
+      "n": 21199
+    },
+    {
+      "target_triple_barrier": 1.0,
+      "n": 162310
+    },
+    {
+      "target_triple_barrier": null,
+      "n": 38827
+    }
+  ],
+  "label_reason_counts_after": [
+    {
+      "label_reason": null,
+      "n": 410499
+    },
+    {
+      "label_reason": "ambiguous_dual_barrier",
+      "n": 36395
+    },
+    {
+      "label_reason": "insufficient_data",
+      "n": 1892
+    },
+    {
+      "label_reason": "no_entry",
+      "n": 540
+    }
+  ],
+  "etl_run_log_today_time_range": {
+    "min": "2026-09-17T12:05:05.858628",
+    "max": "2026-09-17T12:06:45.383262",
+    "span_seconds": 99.524634
+  },
+  "etl_run_log_today_summary": [
+    {
+      "source": "ptt",
+      "outcome": "NO_DATA",
+      "n": 24
+    },
+    {
+      "source": "ptt",
+      "outcome": "OK",
+      "n": 7
+    },
+    {
+      "source": "tracked_stocks_daily",
+      "outcome": "OK",
+      "n": 1
+    }
+  ],
+  "etl_run_log_today_count": 32
+}

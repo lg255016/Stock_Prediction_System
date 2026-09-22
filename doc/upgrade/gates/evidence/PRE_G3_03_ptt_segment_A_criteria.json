@@ -1,0 +1,107 @@
+{
+  "purpose": "`PRE-G3-03` PTT 段 A（150 交易日）的**判準**。**本檔於觸網之前 commit；執行後只做比對，不修改本檔。**",
+  "date": "2026-09-07",
+  "authorization": "PO 2026-09-07：段 A 放行，判準寫死後執行；寫入目標 = 臨時 DB `b1_pilot_tmpdb`（DP3）；八段、段硬上限 400、每段回報不自動續跑。",
+
+  "REVISION_2026-09-07b": {
+    "trigger": "段 7 第一次嘗試於第 89 個請求遇傳輸層 `ConnectionError`（無 HTTP 狀態碼），不在原 `STOP_CONDITIONS` 五項之內，依「未預期情況」先例停止（見 `9e18c10`）。88 頁已掃描的命中結果因中斷發生在批次寫入之前而未持久化。",
+    "change": "`STOP_CONDITIONS` 新增第 6 項（有界重試），**其餘七個欄位一字不動**",
+    "why_not_adjusting_to_pass": "無任何判準 FAIL——發生的是判準沒有寫到的情況（傳輸層錯誤缺席於原判準的窮舉裡，不是某判準被判定失敗後改寬）。修訂在兩次執行之間、經 PO 裁決、獨立 commit、**觸網前**完成，且向前適用（對齊 DEC-032 既有政策：5xx／傳輸層 = 有界重試，403／429 = 硬停），不是為了讓段 7 這一次的結果變好看。",
+    "authorization_ref": "PO 2026-09-07 段 7 中止裁決訊息"
+  },
+
+  "SCOPE": {
+    "depth": "**150 交易日 = 217 日曆日**（PO 裁決，寫死，**不得於執行時調整**）",
+    "pages": "約 **735 頁**，分 **8 段**，每段約 100 頁",
+    "target_db": "**`b1_pilot_tmpdb`（臨時 DB）** —— 沿用 S1 的容器，其 98 篇落在段 A 的日期範圍內（`2026-08-14 ~ 2026-09-06`）",
+    "NOT_in_scope": [
+      "**不寫真實庫** —— 匯入是另一次提請（RISK-013 三項）",
+      "**不重算 `daily_ml_features`** —— Gate 3 阻斷項，匯入之後才做",
+      "不自動續跑下一段"
+    ]
+  },
+
+  "MISSING_STAGE_FOUND_BEFORE_EXECUTION": {
+    "what": "⚠⚠ **`PRE_G3_03_BACKFILL_PROPOSAL.md` 全文零次提到評分（Gemini／NLP／`sentiment_score`）。**（`grep -c -iE \"gemini|nlp|sentiment|評分\"` = **0**）",
+    "why_it_matters": "特徵層只撈 `sentiment_score IS NOT NULL`（`db_writer.py:664`）—— **回補回來的文章沒有分數就沒有特徵。**",
+    "THE_DANGEROUS_DEFAULT": "⚠⚠ `run_nlp_sentiment_pipeline`（`main_etl_pipeline.py:508-539`）以 `while True` 迴圈自動撈 `WHERE sentiment_score IS NULL LIMIT 500` 批次評分。**匯入真實庫的那一刻起，下一次每日任務會自動開始對約 1,400 篇打 Gemini API。**",
+    "VERBATIM": "**「沒安排」不等於「不會發生」—— 它會發生，只是以沒人決定過的方式。**",
+    "ruling": "**PO 2026-09-07：在臨時 DB 內、匯入之前完成評分。** 理由三項：(1) 匯入後才評分等於把 API 支出掛進每日任務，規模與時機都失控；(2) 臨時 DB 失敗可整批重來，不污染真實庫的 checkpoint 狀態；(3) **匯入的東西是完成品**，匯入驗收可一次驗完。"
+  },
+
+  "API_COST_ESTIMATE": {
+    "pipeline_shape": "`process_batch_hybrid`（`nlp_processor.py:175-242`）三階段：SnowNLP 本機評分 → **只有落在 fuzzy range `[0.4, 0.6]` 的標題**查 `sentiment_cache` → **cache miss 者**才進 LLM，且 `_batch_llm_api` **一次吃整批**（每個 DB 批次最多 1 次呼叫）。",
+    "measured_fuzzy_rate": {
+      "value": "**10.2%**（10 / 98）",
+      "basis": "以 S1 試點的 98 篇標題實跑 `NLPProcessor._calc_snownlp`，**本機計算，零 API 呼叫**",
+      "label": "`VERIFIED THIS SESSION`（範圍：98 篇試點標題）"
+    },
+    "projection": {
+      "expected_articles": "約 1,441（735 頁 × 1.96 命中/頁）",
+      "expected_fuzzy": "約 **147** 篇",
+      "cache_hits": "⚠ **假設接近 0** —— `sentiment_cache` 現有 36 筆，且段 A 為新標題。標 **`ASSUMPTION`**",
+      "expected_llm_calls": "`ceil(1441 / 500)` = **3 次**（每批最多 1 次；批內約 48~50 個 fuzzy 標題）",
+      "CAVEAT": "⚠ **fuzzy 率來自 98 篇的樣本，且段 A 的標題分佈未必與 S1 相同。** 上界估計：即使 fuzzy 率翻倍至 20%，LLM 呼叫次數**仍是 3 次**（受批次數而非 fuzzy 數決定）—— **成本對 fuzzy 率不敏感，這一點是本估算最穩固的部分。**"
+    }
+  },
+
+  "CRITERIA": [
+    {"id": "P1", "text": "每段請求數 ≤ **400**（段硬上限）。撞破即停止並回報，**不得於執行時調高**"},
+    {"id": "P2", "text": "逐頁記錄 HTTP 狀態"},
+    {"id": "P3", "text": "404 **列出頁碼，不只總數** —— 零星散佈與連續區間的意涵完全不同。⚠ 這是單調性 `ASSUMPTION` 的窮盡檢驗"},
+    {"id": "P4", "text": "`validate_comment_bounds` 違反者**整篇拒寫**，清單可觀測，**不放寬任何邊界**。⚠ 讀法：**「0 拒寫」驗證的是資料乾淨，不是防護有效**"},
+    {"id": "P5", "text": "`market_articles` 新增 == 命中數 − 既存 `url`"},
+    {"id": "P6", "text": "`article_comments` == Σ`total_comments`（僅計本次新抓的文章）"},
+    {"id": "P7", "text": "**真實庫零變動** —— 本階段不連線真實庫。綁定確認 `current_database() = 'b1_pilot_tmpdb'`，不符即中止"},
+    {"id": "P8", "text": "回補深度達 **150 交易日**（217 日曆日）。未達即回報未達，**不得調降**"},
+    {
+      "id": "P9",
+      "text": "⚠ **新增：內頁請求前先查庫** —— `provider_article_id` 已存在者**跳過內頁抓取**",
+      "detail": "S1 的 98 篇已有 `provider_article_id`（形如 `ptt_Stock_M.1788652189.A.BF3`）與 `total_comments`，**其內頁不重抓**",
+      "expected_saving": "約 **98 個請求**",
+      "rationale": "**貴的是取得，而已取得的不再貴。**",
+      "verification": "逐段記錄 `skipped_existing` 計數；八段合計應 ≈ 98"
+    }
+  ],
+
+  "SCORING_CRITERIA": [
+    {
+      "id": "N1",
+      "text": "評分**在 `b1_pilot_tmpdb` 內執行**，綁定確認後才啟動；**真實庫零連線**"
+    },
+    {
+      "id": "N2",
+      "text": "回報**實際 LLM 呼叫次數**與**每次的標題數**，與 `API_COST_ESTIMATE.projection` 對照",
+      "note": "⚠ 估計是 3 次。**實際超過 5 次即停止並回報** —— 不是因為 5 有什麼特殊，而是**估計錯了兩倍以上就代表我對這條路徑的理解有問題，該先查明再繼續**"
+    },
+    {
+      "id": "N3",
+      "text": "⚠ **`CLAUDE.md` §7.2 的 checkpoint 紀律**：批次檢查點**只有在一筆工作確實成功完成後才能推進**；**LLM 呼叫失敗時，不得把未完成的 fallback 分數誤標示為完成**",
+      "verification": "回報 fallback／降級路徑的觸發次數。**若 LLM 失敗而 SnowNLP 分數被寫入，必須逐篇列出，不得混入正常結果**"
+    },
+    {
+      "id": "N4",
+      "text": "評分完成後 `SELECT count(*) FROM market_articles WHERE sentiment_score IS NULL` **應為 0**",
+      "if_not_zero": "**不是 0 就列出原因分佈**（哪些篇、什麼原因），**不得逕行重跑掩蓋**"
+    },
+    {
+      "id": "N5",
+      "text": "⚠ `sentiment_cache` 的新增筆數一併回報",
+      "rationale": "cache 是下一次回補的成本基礎；**這次寫進去多少，決定下一次省多少**"
+    }
+  ],
+
+  "STOP_CONDITIONS": [
+    "HTTP **403／429** → **立即停止並回報**（DEC-032），**不在授權內自行續跑**",
+    "段請求數撞 400 上限",
+    "綁定確認不是 `b1_pilot_tmpdb`",
+    "N2 的 LLM 呼叫次數超過 5",
+    "P4 出現拒寫且原因無法歸類",
+    "⚠ **【2026-09-07b 新增】傳輸層錯誤（無 HTTP 狀態碼，例如 `ConnectionError`／`RemoteDisconnected`）→ 等待 30～60 秒後重試一次；連續第二次失敗 → 停止回報。403／429 不適用本項，仍立即停止。** 兩次嘗試（原始 + 一次重試）都必須各自記入請求數，不得只計成功的一次"
+  ],
+
+  "WHAT_THIS_ROUND_WILL_NOT_CLAIM": {
+    "panel_readiness": "⚠ **段 A 完成 + 評分完成，仍不得宣稱面板可實驗。** 還缺：匯入真實庫（另次提請）、`daily_ml_features` 全量重算（D5 語意一次到位，Gate 3 阻斷項）。",
+    "why_repeated": "價格回補那次已寫過同一句 —— **價格深度達標不等於可實驗**。**這次是同一個誘惑的第二次。**"
+  }
+}
